@@ -1,0 +1,120 @@
+\DeclareFontFamily{U}{yfrak}{}
+\DeclareFontShape{U}{yfrak}{m}{n}{<-> yfrak}{}
+\DeclareMathOperator{\sign}{sign}
+
+\allowdisplaybreaks
+
+%\definecolor{mygreen}{rgb}{0,0.6,0}
+%\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+%\definecolor{mymauve}{rgb}{0.58,0,0.82}
+% Theorem Styles
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+% Definition Styles
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\theoremstyle{observation}
+\newtheorem{observation}[theorem]{Observation}
+
+
+%\addtocontents{toc}{\noindent\mbox{Chapter}\hfill\mbox{Page}}%
+
+\renewcommand{\listalgorithmname}{LIST OF ALGORITHMS}
+\addtocontents{loa}{\noindent\mbox{Algorithm}\hfill\mbox{Page}}
+\numberwithin{algorithm}{chapter}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\Supp }{\rm Supp}
+\newcommand{\pa }{\partial }
+\newcommand{\f}{\frac}
+\newcommand{\me}{\mathrm{e}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\mpi}{\mathrm{\pi}}
+\newcommand{\msh}{\mathrm{sinh}\,}
+\newcommand{\mch}{\mathrm{cosh}\,}
+\newcommand{\mth}{\mathrm{tanh}\,}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% PARENTHESIS
+
+\newcommand{\sset}[1]{ \left\{ #1 \right\} }
+\newcommand{\ppar}[1]{ \left( #1 \right) }
+\newcommand{\spar}[1]{ \left[ #1 \right] }
+
+\newcommand{\abss}[1]{ \left| {#1} \right| }
+
+%% MATRICES
+
+%\newcommand{\R}{\mathbb{R}}
+%\newcommand{\ones}[1]{ \mathbbm{1}_{N_{#1}} \mathbbm{1}_{N_{#1}}^\intercal }
+
+\newcommand{\ones}{\mathbbm{1}}
+
+\newcommand{\trans}{^\intercal}
+\newcommand{\iinv}{^{-1}}
+\newcommand{\pinv}{^\dagger}
+
+\newcommand{\diag}[1]{\text{diag}\ppar{ #1 }}
+
+%% PROBABILITY
+
+\newcommand{\nnorm}[1]{\lVert #1 \rVert}
+\newcommand{\prob}{\text{Prob}}
+\newcommand{\given}{\;\middle|\;}
+
+%\newcommand{\ccon}[2]{\left\phantom{(} #1 \mathrel{}\middle|\mathrel{} #2 \right\phantom{)}}
+
+%% OPTIMIZATION
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%% BIG LETTERS
+
+\newcommand{\J}{\mathbf{J}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\G}{\mathbf{G}}
+
+\newcommand{\U}{\mathbf{U}}
+\newcommand{\N}{\mathbf{N}}
+
+\newcommand{\rr}{\mathbf{r}}
+
+\newcommand{\V}{\mathbf{V}}
+
+\newcommand{\Gbar}{\overline{\mathbf{G}}}
+\newcommand{\Ybar}{\overline{\mathbf{Y}}}
+
+%% BASICS
+
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\id}{\mathbf{I}}
+\newcommand{\norm}{\mathcal{N}}
+
+%% DEPRECATED
+
+\newcommand{\GAM}{\mathbf{\Gamma}}
+\newcommand{\SIG}{\mathbf{\Sigma}}
+\newcommand{\ga}{\pmb{\gamma}}
+
+\newcommand{\jt}{\mathbf{j}}
+
+\newcommand{\W}{\mathbf{W}}
+
+\newcommand{\LL}{\mathbf{\Lambda}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\def\SPSB#1#2{\rlap{\textsuperscript{#1}}\SB{#2}}
+%\def\SP#1{\textsuperscript{#1}}
+%\def\SB#1{\textsubscript{#1}}
