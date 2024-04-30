@@ -2,6 +2,8 @@
 
 % \pagestyle{plain}
 
+textwidth in inches: \printinunitsof{in}\prntlen{\textwidth}
+
 \label{ch:review}
 
 At some point, cite \cite{grech2008review}.
@@ -399,7 +401,7 @@ The MNE estimator will be used as a toy model for illustrative purposes, but mos
 
 \subsection{L-curve}
 
-This method incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly.
+This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
 %
 In order to do that, define the quantities
 \begin{align}
@@ -414,6 +416,7 @@ In order to do that, define the quantities
 \nnorm{\hat{\J}_\lambda}_F^2 
 = 
 \nnorm{ K_\lambda \Y }_F^2
+\label{det:Lcurve}
 \end{align}
 
 The L-curve denominations stands from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has an interesting appearance.
@@ -424,9 +427,13 @@ Notice that the quantities $\eta, \rho$ can be computed with relative ease for a
 
 The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving in the plotted curve.
 
+Notice that the parametric curve in \eqref{det:Lcurve} can be easily generalized for other quantities.
+
 \subsection{Generalized Cross-Validation}
 
-This heuristic takes on the idea of leave-one-out cross-validation, and then produces an approximate quantity that is computationally fast to compute.
+This heuristic is based on the principle of leave-one-out cross-validation, additional to some approximations that make it computationally efficient. 
+%
+Although it was proposed by Golub in 1979 \cite{GCV_Golub}, it remains popular for methods that admit a inversion kernel.
 
 Following the leave-one-out principle, we consider $\Y^{[m]}\in\R{(M-1)\times T}$ and $\G^{[m]} \in \R^{(M-1)\times N}$ with the $m$-th sensor missing,
 \begin{align}
@@ -485,6 +492,41 @@ Although the definition of GCV is based on the leave-one-out cross validation il
 The latter expression represents a balance between $K_\lambda$ as a pseudo-inverse of $\G$ in general vs only for the current sensor data.
 
 The heuristic employed is to select the parameters that minimizes the function in \eqref{det:GCV}, and it can be extended easily to multiple parameters.
+
+\subsection{Composite Residual and Smoothing Operator (CRESO)}
+
+This heuristic incorporates the idea that the residual, $\nnorm{\G\, \J - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
+%
+In order to achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
+\begin{equation}
+C\ppar{\lambda} = 
+\frac{d}{d\lambda} \spar{ -\nnorm{\G\J_\lambda - \Y}_2^2 + \lambda \nnorm{\J_\lambda}_2^2}
+=
+\frac{d}{d\lambda} \spar{ - \nnorm{\ppar{\G K_\lambda + \id_M}\Y}_2^2 - \lambda \nnorm{K_\lambda \Y}_2^2}
+\end{equation}
+with $K_\lambda \Y$ the inversion kernel, understood explicitly as a function of $\lambda$. 
+%
+The optimal $\lambda$ is the smallest solution to the equation $C(\lambda)=0$.
+
+\subsection{U-curve}
+
+This heuristic incorporates the idea that both the largest among the residual and the solution's norm should be small; this is achieved by minimizing their reciprocals \cite{Ucurve}.
+%
+In particular, the following function is constructed
+\begin{equation}
+U(\lambda) = 
+\nnorm{\G\J_\lambda - \Y}_2^{-2} + \nnorm{\J_\lambda}_2^{-2}
+\end{equation}
+
+Similar to the L-curve heuristic, the U-curve heuristic get it's denomination from the typical shape of the plot of $U(\lambda)$.
+%
+The optimal $\lambda$ is the global minimum of $U(\lambda)$.
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{./img/ParameterFiting}
+\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generlized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interested is , different for each heuristic, is computed for a large number of candidate values and then it is used for selecting one of those values.}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
