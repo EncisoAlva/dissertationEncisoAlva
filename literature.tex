@@ -374,48 +374,49 @@ The algorithm called Source Imaging based on Structured Sparsity (SISSY) was pro
 
 \section{Methods for parameter selection}
 
-Notice that for some of the methods displayed previously, we can write the estimators as
+From all the estimation methods described on the previous section, all of them converge in a general form
 \begin{equation}
-\hat{\J}
-=
-\mathbf{K}_{\theta}\, \Y
+\hat{\J}_\Theta = F\ppar{ \Y, \G; \Theta }
 \end{equation}
-with $\mathbf{K}_\theta \in \R^{N\times M}$ a matrix depending on the parameters $\theta$.
+with $\Theta$ a set of parameters that need to be selected beforehand.
 
-Whenever this is possible, the estimator is called a linear estimator, and $\mathbf{K}_\theta$ is referred to as the {Wiener kernel}, or inversion kernel.
-
-For some methods such as sLORETA, the kernel can be computed using only information from $\G$. 
+One particular case is the linear methods, for which the estimator can be written as
+\begin{equation}
+\hat{\J}_\Theta
+=
+\mathbf{K}_{\Theta}\, \Y
+\end{equation}
+with $\mathbf{K}_{\Theta}$ referred to as the Wiener kernel, or inversion kernel, which is approximately a right inverse of $\G$.
 %
-For methods like MSP it is required some information from $\Y$; this dependence can be diminished by selecting a portion of the data for computing the kernel, as in a training step.
-%
-Other methods like SISSY are non-linear, in the sense that they don't admit a Wiener kernel.
+The collection of liner methods include wMNE, FOCUSS, LORETA and their derivates, MSP, among others. 
 
-%The existence of a Wiener kernel is desirable when the number of dipoles and time points is particularly large,
-%like long-term monitoring of spontaneous activity.
-%%
-%Linear methods are incapable of modeling complex temporal structures.
+On the other hand, methods like MCE, MxNE, SiSSY, etc, are not linear and can't be assigned to a Wiener kernel.
 
-Here we expose some method for determining appropriate values for the estimation parameters $\theta$.
+In this section, we review some heuristics for selecting the parameter set $\Theta$.
 %
-The MNE estimator will be used as a toy model for illustrative purposes, but most of the observations can be generalized  the other estimators.
+The wMNE estimator is used as a reference model since it depends on a single parameter.
+%
+However, the heuristics can be generalized to select multiple parameters by finding the minima/maxima of functions of multiple variables.
+%
+Such generalization is not made explicit.
 
 \subsection{L-curve}
 
-This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
+This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{\J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
 %
 In order to do that, define the quantities
 \begin{align}
 \rho(\lambda)
 &=
 \nnorm{\G\, \hat{\J}_\lambda - \Y}_F^2
-=
-\nnorm{\G\, K_\lambda\Y - \Y}_F^2
+%=
+%\nnorm{\G\, K_\lambda\Y - \Y}_F^2
 \\
 \eta(\lambda)
 &=
 \nnorm{\hat{\J}_\lambda}_F^2 
-= 
-\nnorm{ K_\lambda \Y }_F^2
+%= 
+%\nnorm{ K_\lambda \Y }_F^2
 \label{det:Lcurve}
 \end{align}
 
@@ -427,7 +428,7 @@ Notice that the quantities $\eta, \rho$ can be computed with relative ease for a
 
 The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving in the plotted curve.
 
-Notice that the parametric curve in \eqref{det:Lcurve} can be easily generalized for other quantities.
+%Notice that the parametric curve in \eqref{det:Lcurve} can be easily generalized for other quantities.
 
 \subsection{Generalized Cross-Validation}
 
@@ -493,6 +494,8 @@ The latter expression represents a balance between $K_\lambda$ as a pseudo-inver
 
 The heuristic employed is to select the parameters that minimizes the function in \eqref{det:GCV}, and it can be extended easily to multiple parameters.
 
+It is important to emphasize that the approximation for the GCV error in equation \eqref{det:GCV} can only be computed for linear methods; for instance, estimators based on the $\ell_1$ norm or on neural networks can't be tuned using GCV.
+
 \subsection{Composite Residual and Smoothing Operator (CRESO)}
 
 This heuristic incorporates the idea that the residual, $\nnorm{\G\, \J - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
@@ -524,7 +527,7 @@ The optimal $\lambda$ is the global minimum of $U(\lambda)$.
 
 \begin{figure}
 \centering
-\includegraphics[width=1\linewidth]{./img/ParameterFiting}
+\includegraphics[width=1\linewidth]{./img_MATLAB/ParTuning_sLORETA}
 \caption{Selection of parameters depending on different heuristics: L-curve criterion, Generlized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interested is , different for each heuristic, is computed for a large number of candidate values and then it is used for selecting one of those values.}
 \end{figure}
 
@@ -713,10 +716,8 @@ $\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, with the False Positive
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_dev/nsCurves1}
+\includegraphics{./img_dev/AUROC_sketch.pdf}
 %
-\includegraphics[width=0.4\linewidth]{./img_dev/nsCurves2}
-\includegraphics[width=0.4\linewidth]{./img_dev/nsCurves3}
 \caption{Construction of Receiver-Operator Curve and Precision-Recall Curve from the reference and estimated dipole magnitudes, $\nnorm{{\J}}_2$ and $\nnorm{\hat{\J}}_2$, respectively.}
 \end{figure}
 
@@ -853,7 +854,17 @@ See figure \ref{fig:exaple_true} for a representation of the location and extent
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_dev/nsCurves1}
+%\includegraphics[width=0.8\linewidth]{./img_dev/nsCurves1}
+%\includegraphics{./img/gauss_center}
+%\includegraphics{./img/square_GroundTruth}
+\includegraphics{./img_MATLAB/square_GroundTruth}
+\includegraphics[height=2in]{./img_MATLAB/square_Profile}
+\includegraphics{./img_MATLAB/gauss_GroundTruth}
+\includegraphics[height=2in]{./img_MATLAB/gauss_Profile}
+\includegraphics{./img_MATLAB/exp_GroundTruth}
+\includegraphics[height=2in]{./img_MATLAB/exp_Profile}
+\includegraphics{./img_MATLAB/circ_GroundTruth}
+\includegraphics[height=2in]{./img_MATLAB/circ_Profile}
 \caption{Cortical patch used for creation of synthetic data.}
 \label{fig:exaple_true}
 \end{figure}
