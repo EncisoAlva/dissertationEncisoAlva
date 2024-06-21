@@ -8,12 +8,12 @@ textwidth in inches: \printinunitsof{in}\prntlen{\textwidth}
 
 At some point, cite \cite{grech2008review}.
 
-The EEG model discussed presented on the previous can be summarized on the following matrix equation
+The EEG model discussed presented on the previous can be summarized in the following matrix equation
 \begin{equation}
 \Y = \G\, \ppar{ \J + \nu } + \varepsilon
 \label{eq:general}
 \end{equation}
-where the varibles encode the following elements,
+where the variables encode the following elements,
 \begin{itemize}
 \item[$\Y \in \R^{M\times T}$] EEG measurements over time,
 \item[$\J \in \R^{N\times T}$] Dipole magnitudes over time,
@@ -22,11 +22,11 @@ where the varibles encode the following elements,
 %
 The terms $\nu \in \R^{N\times T}, \varepsilon\in\R^{M\times T}$ represent additive noise within the true values for the dipoles and sensors, respectively. 
 %
-Different author have proposed different sets of assumptions for such noise terms, sme of them will be discussed later.
+Different authors have proposed different sets of assumptions for such noise terms; some of them will be discussed later.
 
-It was discussed how this model is constructed for $M$ EEG sensors and $N$ equivalent dipoles with known orientation; if the dipole orientation is to be determined we may consider 3 superimposed dipoles, parallel to the canonical axis, for each dipole position.
+It was discussed how this model is constructed for $M$ EEG sensors and $N$ equivalent dipoles with known orientation; if the dipole orientation is to be determined, we may consider three superimposed dipoles parallel to the canonical axis for each dipole position.
 %
-The cases of known and unknown dipole orientations don't change the model formulation on a significant way, and thus they will be treated as a single model.
+The cases of known and unknown dipole orientations don't change the model formulation in a significant way, and thus, they will be treated as a single model.
 
 Within the context of Electrical Source Reconstruction, the computation of the leadfield matrix is referred to as the forward problem.
 %
@@ -34,7 +34,7 @@ As discussed previously, this computation implies a large number of steps: ident
 
 A further discussion of the forward model is beyond the scope of this work.
 %
-After this point, we will consider the leadfield matrix $\G$ to be given for each set of anatomical data and electrodes montage.
+After this point, we will consider the leadfield matrix $\G$ to be given for each set of anatomical data and electrode montage.
 
 \section{Inverse problem formulations}
 
@@ -56,9 +56,9 @@ with $\nnorm{A}_F$ the Frobenius norm of $A$, defined as
 \end{equation}
 
 The expression in \eqref{est:naive} represents
-an ill-posed problem due to not having an unique solution and changing significantly with small changes of the parameters.
+an ill-posed problem due to not having a unique solution and changing significantly with small changes of the parameters.
 %
-The first statement is clear since we assumed $M\ll N$.
+The first statement is straightforward since we assumed $M\ll N$.
 %
 The second statement becomes clear if we choose the Least-Square solution,
 \begin{equation}
@@ -87,11 +87,11 @@ As it is discussed later, one way to alleviate the instability of the Least-Squa
 with $\lambda>0$ a regularization parameters and
 $f: \R^{M\times T} \rightarrow \R_+$ a penalization function, usually related to the norm of $\J$.
 %
-It will be shown how this formulations comes naturally as a result of certain assumption, but it can also be designed to impose certain desirable properties over the solution.
+It will be shown how this formulation comes naturally as a result of certain assumptions, but it can also be designed to impose certain desirable properties over the solution.
 
 \subsection{Minimal Norm Estimator}
 
-For this estimator we assume that both the sensor and internal noise are gaussian random variables, independent in time and space, and with constant variance, i.e.
+For this estimator, we assume that both the sensor and internal noise are Gaussian random variables, independent in time and space, and with constant variance, i.e.
 \begin{align}
 \nu &\sim \norm\ppar{0, \sigma^2 \id_N \otimes \id_T  } \\
 \varepsilon &\sim \norm\ppar{0, \lambda^2 \id_M \otimes \id_T}
@@ -106,7 +106,7 @@ The Maximum A Posteriori (MAP) estimator of $\J$ is defined as
 &=
 \argmax_\J \prob\ppar{ \Y \given \J }\, \prob{\J}.
 \end{align}
-The above problem is simplified by (1) taking the logarithm of the expression since it is a monotonic function, (2) considering the independence in time, so that columns of $\J$ are computed independently, and (3) considering the normal distribution of $\nu$ and $\varepsilon$.
+The above problem is simplified by (1) taking the logarithm of the expression since it is a monotonic function, (2) considering the independence in time so that columns of $\J$ are computed independently, and (3) considering the normal distribution of $\nu$ and $\varepsilon$.
 %
 Thus we have
 \begin{align}
@@ -129,9 +129,9 @@ Notice how the MAP estimator can be interpreted as a regularized optimization pr
 %
 Since the MAP estimator is obtained by minimizing the norm of $\J$ (in particular, the $\ell_2$ norm), it is referred to as the Minimal-Norm Estimator (MNE).
 %
-This designation is ambiguous since many other estimators depend on minimizing some norm of the sources, and thus `minimal-norm estimator' refer to a family of estimators. 
+This designation is ambiguous since many other estimators depend on minimizing some norm of the sources; thus, `minimal-norm estimator' refers to a family of estimators. 
 %
-In this work, this particular estimator will be referred simply as MNE to avoid confusion.
+In this work, this particular estimator will be referred to simply as MNE to avoid confusion.
 
 The MNE estimator admits a closed-form solution as follows,
 \begin{equation}
@@ -157,11 +157,11 @@ W &=
 \label{det:wMNE}
 \end{align}
 
-The underlying assumption is that the contribution of deep dipoles, located far from scalp, is scaled by smaller coefficients in the leadfield matrix.
+The underlying assumption is that the contribution of deep dipoles, located far from the scalp, is scaled by smaller coefficients in the leadfield matrix.
 %
-These deeper dipoles must have larger magnitudes to contribute similarly as shallow dipoles into the generation of EEG.
+These deeper dipoles must have larger magnitudes to contribute similarly to shallow dipoles in the generation of EEG.
 %
-The overall effect is that deep dipoles are misrepresented in the MNE estimator, often deleted.
+The overall effect is that deep dipoles are misrepresented in the MNE estimator and often deleted.
 
 In order to alleviate the effect mentioned above, the depth-weighting matrix $W$ is introduced.
 %
@@ -180,9 +180,9 @@ The Weighted Minimal Norm Estimator (wMNE) is then defined as
 
 The Low-Resolution Electric Tomography (LORETA) estimator was proposed by Marqui\cite{sloreta}.
 %
-One key idea from this method is to use a laplacian operator to impose spatial smoothness over $\J$, addtional to using the same depth-weighting from wMNE.
+One key idea from this method is to use a Laplacian operator to impose spatial smoothness over $\J$, additional to using the same depth-weighting from wMNE.
 
-On it's original formulation, which is included here, it is assumed that the dipoles are located on a cubic grid with a distance $d$ between any two neighboring dipoles. 
+In its original formulation, which is included here, the dipoles are assumed to be located on a cubic grid with a distance $d$ between any two neighboring dipoles. 
 
 The LORETA estimator can be expressed as an optimization problem
 \begin{align}
@@ -218,7 +218,7 @@ The estimator is computed as follows:
 
 \subsection{sLORETA}
 
-The standarized Low-Resolution Electric Tomography (sLORETA) estimator was proposed by Marqui\cite{sloreta}.
+The standardized Low-Resolution Electric Tomography (sLORETA) estimator was proposed by Marqui\cite{sloreta}.
 %
 Despite their similar name, LORETA and sLORETA are two different methods.
 %
@@ -230,7 +230,7 @@ The sLORETA estimator considers the following minimization problem
 \end{equation}
 with $\ones=\{1\}^{M\times 1}$ a vector of ones.
 
-The underlying assumption is that the measurements are re-referenced to the average, i.e. the raw observations $\Y_0\in \R^{M\times T}$ are pre-processed as follows
+The underlying assumption is that the measurements are re-referenced to the average, i.e., the raw observations $\Y_0\in \R^{M\times T}$ are pre-processed as follows
 \begin{equation}
 \Y = \ppar{ \id_M - H } \Y_0
 \end{equation}
@@ -239,11 +239,11 @@ with $H \in \R^{M \times M}$ an averaging operator constructed as
 H = \ppar{\ones_M \ones_M\trans}/\ppar{\ones_M\trans \ones_M}.
 \end{equation}
 
-It is relevant to mention that this type of re-reference can be interpreted as constructing a phantom electrode with neutral electric activity, and using it to close the recording circuit.
+It is relevant to mention that this type of re-reference can be interpreted as constructing a phantom electrode with neutral electric activity and using it to close the recording circuit.
 %
 This process is expected to eliminate noises that are common to all electrodes.
 
-Assuming that $\Y$ was re-referenced to the average, then the parameter $c$ is always zero and the estimator is as follows
+Assuming that $\Y$ was re-referenced to the average, then the parameter $c$ is always zero, and the estimator is as follows
 \begin{equation}
 \hat{\J}_{\text{sLORETA}} =
 \G^T H 
@@ -258,11 +258,11 @@ H +
 
 \subsection{Multivariate Source Prelocalization (MSP)}
 
-The MSP estimator was porposed by Mattout []
+The MSP estimator was proposed by Mattout []
 %Mattout J, P\'{e}l\'{e}grini-Issac M, Garnero L, \& Benali H. (2005). Multivariate source prelocalization (MSP): use of functionally informed basis functions for better conditioning the MEG inverse problem. NeuroImage, 26(2), 356-373.}
-incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then get the sources that are more correlated with their projections into that space.
+incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then gets the sources that are more correlated with their projections into that space.
 %
-The obtained information is later used to construct a weight matrix, so the the finale estimation is similar to wMNE.
+The obtained information is later used to construct a weight matrix, so the finale estimation is similar to wMNE.
 \begin{equation}
 \hat{\J}_\text{MSP} = \argmin_{\J} \nnorm{\Y - \G \J}_F^2 + \lambda\nnorm{W_\text{MSP} \J}_F^2
 \end{equation}
@@ -336,7 +336,7 @@ It can be solved efficiently using the Alternating Direction Method of Multiplie
 
 A thorough description of the ADMM methodology is beyond the scope of this chapter, and the interested reader should refer to the book by Boyd [].
 %
-These algorithms are included in order to compare the results.
+These algorithms are included to compare the results.
 
 \subsection{Mixed Norm Estimate (MxNE)}
 
@@ -357,30 +357,25 @@ In general, the bi-level $\ell_{p,q}$ norm is defined as
 \ppar{\sum_{m=1}^M \ppar{ \sum_{n=1}^N \abss{A(m,n)}^p }^{q/p}}^{1/q}
 \end{equation}
 
-The MxNE estimator does not admit a closed-form solution, but can be computed using ADMM or similar algorithms.
+The MxNE estimator does not admit a closed-form solution but can be computed using ADMM or similar algorithms.
 
 \subsection{SISSY}
 
 The algorithm called Source Imaging based on Structured Sparsity (SISSY) was proposed by Becker ().
-%
-%This method incorporates the assumption that the dipoles take the form of cortical patches that are globally sparse and locally smooth.
-%%
-%In order to enforce this assumption over the solution, the authors use the $\ell_1$ norm over $\J$ and the total variation of $\J$ over space, defined as 
-%
-%; this latter term is .
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Methods for parameter selection}
 
-From all the estimation methods described on the previous section, all of them converge in a general form
+From all the estimation methods described in the previous section, all of them converge in a general form
 \begin{equation}
 \hat{\J}_\Theta = F\ppar{ \Y, \G; \Theta }
 \end{equation}
-with $\Theta$ a set of parameters that need to be selected beforehand.
+with $\Theta$ a set of parameters that must be selected beforehand.
 
-One particular case is the linear methods, for which the estimator can be written as
+One particular case is the linear method, for which the estimator can be written as
 \begin{equation}
 \hat{\J}_\Theta
 =
@@ -388,23 +383,23 @@ One particular case is the linear methods, for which the estimator can be writte
 \end{equation}
 with $\mathbf{K}_{\Theta}$ referred to as the Wiener kernel, or inversion kernel, which is approximately a right inverse of $\G$.
 %
-The collection of liner methods include wMNE, FOCUSS, LORETA and their derivates, MSP, among others. 
+The collection of liner methods includes wMNE, FOCUSS, LORETA and their derivates, and MSP, among others. 
 
 On the other hand, methods like MCE, MxNE, SiSSY, etc, are not linear and can't be assigned to a Wiener kernel.
 
 In this section, we review some heuristics for selecting the parameter set $\Theta$.
 %
-The wMNE estimator is used as a reference model since it depends on a single parameter.
+The wMNE estimator is a reference model since it depends on a single parameter.
 %
 However, the heuristics can be generalized to select multiple parameters by finding the minima/maxima of functions of multiple variables.
 %
-Such generalization is not made explicit.
+Such a generalization is not made explicit.
 
 \subsection{L-curve}
 
 This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{\J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
 %
-In order to do that, define the quantities
+To do that, define the quantities
 \begin{align}
 \rho(\lambda)
 &=
@@ -420,11 +415,11 @@ In order to do that, define the quantities
 \label{det:Lcurve}
 \end{align}
 
-The L-curve denominations stands from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has an interesting appearance.
+The L-curve denominations stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has an interesting appearance.
 %
-Look at figure (to be added) for visual reference.
+Look at the figure (to be added) for visual reference.
 %
-Notice that the quantities $\eta, \rho$ can be computed with relative ease for a small set of potential values of $\lambda$, and more points can be added in order to get a more precise curve.
+Notice that the quantities $\eta, \rho$ can be computed relatively quickly for a small set of potential values of $\lambda$, and more points can be added to get a more precise curve.
 
 The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving in the plotted curve.
 
@@ -432,9 +427,9 @@ The heuristic from this method is to select the value of $\lambda$ that leads to
 
 \subsection{Generalized Cross-Validation}
 
-This heuristic is based on the principle of leave-one-out cross-validation, additional to some approximations that make it computationally efficient. 
+This heuristic is based on the principle of leave-one-out cross-validation, in addition to some approximations that make it computationally efficient. 
 %
-Although it was proposed by Golub in 1979 \cite{GCV_Golub}, it remains popular for methods that admit a inversion kernel.
+Although it was proposed by Golub in 1979 \cite{GCV_Golub}, it remains popular for methods that admit an inversion kernel.
 
 Following the leave-one-out principle, we consider $\Y^{[m]}\in\R{(M-1)\times T}$ and $\G^{[m]} \in \R^{(M-1)\times N}$ with the $m$-th sensor missing,
 \begin{align}
@@ -470,7 +465,7 @@ K_\lambda^{[m]}
 K_\lambda^{[m]}\, \Y_\lambda^{[m]}
 \end{align}
 
-The cross-validation is incorporates by estimating the measurements from the $m$-th with information from $J_\lambda^{[m]}$, and then comparing with the actual measurements.
+The cross-validation is incorporated by estimating the measurements from the $m$-th with information from $J_\lambda^{[m]}$ and then comparing with the actual measurements.
 %
 By performing this procedure over all the sensors and averaging, we obtain the following quantity
 \begin{equation}
@@ -488,11 +483,11 @@ This quantity is approximated by the following
 \label{det:GCV}
 \end{equation}
 
-Although the definition of GCV is based on the leave-one-out cross validation illustrated in equation \eqref{det:GCV_pre}, it is the expression on \eqref{det:GCV} the operative definition of GCV.
+Although the definition of GCV is based on the leave-one-out cross-validation illustrated in equation \eqref{det:GCV_pre}, it is the expression on \eqref{det:GCV} the operative definition of GCV.
 %
 The latter expression represents a balance between $K_\lambda$ as a pseudo-inverse of $\G$ in general vs only for the current sensor data.
 
-The heuristic employed is to select the parameters that minimizes the function in \eqref{det:GCV}, and it can be extended easily to multiple parameters.
+The heuristic employed is to select the parameters that minimize the function in \eqref{det:GCV}, and it can be extended easily to multiple parameters.
 
 It is important to emphasize that the approximation for the GCV error in equation \eqref{det:GCV} can only be computed for linear methods; for instance, estimators based on the $\ell_1$ norm or on neural networks can't be tuned using GCV.
 
@@ -500,7 +495,7 @@ It is important to emphasize that the approximation for the GCV error in equatio
 
 This heuristic incorporates the idea that the residual, $\nnorm{\G\, \J - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
 %
-In order to achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
+To achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
 \begin{equation}
 C\ppar{\lambda} = 
 \frac{d}{d\lambda} \spar{ -\nnorm{\G\J_\lambda - \Y}_2^2 + \lambda \nnorm{\J_\lambda}_2^2}
@@ -521,14 +516,14 @@ U(\lambda) =
 \nnorm{\G\J_\lambda - \Y}_2^{-2} + \nnorm{\J_\lambda}_2^{-2}
 \end{equation}
 
-Similar to the L-curve heuristic, the U-curve heuristic get it's denomination from the typical shape of the plot of $U(\lambda)$.
+Similar to the L-curve heuristic, the U-curve heuristic gets its denomination from the typical shape of the plot of $U(\lambda)$.
 %
 The optimal $\lambda$ is the global minimum of $U(\lambda)$.
 
 \begin{figure}
 \centering
 \includegraphics[width=1\linewidth]{./img_MATLAB/ParTuning_sLORETA}
-\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generlized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interested is , different for each heuristic, is computed for a large number of candidate values and then it is used for selecting one of those values.}
+\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generalized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interest is different for each heuristic, which is computed for a large number of candidate values and then used to select one of those values.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -536,17 +531,17 @@ The optimal $\lambda$ is the global minimum of $U(\lambda)$.
 
 \section{Performance metrics}
 
-There is not a single definition for the location of source in the case of  multiple extended sources.
+There is no single definition for the location of the source in the case of multiple extended sources.
 %
 In the case of synthetic data with protocols similar to that of the next section, it is possible to use each `seed' node as the center of each source patch [].
 %
-It is also possible to use the dipoles with maximal magnitude as center [], or the centers of mass with respect to the dipole magnitude [].
+It is also possible to use the dipoles with a maximal magnitude as the center [] or the centers of mass with respect to the dipole magnitude [].
 %
 Since the minimal-norm estimators often produce a large number of dipoles with small magnitudes, some authors use only dipoles whose magnitude is relatively large [] or which are close to the dipole with maximal magnitude [].
 
 In this work, we employ an operative definition based on the latter.
 %
-First we estimate a patch $\mathcal{I}_i$ as the dipoles that are close to the $i$-th local maximum, indexed by $x_i$, and whose magnitude is significant enough to be relevant.
+First, we estimate a patch $\mathcal{I}_i$ as the dipoles that are close to the $i$-th local maximum, indexed by $x_i$, and whose magnitude is significant enough to be relevant.
 \begin{align}
 x_i &= \argmax_{n} \nnorm{\J_n}_2
 \nonumber \\
@@ -568,9 +563,9 @@ k_i =
 \label{def:center1}
 \end{align}
 
-If the number of source patches is unknown, as it is the case with real data, the patches can be identified sequentially by finding the local maximum of the dipoles that are not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
+If the number of source patches is unknown, as it is with real data, the patches can be identified sequentially by finding the local maximum of the dipoles not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
 
-The operative definition in \eqref{def:center1} is consistent with the cited definitions for source location on synthetic source patched, even in the case of point-sources.
+The operative definition in \eqref{def:center1} is consistent with the cited definitions for source location on synthetic source patched, even in the case of point sources.
 %
 Thus, it is used to determine the `true' centers of the source patches, $k_i$.
 %
@@ -578,7 +573,7 @@ However, the definition may deviate in the case of reconstructed sources.
 
 For evaluation purposes, we employ the definition proposed by Hamalainen []. 
 %
-The patches are defined similarly, but using the true centers of the source patches, $k_i$, instead of the local maxima.
+The patches are defined similarly, but the true centers of the source patches, $k_i$, are used instead of the local maxima.
 \begin{align}
 \hat{\mathcal{I}}_i
 &=
@@ -589,11 +584,11 @@ The patches are defined similarly, but using the true centers of the source patc
 \hat{k}_i &= 
 \frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\hat{\J}_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\hat{\J}_n}_2^2}
 \end{align}
-In practice $\hat{\mathcal{I}}_i$ can be constructed by first selecting the dipoles close to the true centers, and later filtering the dipoles based on the local maxima.
+In practice, $\hat{\mathcal{I}}_i$ can be constructed by first selecting the dipoles close to the true centers and later filtering the dipoles based on the local maxima.
 
 \subsection{Distance Localization Error (DLE)}
 
-Given the definitions of the true and estimated centers for the source patches, the Distance Localization Error is simply defined as
+Given the definitions of the true and estimated centers for the source patches, the Distance Localization Error is defined as
 \begin{equation}
 \text{DLE} = 
 \frac{1}{I} \sum_{i=1}^I \nnorm{ k_i - \hat{k}_i }_2
@@ -601,7 +596,7 @@ Given the definitions of the true and estimated centers for the source patches, 
 \end{equation}
 with $I$ the number of true dipoles.
 %
-This definition does not account if the reconstruction has more or less source patches than it should.
+This definition does not account for whether the reconstruction has more or fewer source patches than it should.
 
 \subsection{Spatial Dispersion (SD)}
 
@@ -616,7 +611,7 @@ This metric proposed by Hamalainen is defined as
 
 \subsection{Relative Mean Square Error (rMSE)}
 
-Also referred to as relative Reconstruction Error, this metric represents the estimation error in for the dipole magnitudes. 
+Also referred to as relative Reconstruction Error, this metric represents the estimation error for the dipole magnitudes. 
 %
 It is defined as
 \begin{equation}
@@ -626,7 +621,7 @@ It is defined as
 
 \subsection{Effective Mean Square Error (fMSE)}
 
-This metric represents is similar to the rMSE, but as perceived by the sensors.
+This metric is similar to the rMSE, but as perceived by the sensors.
 %
 It is defined as
 \begin{equation}
@@ -636,20 +631,20 @@ It is defined as
 
 \subsection{Area Under Receiver-Operator Curve (AUROC)}
 
-Hamalainen proposed to interpret the estimation from Electric Source Imaging as a binary classification problem over the dipoles, with the classes being active and non-active.
+Hamalainen proposed interpreting the estimation from Electric Source Imaging as a binary classification problem over the dipoles, with active and non-active classes.
 %
-This interpretation is consistent with a the usability of ESI data to identify brain regions related to certain cognitive or pathological processes.
+This interpretation is consistent with the usability of ESI data to identify brain regions related to specific cognitive or pathological processes.
 
-Within this interpretation, the active/non-active labels can be created on many ways. 
+Within this interpretation, the active/non-active labels can be created in many ways. 
 %
-Hamalainen proposed using the relative magnitude, to 
+Hamalainen proposed using the relative magnitude to 
 \begin{align}
 \mathcal{A}^{\text{ref}}(\beta)
 &=
 \sset{n\in\sset{1, \dots, N} \given  }
 \end{align}
 
-This metric, very common in Data Science, is used in this context by interpreting the dipoles magnitude as scores for labeling them as active/non-active.
+This metric, very common in Data Science, is used in this context by interpreting the dipoles' magnitude as scores to label them as active or non-active.
 %
 Within this interpretation $\nnorm{\J}$ is used to create the reference labels, $\mathcal{A}^{\text{ref}}: \R \rightarrow \sset{0,1}^N$, and $\hat{\J}$ is used to create the estimated labels, $\mathcal{A}^{\text{est}}: \R \rightarrow \sset{0,1}^N$, as follows
 \begin{align}
@@ -674,7 +669,7 @@ Within this interpretation $\nnorm{\J}$ is used to create the reference labels, 
 
 For ease of notation, labels 0/1 must be read as false/true so that we can use the logical operators and ($\wedge$) and not ($\neg$), but also count the number of \textit{true} elements using the carnality ($\abss{\bullet}$).
 %
-With this notation, we define True Positive, False Positives, True Negatives and False Negatives as follows
+With this notation, we define True Positives, False Positives, True Negatives, and False Negatives as follows
 \begin{align}
 \text{TP}
 &=
@@ -730,9 +725,9 @@ Using a small $\beta$ will cause the labels to be permissive, with very few Fals
 \end{itemize}
 In general, extreme values of $\beta$ will lead to the endpoints (0,0) and (1,1) of the ROC, and a somewhat smooth trajectory will be observed as $\beta$ increases.
 
-A classifier for which TPR$(\beta)$ and $1-$FPR$(\beta)$ are close to 1 for all $\beta$'s is preferable, and this phenomenon can be observed in the ROC as being `close to the top'.
+A classifier for which TPR$(\beta)$ and $1-$FPR$(\beta)$ are close to 1 for all $\beta$'s is preferable, and this phenomenon can be observed in the ROC as being `close to the top.'
 %
-This concept is formalized by taking the are under the Area Under ROC (AUROC) is defined as the area under the ROC curve, being AUROC$\approx 1$ preferable.
+This concept is formalized by taking the area under the Area Under ROC curve (AUROC), which is defined as the area under the ROC curve; AUROC$approx 1$ is preferable.
 %
 In practice, the AUROC can be computed numerically using the trapezoid rule as follows
 \begin{equation}
@@ -744,23 +739,23 @@ In practice, the AUROC can be computed numerically using the trapezoid rule as f
 \end{equation}
 with $\beta_i$ the finite number of values that $\beta$ can actually take.
 
-The suffix `global' is added since all the dipoles are used in the computation of AUROC.
+The suffix `global' is added since all the dipoles are used to compute AUROC.
 %
-Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance, i.e. we expect the proportion of active dipoles at any moment to be very low.
+Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance; that is, we expect the proportion of active dipoles at any moment to be very low.
 %
-In order to alleviate that, they propose to use dipoles within certain distance to the true center.
+To alleviate that, they propose to use dipoles within a certain distance from the true center.
 %
-We refer to that metric as $\text{AUROC}_\text{local}$, and use the distance as 5 \si{mm}.
+We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5 \si{mm}.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./img_dev/nsCurves4}
-\caption{Effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. In order to attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.}
+\caption{Effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. To attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.}
 \end{figure}
 
 \subsection{Average Precision}
 
-A different approach to the class imbalance of the AUROC is to use instead a quantity that is robust to this issue.
+A different approach to the class imbalance of the AUROC is to use a robust quantity to this issue instead.
 
 Average Precision, also known as Area Under Precision-Recall Curve, is based on the parametric curve 
 $\ppar{\text{Rec}\ppar{\beta}, \text{Pre}\ppar{\beta}}$, with the Precision (Pre) and Rec (Rec) defined as
@@ -783,7 +778,7 @@ Similar to AUROC, Average Precision can be computed numerically as follows
 \ppar{ \text{TPR}\ppar{\beta_i}+\text{TPR}\ppar{\beta_{i-1}} }
 \end{equation}
 
-The characteristic shape of the Prcision-Recall Curve is quite different. 
+The characteristic shape of the Precision-Recall Curve is quite different. 
 %
 For instance, see FIGURE.
 
@@ -792,13 +787,13 @@ For instance, see FIGURE.
 
 \section{Numerical experiments}
 
-In order to illustrate the characteristics and performance of the methods described in this section, those methods are first used over synthetic data.
+The methods described in this section are first used over synthetic data to illustrate their characteristics and performance.
 
-The anatomical data is obtained from the ICBM 152 template[], which was constructed as an `average' of a T1 MRI scans from a number of different subjects.
+The anatomical data is obtained from the ICBM 152 template[], constructed as an `average' of T1 MRI scans from several subjects.
 %
-Segmentation and surface extraction was omitted since the 4-sphere surfaces are provided.
+Segmentation and surface extraction were omitted since the 4-sphere surfaces are provided.
 %
-Those triangulates surfaces are displayed in figure \ref{fig:surfaces}.
+Those triangulated surfaces are displayed in figure \ref{fig:surfaces}.
 
 \begin{figure}
 \centering
@@ -815,19 +810,19 @@ Those triangulates surfaces are displayed in figure \ref{fig:surfaces}.
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_outer}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_inner}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_cortex}
-\caption{A. Cortex surface for the ICBM 152 template, consisting on 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head.}
+\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head.}
 \label{fig:surfaces}
 \end{figure}
 
-Electrodes were placed according to the 10-10 International System [], resulting on a total of $M=90$ electrodes. See either figure \ref{fig:1010system} for visual reference or [] for a more precise description of the electrode placement protocol.
+Electrodes were placed according to the 10-10 International System [], resulting in $M=90$ electrodes. See either figure \ref{fig:1010system} for visual reference or [] for a more precise description of the electrode placement protocol.
 %
-The electrodes would be re-referenced to average, so no reference electrode is considered at this stage.
+The electrodes would be re-referenced to the average, so no reference electrode is considered at this stage.
 
-Dipole locations were determined using the $N=15,002$ available in triangulated cortex surface.
+Dipole locations were determined using the $N=15,002$ available in the triangulated cortex surface.
 %
 Dipole orientations were assumed to be orthogonal to the cortex surface.
 
-Additionally, for illustrative purposes in this section, only a single time-stamp is considered, i.e. $T=1$.
+Additionally, this section considers only a single time stamp, $ T=1$, for illustrative purposes.
 
 \begin{figure}
 \centering
@@ -842,9 +837,9 @@ Additionally, for illustrative purposes in this section, only a single time-stam
 
 %\subsubsection{Synthetic data protocol}
 
-Following the forward model from equation \eqref{eq:general}, the synthetic data is constructed by (1) constructing $\J$ based on a source distrubition described later, then (2) constructing $\nu$ and $\varepsilon$ to meet a prescriped Signal-to-Noise Ratio (SNR), and finally (3) constructing $\Y$ as in the forward model.
+Following the forward model from equation \eqref{eq:general}, the synthetic data is constructed by (1) constructing $\J$ based on a source distribution described later, then (2) constructing $\nu$ and $\varepsilon$ to meet a prescribed Signal-to-Noise Ratio (SNR), and finally (3) constructing $\Y$ as in the forward model.
 
-The source distribution consist on selecting an arbitrary dipole indexed by $n^*$, and then construct $J$ as
+The source distribution consists of selecting an arbitrary dipole indexed by $n^*$ and then constructing $J$ as
 \begin{equation}
 \J_n = f\ppar{ \nnorm{r_n-r_{n^*}} / \kappa }
 \end{equation}
@@ -865,11 +860,11 @@ See figure \ref{fig:exaple_true} for a representation of the location and extent
 \includegraphics[height=2in]{./img_MATLAB/exp_Profile}
 \includegraphics{./img_MATLAB/circ_GroundTruth}
 \includegraphics[height=2in]{./img_MATLAB/circ_Profile}
-\caption{Cortical patch used for creation of synthetic data.}
+\caption{Cortical patch used for the creation of synthetic data.}
 \label{fig:exaple_true}
 \end{figure}
 
-This type of configuration is referred to as `source patches' or `extended sources', since they occupy an area that is too large to be modeled as a single dipole.
+This type of configuration is referred to as `source patches' or `extended sources' since it occupies an area too large to be modeled as a single dipole.
 
 For the synthetic data in this section, the dipole $n^*$ was selected within the frontal cortex for visibility.
 %
@@ -880,9 +875,9 @@ f(x) = \begin{cases}
 0, &\text{otherwise}.
 \end{cases}
 \end{equation}
-and $\kappa = $ 12.6 \si{mm}, so to obtain a source patch with an area of 5 \si{cm^2} approximately.
+and $\kappa = $ 12.6 \si{mm}, to obtain a source patch with an area of approximately 5 \si{cm^2}.
 
-For simplicity within the model formulation, we considered no internal noise ($\nu=0$) and independent gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
+For simplicity within the model formulation, we considered no internal noise ($\nu=0$) and independent Gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
 %
 Under these conditions, the distribution of $\Y$ is given by
 \begin{equation}
@@ -902,7 +897,7 @@ With a prescribed SNR value, the parameters $\sigma_m$ are selected as follows
 10\wedge \ppar{-\frac{SNR}{10}}
 \end{equation}
 
-For the synthetic data in this section we consider a SNR level of 20 dB, which we considered a low-noise condition.
+For the synthetic data in this section, we consider an SNR level of 20 dB, which we consider a low-noise condition.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -939,9 +934,7 @@ For the synthetic data in this section we consider a SNR level of 20 dB, which w
 %%some bilateral interactions may be simplified. 
 %%Thus 
 %
-%{Asymmetric data fusion} is the extraction of some parameters from one modality, which then are used to further the analysis of the other modality.
-%%
-%For ESI, the obtained parameters are typically used within the penalty functions.
+%{Asymmetric data fusion} is the extraction of some parameters from one modality, which then are used to further the  for ESIanalysis of the other modaliFor ESI, the obtained parameters are typically used within the penalty functions.
 %%Some simplifying assumptions considered in the literature for asymmetric data fusion for ESI are:
 %%A common framework
 %%Some techniques used in the literature 

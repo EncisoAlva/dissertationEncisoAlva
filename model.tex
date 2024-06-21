@@ -1,4 +1,4 @@
-\chapter{Model description}
+\chapter{Proposed Model}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%                                                   %%%%%%%%%%%%%%%%%%%%%%
@@ -10,7 +10,23 @@
 %
 %
 
-\section{Dataset Framework}
+Within the asymmetric multi-modal data analysis paradigm, we aim to enhance the ESI data by incorporating information from other measurement modalities.
+
+In particular, we consider the case in which a physical region is known to produce a higher background electrical activity.
+%
+The location and extent of this region are observed using some imaging techniques independent of EEG.
+
+The motivation for this particular case comes from a specific experimental setup in which an ischemic stroke is induced, and later, the affected area is determined using histochemical analysis.
+
+\section{Results}
+
+The new method is used based on data from a study of ischemic stroke in an animal model.
+
+\subsection{Real Data}
+
+
+
+\subsection{Dataset Framework}
 The goal is to study the effects of
 ischemic stroke of the Middle Cerebral Artery in an animal
 model. 
@@ -32,7 +48,7 @@ to identify tissues damaged by hypoxia. This information is referred to as  {sym
 
 The proposed innovation is to use the information from {symptoms} to enhance the results of ESI.
 
-A posterior analysis of the results of this ESI may be used to aid the identification of the damaged zone as it evolves through time.
+A posterior analysis of the results of this ESI may help identify the damaged zone as it evolves over time.
 
 This new model considers two phases:
 \begin{enumerate}
@@ -66,7 +82,7 @@ where
 \begin{itemize}
 \item $\Y \in \R^{M \times T}$: EEG measurements.
 \item $\J \in \R^{3N \times T}$: Dipole magnitudes, 3 dipoles per grid point.
-\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on 3 nested media.
+\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on three nested media.
 \item $\varepsilon\in \R^{M\times T}$: Additive noise at the sensors.
 \end{itemize}
  
@@ -82,10 +98,10 @@ where
 % 
 
  {Observed symptoms}
-The post-mortem observations, which will be referred to as  {symptoms}, are registered against a template brain. 
+The post-mortem observations, referred to as  {symptoms}, are registered against a template brain. 
 
 This information is used to label the dipoles in the grid using
-${S\in \set{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
+${S\in \sset{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
 
 %\begin{figure}
 %\centering
@@ -95,10 +111,10 @@ ${S\in \set{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is locate
  
 
  {Regional Parcellation}
-The  brain is divided into $K$ arbitrary regions. For this work, the Desikan-Killian anatomical atlas is used.
+The brain is divided into $K$ arbitrary regions. The Desikan-Killian anatomical atlas is used for this work.
 %due to its physiological interpretation. 
 
-Let $R_k$ be all the dipoles in the $k$-th region. Define the matrix $L\in \set{0,1}^{N\times K}$ as
+Let $R_k$ be all the dipoles in the $k$-th region. Define the matrix $L\in \sset{0,1}^{N\times K}$ as
 \begin{equation}
     L_{n,k} = \begin{cases}
         1, &\text{if } n\in R_k \\
@@ -198,7 +214,7 @@ which derives into the following error function
         \\
         \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
     \end{align}
-    These steps have the following closed form
+    These steps have the following closed-form
     \begin{align}
         \hat{\N}^{(i+1)} &=
         \hat{\N}^{(i)}
