@@ -16,175 +16,88 @@ In particular, we consider the case in which a physical region is known to produ
 %
 The location and extent of this region are observed using some imaging techniques independent of EEG.
 
-The motivation for this particular case comes from a specific experimental setup in which an ischemic stroke is induced, and later, the affected area is determined using histochemical analysis.
+The motivation for this particular setup comes from a specific experimental setup in which an ischemic stroke is induced, and later, the affected area is determined using histochemical analysis.
 
-\section{Results}
+\section{Model Assumptions}
 
-The new method is used based on data from a study of ischemic stroke in an animal model.
-
-\subsection{Real Data}
-
-
-
-\subsection{Dataset Framework}
-The goal is to study the effects of
-ischemic stroke of the Middle Cerebral Artery in an animal
-model. 
-Said lesion is induced.
-
-Electro Corticogram (ECoG) is placed. Recordings start before the lesion and stop 2 hours after it.
-
-In the post-mortem, the brain is stained with
-%2, 3, 5 
-triphenyltetrazolium (TTC)
-to identify tissues damaged by hypoxia. This information is referred to as  {symptoms}.
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.8\linewidth]{./img/sketch01_v2}
-%%\caption{This figure is temporary and will be replaced}
-%\end{figure}
- 
-
-The proposed innovation is to use the information from {symptoms} to enhance the results of ESI.
-
-A posterior analysis of the results of this ESI may help identify the damaged zone as it evolves over time.
-
-This new model considers two phases:
-\begin{enumerate}
-    \item Static symptoms (finished, reporting now).
-    \item Time-changing symptoms.
-\end{enumerate}
- 
-
-
-
-\section{Electrical Source Imaging Formulation}
-\begin{itemize}
-    \item $N$ dipoles with fixed locations on a grid over the brain volume ($<5$ mm between points).
-    \item Each dipole is written as the sum of 3 dipoles with canonical orientations and magnitude to be determined.
-    \item $M$ EEG sensors at fixed locations over the head surface.
-    \item $T$ time-points, labeled from 1 to $T$.
-\end{itemize}
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.5\linewidth]{./img/inverse_prob_v2}
-%%\caption{My idea is to make a small variat}
-%\end{figure}
- 
-
- {Electrical Source Imaging Formulation}
-\textbf{Forward problem}, $N$ unconstrained dipoles with fixed locations
+The relationship between the recordings from surface electrodes, $\Y$, and the magnitudes of equivalent distributed dipoles located inside the brain, $\SA$, is given by the following equation
 \begin{equation}
-\Y = \G \J + \varepsilon.
+\Y = \G \SA + \varepsilon,
 \end{equation}
-where
-\begin{itemize}
-\item $\Y \in \R^{M \times T}$: EEG measurements.
-\item $\J \in \R^{3N \times T}$: Dipole magnitudes, 3 dipoles per grid point.
-\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on three nested media.
-\item $\varepsilon\in \R^{M\times T}$: Additive noise at the sensors.
-\end{itemize}
- 
-
-% {Notation clarification}
-%\begin{itemize}
-%\item ${\Y_m(t) \ppar{\in \R}} = e_m^T \Y e_t$: measurement of sensor $m$ at time-point $t$
-%\item $\Y(t) \in \ppar{\R^{M\times 1}} = \Y e_t$: vector of all sensor measurements at the time-point $t$
-%\item $\Y_m \in \ppar{\R^{1\times T}} = e_m^T \Y$: vector of all measurements of sensor $m$ over time
-%\end{itemize}
+with $\Y \in \R^{M \times 1}$, $\SA \in \R^{3N \times 1}$, $\G \in \R^{3N\times M}$, and $\varepsilon\in \R^{M\times 1}$.
 %
-%This notation extends to both $\U$ and $\J$, but it won't be used for other matrices. 
-% 
+This model was described in detail in chapter [], including the interpretation and derivation of the leadfield matrix $\G$.
 
- {Observed symptoms}
-The post-mortem observations, referred to as  {symptoms}, are registered against a template brain. 
+Ideally, the extra information provided by the additional data modality should allow us to identify an anatomical region exhibiting pathological behavior. 
+%
+This pathological region, referred to as the P-region for generality, is assumed to exhibit a large and synchronized pattern of activity.
+%
+Further details on how to determine the P-region are described in section [], as they are specific to the data modality being used.
 
-This information is used to label the dipoles in the grid using
-${S\in \sset{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
+For generality, we consider the possibility of multiple disjoint P-regions, say $K$ with $1\leq K < \infty$.
+%
+P-regions are labeled $P_1, P_2, \dots, P_K$ with $P_0$ representing the dipoles outside all P-regions.
+
+The P-regions regions are encoded into the model using a matrix 
+$\PA\in \sset{0,1}^{N\times K}$ defined as
+\begin{equation}
+    \PA_{n,k} = \begin{cases}
+        1, &\text{if } n \in P_k \\
+        0, &\text{otherwise.}
+    \end{cases}
+\end{equation}
+
+%The P-region is encoded into the model as a labeling variable 
+%${Z\in \sset{0,1}^{N\times 1}}$, so that $Z_n = 1$ if the $n$-th dipole is located on a the active region.
 
 %\begin{figure}
 %\centering
 %\includegraphics[width=0.8\linewidth]{./img/sketch02_v2}
 %\end{figure}
 
- 
-
- {Regional Parcellation}
-The brain is divided into $K$ arbitrary regions. The Desikan-Killian anatomical atlas is used for this work.
-%due to its physiological interpretation. 
-
-Let $R_k$ be all the dipoles in the $k$-th region. Define the matrix $L\in \sset{0,1}^{N\times K}$ as
+The relation between the current density, $\SA$, and the P-regions is incorporated into the model by adjusting the expected value of $\SA$ depending on whether it is located in a P-region.
+%
+To be specific, consider,
 \begin{equation}
-    L_{n,k} = \begin{cases}
-        1, &\text{if } n\in R_k \\
-        0, &\text{otherwise.}
-    \end{cases}
-\end{equation}
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.3\linewidth]{./img/desikan}
-%\end{figure}
-
- 
-
- {Effect of Observed Symptoms}
-The relation between symptoms and current density ($\J$) is modeled by adjusting the expected value of the latter based on the symptoms label ($S$).
-\begin{equation}
-    E\spar{\J_{t,n}} = 
+    E\spar{\SA\ppar{t,n}} = 
     \begin{cases}
-        \U_{t,k} & \text{if } S_n=1 \text{ and } n\in R_k \\
-        0 & \text{if } S_n=0
+        \U\ppar{t,k}, & \text{if } n\in R_k \text{ with } 0<k, \\
+        0, & \text{otherwise}
     \end{cases}
 \end{equation}
 %with $\U \in \R^{K\times T}$ a the collection of regional averages. 
 %Thus any dipole located on a region with no symptoms is treated as generating only noise with low amplitude.
 
-This formulation is equivalent to stating that
+This assumption can be interpreted as assuming that each pathologic region exhibits a synchronized activity with background noise no larger than the background noise from other regions.
+%
+Such synchronized activity should be larger than the noise in order to be significant to the model.
+
+The model can be condensed as
 \begin{equation}
-    \J = \text{diag}\ppar{S} L \U + \N
+    \J = \PA \U + \N
 \end{equation}
 where $\mathbf{U}\in \R^{K\times T}$ and $\mathbf{N}\in \R^{N\times T}$ are independent and satisfy
 \begin{equation}
     \text{Var}\ppar{\N_{t,n}} \ll \text{Var}\ppar{\U_{t,k}}.
 \end{equation}
- 
 
- {Distributions from the model}
 The proposed model is driven by the following equations
 \begin{align}
-    \Y &= \G \J + \varepsilon \\
-    \J &=  L_S \U + \N
-\end{align}
-where $\Y, \G$ and $L_S = \text{diag}\ppar{S} L$ are given, and
-\begin{align}
-    \varepsilon_t &\sim  \norm\ppar{0, \sigma^2 \id } \\
+    \Y &= \G \ppar{\PA \U + \N} \\
     \N_t &\sim  
     \norm\ppar{0, \gamma_0^2 \id } \\
     \U_t &\sim  
     \norm\ppar{0, \gamma_1^2 \id } 
 \end{align}
-with $\gamma_0^2 \ll \gamma_1^2$.
- 
+%where 
+%$\Y, \G$ and $L_S = \text{diag}\ppar{S} L$ are given, and
+with $\gamma_0^2 \ll \gamma_k^2$.
 
+\section{Proposed Estimator}
 
- {Additional assumption}
-For simplicity, assume that
-the measurements are generated independently over time, so
-%\begin{equation}
-%    P\ppar{ \U_t \Big| \U_s } = P\ppar{ \U_t },
-%    \text{ if } t\neq s
-%\end{equation}
-%for any $t, s$. The analogous holds for $\varepsilon$ and $\N$.
-\begin{equation}
-    P\ppar{ \U } = \prod_{t=1}^T P\ppar{ \U_t }
-\end{equation}
-The analogous holds for $\varepsilon$ and $\N$.
- 
-
- {Maximum A Posteriori (MAP) estimator}
-The estimator is derived from maximizing the a posteriori probability,
+The proposed estimator for $\SA$ is derived as a Maximum A Posteriori (MAP) from ().
+%
+In other words, we want
 \begin{align}
     \ppar{ \hat{\U}, \hat{\N} } &=
     %\set{ \hat{\J}, \hat{\ga} } &=
@@ -226,6 +139,59 @@ which derives into the following error function
         -
         L_S^T \G^T \spar{\G L_S L_S^T \G^T + \frac{\gamma_1^2}{\sigma^2} \id}^{-1} \ppar{\hat{\N}^{(i)}-\hat{\N}^{(i-1)} }
     \end{align}
+
+\section{Results}
+
+\subsection{Real Data}
+
+The effectiveness of the method is tested using data from an experiment 
+of acute ischemic stroke on an animal model, performed by
+Pascal [cite].
+
+Posterior to the experiment, the subject is sacrificed.
+%
+The brain is fragmented in frontal slices for staining with
+2, 3, 5 
+triphenyltetrazolium (TTC)
+to identify the anatomical region damaged by hypoxia\footnote{Lack of oxygen at a cellular level.}, which is also known as the Ischemic Penumbra
+
+The operation of the TTC staining is based on the fact that TTC (white) 
+%is a white compound, but it 
+is degraded to 1,3,5-triphenyl formazan (TPF, red)
+on the presence of dehydrogenases in metabolically active cells.
+%
+As a result, tissue colored white was affected by necrosis, and tissue colored red was unaffected. 
+[cite Wiki?]
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.8\linewidth]{./img/sketch01_v2}
+%%\caption{This figure is temporary and will be replaced}
+%\end{figure}
+
+Within the framework of this work, pictures obtained after TTC staining were registered to the template MRI in order to identify the Ischemic Penumbra at the time of sacrifice.
+%
+This definition is simplistic and doesn't represent a clinical decision.
+
+The active region defined in the section [], $Z$, is determined using the obtained information: a dipole $i$ is labeled as $Z_i=1$ if and only if it is located on the Ischemic Penumbra.
+
+
+
+\section{Previous text}
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
  
 
 
