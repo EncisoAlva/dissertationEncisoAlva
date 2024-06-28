@@ -22,30 +22,35 @@ The motivation for this particular setup comes from a specific experimental setu
 
 The relationship between the recordings from surface electrodes, $\Y$, and the magnitudes of equivalent distributed dipoles located inside the brain, $\SA$, is given by the following equation
 \begin{equation}
-\Y = \G \SA + \varepsilon,
+\Y = \G \ppar{\SA + \varepsilon},
+\label{eq:3.1}
 \end{equation}
-with $\Y \in \R^{M \times 1}$, $\SA \in \R^{3N \times 1}$, $\G \in \R^{3N\times M}$, and $\varepsilon\in \R^{M\times 1}$.
+with $\Y \in \R^{M \times 1}$, $\SA \in \R^{3N \times 1}$, $\G \in \R^{3N\times M}$, and $\varepsilon\in \R^{N\times 1}$.
 %
 This model was described in detail in chapter [], including the interpretation and derivation of the leadfield matrix $\G$.
-
-Ideally, the extra information provided by the additional data modality should allow us to identify an anatomical region exhibiting pathological behavior. 
 %
-This pathological region, referred to as the P-region for generality, is assumed to exhibit a large and synchronized pattern of activity.
-%
-Further details on how to determine the P-region are described in section [], as they are specific to the data modality being used.
+Notice that this model considers only internal noise.
 
+Ideally, the extra information provided by the additional data modality should allow us to identify an anatomical region exhibiting pathological behavior; for simplicity, we refer to this region as a P-region. 
+%
+%This pathological region, referred to as the P-region for generality, is assumed to be more active with respect to the background.
+%
+%Section [] describes further details on determining the P-region, as they are specific to the data modality being used.
+%
 For generality, we consider the possibility of multiple disjoint P-regions, say $K$ with $1\leq K < \infty$.
 %
-P-regions are labeled $P_1, P_2, \dots, P_K$ with $P_0$ representing the dipoles outside all P-regions.
-
+P-regions are labeled $P_1, P_2, \dots, P_K$, with $P_0$ the dipoles outside all P-regions.
+%
 The P-regions regions are encoded into the model using a matrix 
 $\PA\in \sset{0,1}^{N\times K}$ defined as
 \begin{equation}
-    \PA_{n,k} = \begin{cases}
+    \PA\ppar{n,k} = \begin{cases}
         1, &\text{if } n \in P_k \\
         0, &\text{otherwise.}
     \end{cases}
 \end{equation}
+
+In section [], we describe heuristic methods to determine the P-regions and, consequently, the matrix $\PA$.
 
 %The P-region is encoded into the model as a labeling variable 
 %${Z\in \sset{0,1}^{N\times 1}}$, so that $Z_n = 1$ if the $n$-th dipole is located on a the active region.
@@ -55,56 +60,80 @@ $\PA\in \sset{0,1}^{N\times K}$ defined as
 %\includegraphics[width=0.8\linewidth]{./img/sketch02_v2}
 %\end{figure}
 
-The relation between the current density, $\SA$, and the P-regions is incorporated into the model by adjusting the expected value of $\SA$ depending on whether it is located in a P-region.
+The relation between the current density, $\SA$, and the P-regions is incorporated into the model by adjusting the covariance of $\SA$ depending on which P-region it is located.
 %
 To be specific, consider,
 \begin{equation}
-    E\spar{\SA\ppar{t,n}} = 
+    \ccov{\SA\ppar{n_1}, \SA\ppar{n_2}} = 
     \begin{cases}
-        \U\ppar{t,k}, & \text{if } n\in R_k \text{ with } 0<k, \\
+        \gamma_k, & \text{if } n_1, n_2\in P_k, \\
         0, & \text{otherwise}
     \end{cases}
 \end{equation}
-%with $\U \in \R^{K\times T}$ a the collection of regional averages. 
-%Thus any dipole located on a region with no symptoms is treated as generating only noise with low amplitude.
-
-This assumption can be interpreted as assuming that each pathologic region exhibits a synchronized activity with background noise no larger than the background noise from other regions.
+with $\gamma_0 \ll \gamma_k$ for $1\leq k \leq K$.
 %
-Such synchronized activity should be larger than the noise in order to be significant to the model.
+This guarantees that P-regions have synchronized activity that is larger in magnitude than the background activity.
 
-The model can be condensed as
+The assumption of a perfect synchrony is introduced in order to simplify the model.
+%
+We can separate the source, $\SA$, into a regionally-synchronised activity, $\RA$, and a background noise, $\BA$, as
 \begin{equation}
-    \J = \PA \U + \N
+    \SA +\varepsilon = \BA + \PA \RA = \BA + \sum_{k=1}^K \PA(:,k)\, \RA(k)
+    \label{eq:3.4}
 \end{equation}
-where $\mathbf{U}\in \R^{K\times T}$ and $\mathbf{N}\in \R^{N\times T}$ are independent and satisfy
-\begin{equation}
-    \text{Var}\ppar{\N_{t,n}} \ll \text{Var}\ppar{\U_{t,k}}.
-\end{equation}
-
-The proposed model is driven by the following equations
+with $\BA \in \R^{N\times 1}, \RA \in \R^{K\times 1}$ independent with each other.
+%
+These assumptions about P-regions can be combined with Gaussian assumptions, leading to 
 \begin{align}
-    \Y &= \G \ppar{\PA \U + \N} \\
-    \N_t &\sim  
-    \norm\ppar{0, \gamma_0^2 \id } \\
-    \U_t &\sim  
-    \norm\ppar{0, \gamma_1^2 \id } 
+    \BA &\sim \norm\ppar{0, \gamma_0 \id_N } 
+    \label{eq:3.5} \\
+    \RA &\sim \norm\ppar{0, \text{diag}\ppar{\gamma_1, \gamma_2, \dots, \gamma_K}-\gamma_0 \id_N }
+    \label{eq:3.6}
 \end{align}
-%where 
-%$\Y, \G$ and $L_S = \text{diag}\ppar{S} L$ are given, and
-with $\gamma_0^2 \ll \gamma_k^2$.
 
 \section{Proposed Estimator}
 
-The proposed estimator for $\SA$ is derived as a Maximum A Posteriori (MAP) from ().
+The proposed estimator is inspired by the concept of Maximum A Posteriori Estimators described in Chapter 2.
 %
-In other words, we want
+This choice follows the analysis of this type of estimator's strengths and weaknesses, balancing towards shorter computation times and memory requirements.
+%
+We expect that the additional information from P-regions will increase the low accuracy of this type of estimator.
+
 \begin{align}
-    \ppar{ \hat{\U}, \hat{\N} } &=
-    %\set{ \hat{\J}, \hat{\ga} } &=
-    \argmax_{\U, \N }\,
-    %\argmax_{\J, \ga}\,
-    \log P\ppar{\ppar{ {\U}, {\N} } \Big| {\Y; \gamma_0, \gamma_2} }
+    \ppar{ \hat{\BA}, \hat{\RA} } 
+    =
+    \argmax_{\BA, \RA }\, 
+    &\phantom{.}
+    \frac{1}{2 \gamma_0} \nnorm{\BA}^2
+    +
+    \sum_{k=1}^K \frac{1}{2\gamma_k} \nnorm{\PA(:,k)\, \RA(k)}^2
+    \nonumber \\
+    \text{s.t.}
+    \quad
+    &\phantom{.}
+    {\G \ppar{\BA + \PA \RA} } - \Y = 0
 \end{align}
+
+The proposed estimator for $\hat{\SA}$ is derived as a Maximum A Posteriori (MAP) from equation \eqref{eq:3.1}, incorporating equation \eqref{eq:3.4} and the distributions from equations \eqref{eq:3.5} and \eqref{eq:3.6}.
+%
+In other words we construct $\hat{\SA} = \hat{\BA} + \PA \hat{\RA}$,
+where $\hat{\BA}$ and $\hat{\RA}$ come from
+\begin{align}
+    \ppar{ \hat{\BA}, \hat{\RA} } &=
+    \argmax_{\BA, \RA }\,
+    \log \text{Prob}\ppar{\ppar{ {\PA}, {\RA} } \Big| {\Y; \gamma_0, \dots \gamma_K} }
+\end{align}
+with $\gamma_k$ fixed parameters for $0\leq k \leq K$. 
+%
+In section [], we describe a heuristic to determine these parameters.
+
+The log-probability can be deduced from the distributions of ${\BA}$ and ${\RA}$
+\begin{align}
+    \log \text{Prob}\ppar{\ppar{ {\PA}, {\RA} } \Big| {\Y; \gamma_0, \dots \gamma_K} }
+    &=
+    \frac{1}{2}
+\end{align}
+
 which derives into the following error function
 \begin{align}
     F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1} &=
