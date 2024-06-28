@@ -33,10 +33,6 @@ Notice that this model considers only internal noise.
 
 Ideally, the extra information provided by the additional data modality should allow us to identify an anatomical region exhibiting pathological behavior; for simplicity, we refer to this region as a P-region. 
 %
-%This pathological region, referred to as the P-region for generality, is assumed to be more active with respect to the background.
-%
-%Section [] describes further details on determining the P-region, as they are specific to the data modality being used.
-%
 For generality, we consider the possibility of multiple disjoint P-regions, say $K$ with $1\leq K < \infty$.
 %
 P-regions are labeled $P_1, P_2, \dots, P_K$, with $P_0$ the dipoles outside all P-regions.
@@ -99,54 +95,124 @@ This choice follows the analysis of this type of estimator's strengths and weakn
 %
 We expect that the additional information from P-regions will increase the low accuracy of this type of estimator.
 
+The estimator of $\SA$ will be constructed as 
+\begin{equation}
+    \hat{\SA} = \hat{\BA} + \PA \hat{\RA}
+\end{equation}
+where $\hat{\BA}$ and $\hat{\RA}$ are solutions of the following minimization problem
 \begin{align}
     \ppar{ \hat{\BA}, \hat{\RA} } 
     =
     \argmax_{\BA, \RA }\, 
     &\phantom{.}
-    \frac{1}{2 \gamma_0} \nnorm{\BA}^2
+    \frac{1}{2 \theta_0} \nnorm{\BA}^2
     +
-    \sum_{k=1}^K \frac{1}{2\gamma_k} \nnorm{\PA(:,k)\, \RA(k)}^2
+    \sum_{k=1}^K \frac{1}{2 \theta_0} \nnorm{\PA(:,k)\, \RA(k)}^2
     \nonumber \\
     \text{s.t.}
     \quad
     &\phantom{.}
     {\G \ppar{\BA + \PA \RA} } - \Y = 0
+    \label{eq:3.7}
 \end{align}
 
-The proposed estimator for $\hat{\SA}$ is derived as a Maximum A Posteriori (MAP) from equation \eqref{eq:3.1}, incorporating equation \eqref{eq:3.4} and the distributions from equations \eqref{eq:3.5} and \eqref{eq:3.6}.
+A careful derivation will reveal that $\theta_0 = \frac{\gamma_0 }{\sigma}$ and $\theta_k = \frac{\gamma_k-\gamma_0}{\sigma}$, with $\sigma>0$ the variance of the external noise.
 %
-In other words we construct $\hat{\SA} = \hat{\BA} + \PA \hat{\RA}$,
-where $\hat{\BA}$ and $\hat{\RA}$ come from
-\begin{align}
-    \ppar{ \hat{\BA}, \hat{\RA} } &=
-    \argmax_{\BA, \RA }\,
-    \log \text{Prob}\ppar{\ppar{ {\PA}, {\RA} } \Big| {\Y; \gamma_0, \dots \gamma_K} }
-\end{align}
-with $\gamma_k$ fixed parameters for $0\leq k \leq K$. 
-%
-In section [], we describe a heuristic to determine these parameters.
+%However, we decided that the role of those parameters within the interpretability of the model is negligible; we use $\theta_k$ as generic parameters that need to be tuned using the heuristics discussed in Chapter 2.
 
-The log-probability can be deduced from the distributions of ${\BA}$ and ${\RA}$
+The constrained optimization problem in equation \eqref{eq:3.7} is solved using the method Lagrange multipliers.
+%
+First, we construct the respective lagrangian function
 \begin{align}
-    \log \text{Prob}\ppar{\ppar{ {\PA}, {\RA} } \Big| {\Y; \gamma_0, \dots \gamma_K} }
+    \mathcal{L}\ppar{\BA, \RA, \lambda} &=
+    \frac{1}{2 \theta_0} \nnorm{\BA}^2
+    +
+    \sum_{k=1}^K \frac{1}{2 \theta_k} \nnorm{\PA(:,k)\, \RA(k)}^2
+    +
+    \lambda^T \ppar{{\G \ppar{\BA + \PA \RA} } - \Y}
+\end{align}
+which can be minimized by solving the normal equations, i.e., the partial derivatives equal to zero.
+%
+The partial derivatives are given by
+\begin{align}
+    \frac{\partial}{\partial \BA} \mathcal{L}\ppar{\BA, \RA, \lambda}
     &=
-    \frac{1}{2}
+    \frac{1}{\theta_0} \BA + \G^T \lambda 
+    \label{eq:3.9}
+    \\
+    \frac{\partial}{\partial \RA(k)} \mathcal{L}\ppar{\BA, \RA, \lambda}
+    &=
+    \frac{1}{\theta_k} \PA(:,k)^T \PA(:,k)\, \RA(k) + \PA(:,k)^T \G^T \lambda 
+    \label{eq:3.10}
+    \\
+    \frac{\partial}{\partial \lambda} \mathcal{L}\ppar{\BA, \RA, \lambda}
+    &=
+    \G \ppar{ \BA + \PA \RA } - \Y
+    \label{eq:3.11}
 \end{align}
 
-which derives into the following error function
+Solving the normal equation for \eqref{eq:3.9} and \eqref{eq:3.10} lead to the following identities
 \begin{align}
-    F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1} &=
-    \frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U + \G \N - \Y}_F^2
-    \nonumber \\
-    &\phantom{=}
-    +
-    \frac{1}{2\gamma_0^2} \nnorm{\N}_F^2
-    +
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U}_F^2
+    \BA &= -\theta_0 \G^T \lambda
+    \\
+    \RA(k)
+    &=
+    -\theta_k \spar{\PA(:,k)^T \PA(:,k)}^{-1} \PA(:,k)^T \G^T \lambda 
 \end{align}
- 
+
+Notice that $\PA(:,k)^T \PA(:,k) \in \mathbb{N}^{1\times 1}$ represents the number of dipoles on the $k$-th P-region, and thus is invertible.
+%
+For ease of notation, define
+\begin{equation}
+    \abss{P_k} = \PA(:,k)^T \PA(:,k)
+\end{equation}
+
+From equation \eqref{eq:3.11}, we may obtain a closed-form expression for $\lambda$,
+\begin{align}
+    \Y
+    &=
+    \G \BA + \G { \sum_{k=1}^K { \PA(:,k)\, \RA(k) } }
+    \nonumber \\
+    &=
+    \G\ppar{-\theta_0 \G^T \lambda}
+    + \G \sum_{k=1}^K
+    { \PA(:,k)\, \ppar{-\theta_k \abss{P_k}^{-1} \PA(:,k)^T \G^T \lambda}}
+    \nonumber \\
+    &=
+    -\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T \lambda
+\end{align}
+which leads to the following identity
+\begin{equation}
+    \lambda
+    =
+    -\spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T}^{-1} \Y
+\end{equation}
+
+For robustness, we propose using a regularized $\lambda_\rho$ defined as
+\begin{equation}
+    \lambda_\rho
+    =
+    -\spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T + \rho \id_M }^{-1} \Y
+\end{equation}
+and for a further simplification of notation, define
+\begin{align}
+    W_\rho &=
+    \spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T + \rho \id_M }^{-1}
+    \\
+    \lambda_\rho &= -W_\rho  \Y
+\end{align}
+
+Using $\lambda_\rho$ 
+
+
 
 
  {Maximum A Posteriori (MAP) estimator}
