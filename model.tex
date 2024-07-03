@@ -1,11 +1,11 @@
-\chapter{Proposed Model}
+\chapter{Anatomical Region Prior Model}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%                                                   %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%                                                   %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%                                             Stability of multipeakons                                            %%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %
@@ -37,7 +37,14 @@ For generality, we consider the possibility of multiple disjoint P-regions, say 
 %
 P-regions are labeled $P_1, P_2, \dots, P_K$, with $P_0$ the dipoles outside all P-regions.
 %
-The P-regions regions are encoded into the model using a matrix 
+For notation, define 
+\begin{equation}
+    P_k = \sset{ n\in \sset{1, 2, \dots, N} \given n\text{-th dipole is in the } k\text{-th region} }
+\end{equation}
+
+As a remark, the P-regions are defined independently of the dipoles; each $P_k$ is the set of dipoles inside a specific P-region.
+
+For ease of handling in the model, the P-regions regions are encoded using the matrix 
 $\PA\in \sset{0,1}^{N\times K}$ defined as
 \begin{equation}
     \PA\ppar{n,k} = \begin{cases}
@@ -66,13 +73,13 @@ To be specific, consider,
         0, & \text{otherwise}
     \end{cases}
 \end{equation}
-with $\gamma_0 \ll \gamma_k$ for $1\leq k \leq K$.
+with $0 < \gamma_0 \ll \gamma_k$ for $1\leq k \leq K$.
 %
 This guarantees that P-regions have synchronized activity that is larger in magnitude than the background activity.
 
 The assumption of a perfect synchrony is introduced in order to simplify the model.
 %
-We can separate the source, $\SA$, into a regionally-synchronised activity, $\RA$, and a background noise, $\BA$, as
+We can separate the source, $\SA$, into a regionally-synchronized activity, $\RA$, and a background noise, $\BA$, as
 \begin{equation}
     \SA +\varepsilon = \BA + \PA \RA = \BA + \sum_{k=1}^K \PA(:,k)\, \RA(k)
     \label{eq:3.4}
@@ -98,6 +105,8 @@ We expect that the additional information from P-regions will increase the low a
 The estimator of $\SA$ will be constructed as 
 \begin{equation}
     \hat{\SA} = \hat{\BA} + \PA \hat{\RA}
+    = \hat{\BA} + \sum_{k=1}^K \PA(:,k) \hat{\RA}(k)
+    \label{eq:3.7_v2}
 \end{equation}
 where $\hat{\BA}$ and $\hat{\RA}$ are solutions of the following minimization problem
 \begin{align}
@@ -122,7 +131,7 @@ A careful derivation will reveal that $\theta_0 = \frac{\gamma_0 }{\sigma}$ and 
 
 The constrained optimization problem in equation \eqref{eq:3.7} is solved using the method Lagrange multipliers.
 %
-First, we construct the respective lagrangian function
+First, we construct the respective Lagrangian function
 \begin{align}
     \mathcal{L}\ppar{\BA, \RA, \lambda} &=
     \frac{1}{2 \theta_0} \nnorm{\BA}^2
@@ -154,10 +163,12 @@ The partial derivatives are given by
 Solving the normal equation for \eqref{eq:3.9} and \eqref{eq:3.10} lead to the following identities
 \begin{align}
     \BA &= -\theta_0 \G^T \lambda
+    \label{eq:3.13}
     \\
     \RA(k)
     &=
     -\theta_k \spar{\PA(:,k)^T \PA(:,k)}^{-1} \PA(:,k)^T \G^T \lambda 
+    \label{eq:3.14}
 \end{align}
 
 Notice that $\PA(:,k)^T \PA(:,k) \in \mathbb{N}^{1\times 1}$ represents the number of dipoles on the $k$-th P-region, and thus is invertible.
@@ -193,47 +204,218 @@ which leads to the following identity
 \end{equation}
 
 For robustness, we propose using a regularized $\lambda_\rho$ defined as
-\begin{equation}
-    \lambda_\rho
-    =
-    -\spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
-    \PA(:,k)\, \PA(:,k)^T
-    } \G^T + \rho \id_M }^{-1} \Y
-\end{equation}
-and for a further simplification of notation, define
+%\begin{equation}
+%    \lambda_\rho
+%    =
+%    -\spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+%    \PA(:,k)\, \PA(:,k)^T
+%    } \G^T + \rho \id_M }^{-1} \Y
+%\end{equation}
+%and for a further simplification of notation, define
 \begin{align}
+    \lambda_\rho &= -W_\rho  \Y 
+    \\
     W_\rho &=
     \spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
     \PA(:,k)\, \PA(:,k)^T
     } \G^T + \rho \id_M }^{-1}
-    \\
-    \lambda_\rho &= -W_\rho  \Y
 \end{align}
 
-Using $\lambda_\rho$ 
+Using $\lambda_\rho$ in equations \eqref{eq:3.13} and \eqref{eq:3.14} lead to the estimators
+\begin{align}
+    \hat{\BA} &=
+    \theta_0 \G^T W_\rho \Y
+    \\
+    \hat{\RA}(k) &=
+    \theta_k \abss{P_k}^{-1} \PA(:,k)^T \G^T W_\rho \Y
+\end{align}
 
+The estimator for $\SA$ is constructed as in equation \eqref{eq:3.7_v2},
+\begin{align}
+    \hat{\SA}
+    &=
+    \hat{\BA} + \sum_{k=1}^K \PA(:,k) \hat{\RA}(k)
+    \nonumber \\
+    &=
+    \ppar{\theta_0 \G^T W_\rho \Y}
+    + \sum_{k=1}^K \PA(:,k) \ppar{\theta_k \abss{P_k}^{-1} \PA(:,k)^T \G^T W_\rho \Y}
+    \nonumber \\
+    &=
+    \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T W_\rho \Y
+\end{align}
 
+Thus, the proposed estimator is given by
+\begin{align}
+    \hat{\SA}
+    &=
+    \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T W_\rho \Y
+    \label{eq:3.24}
+    \\
+    W_\rho &=
+    \spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T + \rho \id_M }^{-1}
+    \label{eq:3.25}
+\end{align}
 
+\subsection{Implementation notes}
 
- {Maximum A Posteriori (MAP) estimator}
-    The iterative minimization of the error function can be interpreted as a multi-scale iterative correction
-    \begin{align}
-        \hat{\N}^{(i+1)} &= \argmin_{\N} F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
+The computation of the estimator described in equations \eqref{eq:3.24} and \eqref{eq:3.25} can be accelerated by avoiding explicit matrix multiplications whenever possible.
+%
+For instance, consider the matrices in the form 
+\begin{equation}
+    A_k = \abss{P_k}^{-1} \PA(:,k)\, \PA(:,k)^T
+\end{equation}
+for $1\leq k \leq K$. 
+%
+Notice that each $A_k \in \R^{N\times N}$ is an averaging operator with support over the corresponding P-region.
+%
+In other words, for any vector $V\in \R^{N}$ we have
+\begin{equation}
+    \spar{A_k V}(n) =
+    \begin{cases}
+        {\displaystyle \frac{1}{\abss{P_k}} \sum_{n'\in P_k} V(n')}, 
+        &\text{if } n\in P_k, \\
+        0, &\text{otherwise}.
+    \end{cases}
+\end{equation}
+
+With this notation at hand, we can rewrite equation \eqref{eq:3.24} as
+\begin{align}
+    \hat{\SA}
+    &=
+    \ppar{\theta_0 \id_N + \sum_{k=1}^K \theta_k A_k}\G^T W_\rho \Y
+\end{align}
+
+%Instead of constructing the matrix $\ppar{\theta_0 \id_N + \sum_{k=1}^K \theta_k A_k}$ explicitly 
+
+Using the matrices $A_k$, we can construct $\hat{\SA}$ row-by-row as follows:
+\begin{align}
+    \hat{\BA}_0
+    &=
+    \G^T W_\rho \Y \\
+    \hat{\RA}_0(k)
+    &=
+    {\displaystyle \frac{1}{\abss{P_k}} \sum_{n\in P_k} \hat{\BA}_0(n)},
+    \text{for } 1\leq k \leq K
+    \\
+    \hat{\SA}
+    &=
+    \theta_0 \hat{\BA}_0 + \G\, \text{diag}\ppar{\theta_1, \dots, \theta_K}\, \hat{\RA}
+    \label{eq:3.s1}
+\end{align}
+with $\hat{\BA}_0 \in \R^{N\times 1}$, $\hat{\RA}_0 \in \R^{K\times 1}$.
+%
+Alternatively, we can construct $\hat{\SA}$ row by row as
+\begin{equation}
+    \hat{\SA}(n) =
+    \begin{cases}
+        \theta_0 \hat{\BA}_0(n) + \theta_k \hat{\RA}_0(k),
+        &\text{if } n\in P_k \text{ with } 1\leq k \leq K,
         \\
-        \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
-    \end{align}
-    These steps have the following closed-form
-    \begin{align}
-        \hat{\N}^{(i+1)} &=
-        \hat{\N}^{(i)}
-        -
-        \G^T \spar{\G \G^T + \frac{\gamma_0^2}{\sigma^2} \id}^{-1} L_S \ppar{\hat{\U}^{(i)}-\hat{\U}^{(i-1)} }
-        \\
-        \hat{\U}^{(i+1)} &=
-        \hat{\U}^{(i)}
-        -
-        L_S^T \G^T \spar{\G L_S L_S^T \G^T + \frac{\gamma_1^2}{\sigma^2} \id}^{-1} \ppar{\hat{\N}^{(i)}-\hat{\N}^{(i-1)} }
-    \end{align}
+        \theta_0 \hat{\BA}_0(n), &\text{if } n\in P_0
+    \end{cases}
+    \label{eq:3.s2}
+\end{equation}
+Depending on how large the P-regions are, i.e., how large are each $\abss{P_k}$ with respect to $N$, it would be more convenient to use
+either \eqref{eq:3.s1} or \eqref{eq:3.s2}.
+%
+In a practical setting, we informally expect each P-region to contain less than 10\% of the total dipoles.
+
+
+
+
+With this notation at hand, consider the following weighted averaging operator
+\begin{align}
+    \AAA_\Theta 
+    &=
+    \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    \nonumber \\
+    &=
+    \theta_0 \id_N + \sum_{k=1}^K \theta_k A_k
+\end{align}
+which appears in bit equations \eqref{eq:3.24} and \eqref{eq:3.25}.
+
+First, we simplify equation \eqref{eq:3.24} is simplified by using row-wise averages.
+%
+%To be precise, write
+\begin{align}
+    \hat{\SA} (n)
+    &=
+    \AAA_\Theta \G^T W_\rho \Y
+    \nonumber 
+\end{align}
+
+
+consequently, they are symmetric and idempotent.
+Furthermore, if the P-regions are non-intersecting, then
+\begin{equation}
+    A_{k_1} A_{k_2} = 
+    \begin{cases}
+        A_{k_1}, &\text{if } k_1=k_2, \\
+        0, &\text{otherwise.}
+    \end{cases}
+    \label{eq:3.27}
+\end{equation}
+
+Thinking about equation \eqref{eq:3.25} in particular, we can exploit the property on equation \eqref{eq:3.27} to factor $\AAA_\Theta$ as
+\begin{align}
+    \AAA_\Theta &= \AAA_{\tilde\Theta}^2 \\
+    \AAA_{\tilde\Theta} &=
+    \sqrt{\theta_0} \id_N + \sum_{k=1}^K \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} A_k
+\end{align}
+
+The middle step for this computation is the following identity, which follows directly from equation \eqref{eq:3.27},
+\begin{equation}
+    \ppar{q_0 \id_N + \sum_{k=1}^K q_k A_k}^2
+    =
+    q_0^2 \id_N + \sum_{k=1}^K \ppar{2q_0 q_k + q_k^2} A_k
+\end{equation}
+
+With the decomposition of $\AAA_\Theta$ at hand, we can rewrite $W_\rho$ as
+\begin{equation}
+    W_\rho =
+    \spar{ \ppar{\G \AAA_{\tilde{\Theta}}} \ppar{\G \AAA_{\tilde{\Theta}}}^T
+    + \rho \id_M }^{-1}
+\end{equation}
+
+Naturally, $\ppar{\G \AAA_{\tilde{\Theta}}}$ can be (and will be) computed without constructing ${\AAA_{\tilde{\Theta}}}$ explicitly
+
+...
+As an implementation note, consider the following matrix, which is involved in the computation of the estimator,
+\begin{equation}
+    A_\Theta =
+    \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+\end{equation}
+
+Notice that $A_\Theta\in \R^{N\times N}$ acts as a weighted average estimator over the columns of $\G^T$. In other words
+\begin{equation}
+    \spar{A_\Theta \G^T}(n, m) =
+    \theta_0 \G^T(n,m) + \theta_k \frac{1}{\abss{P_k}} \sum_{n' \in P_k} \G^T(n',m), \text{ for } n\in P_k
+\end{equation}
+
+Since $\ppar{A_\Theta \G^T}\in \R^{N\times M}$ can be computed without constructing explicitly $A_\Theta$,
+%
+we can write alternatively
+\begin{align}
+    \hat{\SA}
+    &=
+    \ppar{A_\Theta \G^T} W_\rho \Y
+    \\
+    W_\rho &=
+    \spar{ {\G} \ppar{A_\Theta \G^T}  + \rho \id_M }^{-1}
+\end{align}
+which only requires inverting a symmetric and dense $M\times M$ matrix.
+
+\subsection{Functional P-regions}
+
+
 
 \section{Results}
 
@@ -269,10 +451,6 @@ Within the framework of this work, pictures obtained after TTC staining were reg
 This definition is simplistic and doesn't represent a clinical decision.
 
 The active region defined in the section [], $Z$, is determined using the obtained information: a dipole $i$ is labeled as $Z_i=1$ if and only if it is located on the Ischemic Penumbra.
-
-
-
-\section{Previous text}
 
 
 
