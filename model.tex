@@ -326,33 +326,12 @@ either \eqref{eq:3.s1} or \eqref{eq:3.s2}.
 %
 In a practical setting, we informally expect each P-region to contain less than 10\% of the total dipoles.
 
+%%%
 
-
-
-With this notation at hand, consider the following weighted averaging operator
-\begin{align}
-    \AAA_\Theta 
-    &=
-    \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
-    \PA(:,k)\, \PA(:,k)^T
-    \nonumber \\
-    &=
-    \theta_0 \id_N + \sum_{k=1}^K \theta_k A_k
-\end{align}
-which appears in bit equations \eqref{eq:3.24} and \eqref{eq:3.25}.
-
-First, we simplify equation \eqref{eq:3.24} is simplified by using row-wise averages.
+Next, equation \eqref{eq:3.25} is simplified by considering the properties of the matrices involved.
 %
-%To be precise, write
-\begin{align}
-    \hat{\SA} (n)
-    &=
-    \AAA_\Theta \G^T W_\rho \Y
-    \nonumber 
-\end{align}
-
-
-consequently, they are symmetric and idempotent.
+Notice that each matrix $A_k$ is symmetric and idempotent.
+%
 Furthermore, if the P-regions are non-intersecting, then
 \begin{equation}
     A_{k_1} A_{k_2} = 
@@ -363,61 +342,86 @@ Furthermore, if the P-regions are non-intersecting, then
     \label{eq:3.27}
 \end{equation}
 
-Thinking about equation \eqref{eq:3.25} in particular, we can exploit the property on equation \eqref{eq:3.27} to factor $\AAA_\Theta$ as
-\begin{align}
-    \AAA_\Theta &= \AAA_{\tilde\Theta}^2 \\
-    \AAA_{\tilde\Theta} &=
-    \sqrt{\theta_0} \id_N + \sum_{k=1}^K \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} A_k
-\end{align}
-
-The middle step for this computation is the following identity, which follows directly from equation \eqref{eq:3.27},
+This property can be extended to get powers and decomposition of the averaging operators $A_k$.
+%
+In particular, we have the following
 \begin{equation}
     \ppar{q_0 \id_N + \sum_{k=1}^K q_k A_k}^2
     =
     q_0^2 \id_N + \sum_{k=1}^K \ppar{2q_0 q_k + q_k^2} A_k
 \end{equation}
+which leads to the following identity
+\begin{align}
+    \AAA_{\Theta} &=
+    \sqrt{\theta_0} \id_N + \sum_{k=1}^K \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} A_k
+    \\
+    \AAA_{\Theta}^2
+    &=
+    {\theta_0} \id_N + \sum_{k=1}^K {\theta_k} A_k
+\end{align}
 
-With the decomposition of $\AAA_\Theta$ at hand, we can rewrite $W_\rho$ as
+With this decomposition at hand, we can rewrite $W_\rho$ as
 \begin{equation}
     W_\rho =
-    \spar{ \ppar{\G \AAA_{\tilde{\Theta}}} \ppar{\G \AAA_{\tilde{\Theta}}}^T
+    \spar{ \ppar{\G \AAA_{{\Theta}}} \ppar{\G \AAA_{{\Theta}}}^T
     + \rho \id_M }^{-1}
 \end{equation}
 
-Naturally, $\ppar{\G \AAA_{\tilde{\Theta}}}$ can be (and will be) computed without constructing ${\AAA_{\tilde{\Theta}}}$ explicitly
-
-...
-As an implementation note, consider the following matrix, which is involved in the computation of the estimator,
+Notice that $\AAA_\Theta\in \R^{N\times N}$ acts as a weighted average estimator over the rows of $\G$, a phenomenon described on the previous pages. In other words
 \begin{equation}
-    A_\Theta =
-    \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
-    \PA(:,k)\, \PA(:,k)^T
-\end{equation}
-
-Notice that $A_\Theta\in \R^{N\times N}$ acts as a weighted average estimator over the columns of $\G^T$. In other words
-\begin{equation}
-    \spar{A_\Theta \G^T}(n, m) =
-    \theta_0 \G^T(n,m) + \theta_k \frac{1}{\abss{P_k}} \sum_{n' \in P_k} \G^T(n',m), \text{ for } n\in P_k
-\end{equation}
-
-Since $\ppar{A_\Theta \G^T}\in \R^{N\times M}$ can be computed without constructing explicitly $A_\Theta$,
-%
-we can write alternatively
-\begin{align}
-    \hat{\SA}
-    &=
-    \ppar{A_\Theta \G^T} W_\rho \Y
+    \spar{\G \AAA_\Theta}(:, n) =
+    \begin{cases}
+    \sqrt{\theta_0} \G^T(:,n) 
     \\
-    W_\rho &=
-    \spar{ {\G} \ppar{A_\Theta \G^T}  + \rho \id_M }^{-1}
-\end{align}
-which only requires inverting a symmetric and dense $M\times M$ matrix.
+    \quad + \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} \displaystyle\frac{1}{\abss{P_k}} \sum_{n' \in P_k} \G^T(:, n'), &\text{for } n\in P_k, 1\leq k \\
+    \sqrt{\theta_0} \G^T(:,n).
+    &\text{for } n\in P_0
+    \end{cases}
+\end{equation}
 
-\subsection{Functional P-regions}
+Clearly, $\ppar{A_\Theta \G^T}\in \R^{N\times M}$ can be computed by updating $\G$ on a similar way as $\hat{\SA}$.
+%
+The similarity can be made more clear by using similar steps.
+\begin{align}
+    \G_\RA(:,k) 
+    &= 
+    \frac{1}{\abss{P_k}} \sum_{n \in P_k} \G^T(:, n), 
+    \text{for } 1\leq k \leq K,
+    \\
+    \spar{\G \AAA_\Theta}(:, n) 
+    &=
+    \begin{cases}
+    \sqrt{\theta_0} \G^T(:,n) 
+     + \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} \G_\RA(:,k), &\text{for } 1\leq k \leq K \\
+    \sqrt{\theta_0} \G^T(:,n).
+    &\text{for } n\in P_0
+    \end{cases}
+\end{align}
+with $\G_\RA \in \R^{K\times M}$.
+%
+Notice that, once $\ppar{A_\Theta \G^T}$ is computed, it can be subject to 
+SVD decomposition in order to compute $W_\rho$.
+%
+This process is similar to all the kernels described in Chapter 2 for linear methods; thus, it is omitted.
+
+With this list of considerations, we claim that this new method is not significantly more computationally expensive than the linear methods presented in Chapter 2.
+%
+The results from the following section follow from implementing this method in Matlab, and we want to emphasize that some of the methods in Chapter 2 are implemented in C as part of commercial software.
+%
+This results in an appreciably smaller computation time despite having a similar complexity.
+
+
+%\subsection{Functional P-regions}
 
 
 
 \section{Results}
+
+\subsection{Synthetic Data}
+
+The battery of analysis described in Chapter 2 is repeated for the new method, which is compared to 3 methods (this is already done, I haven't made the gaps yet).
+
+An additional set of similar analyses was done for ECoG and considering pig brain.
 
 \subsection{Real Data}
 
@@ -446,11 +450,11 @@ As a result, tissue colored white was affected by necrosis, and tissue colored r
 %%\caption{This figure is temporary and will be replaced}
 %\end{figure}
 
-Within the framework of this work, pictures obtained after TTC staining were registered to the template MRI in order to identify the Ischemic Penumbra at the time of sacrifice.
+Within the framework of this work, pictures obtained after TTC staining were registered to the template MRI to identify the Ischemic Penumbra at the time of sacrifice.
 %
 This definition is simplistic and doesn't represent a clinical decision.
 
-The active region defined in the section [], $Z$, is determined using the obtained information: a dipole $i$ is labeled as $Z_i=1$ if and only if it is located on the Ischemic Penumbra.
+The P-region defined in the previous section is determined as the anatomic Ischemic Penumbra observed using TTC stain.
 
 
 
