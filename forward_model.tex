@@ -116,15 +116,15 @@ Under these conditions, the simplest model considers a small number of tissue-ba
 %
 The 4-sphere model considers only four media: the brain, $\mathcal{M}_4$, cerebrospinal fluid (CSF), $\mathcal{M}_3$, skull, $\mathcal{M}_2$, and the rest of the head, $\mathcal{M}_1$.
 %
-For computational purposes, we may consider a fifth medium, $\mathcal{M}_0$, representing outside of the head.
+For computational purposes, we may consider a fifth medium, $\mathcal{M}_0$, representing the outside of the head.
 
 Multiple approximations are used in practice, as illustrated in figure \ref{fig:diagrams2} where portions of the skull far from the brain are ignored, as well as muscle and connective tissues 
 because those tissues are too far from the EEG sensors to make a significant difference in the model.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_dev/nsHeadSurfacesVolumes}
-\caption{Geometric domain defined by relevant tissues in the subject's head. The 4-sphere model considers three media: brain, cerebrospinal fluid (CSF), and the rest of the head. Relevant interfaces between media are displayed: brain cortex, inner and outer skull, and scalp. (Left) Cartoonish diagram displaying the elements. (Right) Surfaces extracted from the ICBM152 template were included to show realistic proportions.}
+\includegraphics[width=\linewidth]{./img/HeadSurfacesVolumes}
+\caption{Geometric domain defined by relevant tissues in the subject's head. The 4-sphere model considers three media: brain, cerebrospinal fluid (CSF), and the rest of the head. Relevant interfaces between media are displayed: brain cortex, inner and outer skull, and scalp. (Left) Realistic illustration of a human head. Composition from diagrams by Patrick L. Lynch and C. Carl Jaffe. [TODO: BibTeX citation] (Right) Surfaces extracted from the ICBM152 template after performing a segmentation using OPENMEEG. The simplifications of anatomy described in the text become evident.}
 \label{fig:diagrams2}
 \end{figure}
 
@@ -251,7 +251,7 @@ where $\Y \in \R^{M\times 1}$ is a vector of EEG measurements, $\J \in \R^{N\tim
 The forward model can be extended trivially to account for $T$ EEG measurements in time by setting $\Y \in ]R^{M\times T}$, $\Y \in \R^{M\times T}$, and $\G$ unchanged.
 
 
-If the dipole's orientation is to be determined, then we can consider each dipole as the sum of three dipoles parallel to some orthogonal directions. Such as in figure \ref{fig:diagrams3}, we can write
+If the dipole's orientation is to be determined, we can consider each dipole as the sum of three dipoles parallel to some orthogonal directions. Such as in figure \ref{fig:diagrams3}, we can write
 \begin{equation}
 m_n d_n = m_n^x e_n^x + m_n^y e_n^y + m_n^z e_n^z
 \end{equation}
@@ -285,7 +285,7 @@ Silent activity refers to neural activity that doesn't produce a significant ele
 %
 It is estimated that only 20\% of the brain's energy is spent producing non-silent activity.
 
-The orientation of neuron dendrites, which carry the post-synaptic potentials, plays a key role in how much of their activity is recorded by surface electrodes.
+The orientation of neuron dendrites, which carry the post-synaptic potentials, is crucial in how much of their activity is actually recorded by surface electrodes.
 %
 Pyramidal neurons at the gray matter (located at the outer cortex) are almost exclusively oriented parallel to the cortex surface.
 %
@@ -295,7 +295,7 @@ On the other side, neural activity occurring at the lower layers of the brain is
 
 These limitations of this recording modality are inherited from the ESI methods, and thus, they must be considered when interpreting the obtained results.
 
-A second set of limitations from the model of distributed dipoles, which represent a spatial average of the .
+A second set of limitations from the distributed dipole model represents a spatial average of the .
 %
 Distributed dipoles can efficiently represent synchronous activity over large regions, a phenomenon known as a source patch.
 %
@@ -304,8 +304,41 @@ Distributed dipoles of low magnitude may represent smaller source patches and re
 
 
 
-%An important consideration in the practice is the location of the dipoles. 
+% an essential consideration in the practice is the location of the dipoles. 
 %
 The distributed dipole model is agnostic in that it doesn't make any assumptions about the location of the dipoles.
 %
 A region with no active dipoles leads to equivalent dipoles with zero magnitude, while a region with active dipoles leads to equivalent dipoles with non-zero magnitude.
+
+\section{Extensions of the model}
+
+The 4-sphere model is a prevalent standard in the modern literature.
+%
+Segmentation algorithms for the relevant tissues are available in many commercial software.
+
+Different authors have addressed a number of limitations of the 4-sphere model.
+
+For instance, extending the 4-sphere model into 5 spheres has been proposed by distinguishing between white matter and gray matter inside the brain.
+%
+The resulting model is almost identical, and the additional computational cost is not very large. 
+%
+%Unfortunately, 
+However, the gray and white matter are very similar when observed using T1 MRI, even under normal conditions, and thus, very robust segmentation algorithms are required.
+
+The assumption of isotropic conductivity has also been questioned.
+%
+Conductivity can be estimated using, for example, Diffusion Tensor Imaging.
+%
+[] investigated the benefits of including such additional information and concluded that anisotropic information should be used when available, but the enhancements do not justify the additional costs.
+
+On the other hand, more simplistic models have also been proposed.
+%
+The Corrected 4-sphere model, for example, uses four spheres instead of volumes obtained from the subject.
+%
+TODO[ add comment]
+
+Now, the 4-sphere model can be generalized to other types of electrical recordings.
+%
+For example, [] have used () to model intracranial electrodes, i.e., electrodes placed at the cortex surface or inside the brain.
+
+In Chapter 3 we use the 1-sphere model to locate sources. 
