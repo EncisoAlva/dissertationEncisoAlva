@@ -1,4 +1,9 @@
 Skull:
 
-https://commons.wikimedia.org/wiki/File:Human_skull_side_suturas_right.svg
+https://commons.wikimedia.org/wiki/File:Skull_human_sagittal_section.svg
+https://commons.wikimedia.org/wiki/User:Rocket000/SVGs/Biology/Human_anatomy#/media/File:Skull_human_and_cervical_spine.svg
+
+Brain:
+
+https://commons.wikimedia.org/wiki/File:Brain_human_sagittal_section.svg
 
