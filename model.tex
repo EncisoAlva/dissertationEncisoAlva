@@ -10,7 +10,13 @@
 %
 %
 
-Within the asymmetric multi-modal data analysis paradigm, we aim to enhance the ESI data by incorporating information from other measurement modalities.
+When considering using more than one data modality for analysis, there are many ways to combine them. 
+%
+The asymmetric multi-modal data analysis paradigm consists of selecting a tool designed for one data modality and then incorporating information from all the other data modalities into the analysis.
+%
+This paradigm fits the purpose of performing the Electronic Source Imaging while incorporating information from additional data modalities.
+
+%Within the asymmetric multi-modal data analysis paradigm, we aim to enhance the ESI data by incorporating information from other measurement modalities.
 
 In particular, we consider the case in which a physical region is known to produce a higher background electrical activity.
 %
@@ -27,7 +33,7 @@ The relationship between the recordings from surface electrodes, $\Y$, and the m
 \end{equation}
 with $\Y \in \R^{M \times 1}$, $\SA \in \R^{3N \times 1}$, $\G \in \R^{3N\times M}$, and $\varepsilon\in \R^{N\times 1}$.
 %
-This model was described in detail in chapter [], including the interpretation and derivation of the leadfield matrix $\G$.
+This model was described in detail in Chapter \ref{ch:forward}, including the interpretation and derivation of the leadfield matrix $\G$.
 %
 Notice that this model considers only internal noise.
 
@@ -59,7 +65,7 @@ $\PA\in \sset{0,1}^{N\times K}$ defined as
     \end{cases}
 \end{equation}
 
-In section [], we describe heuristic methods to determine the P-regions and, consequently, the matrix $\PA$.
+In section \ref{sec:SelectPregions}, we describe heuristic methods to determine the P-regions and, consequently, the matrix $\PA$.
 
 %The P-region is encoded into the model as a labeling variable 
 %${Z\in \sset{0,1}^{N\times 1}}$, so that $Z_n = 1$ if the $n$-th dipole is located on a the active region.
@@ -96,33 +102,53 @@ These assumptions about P-regions can be combined with Gaussian assumptions, lea
 \begin{align}
     \BA &\sim \norm\ppar{0, \gamma_0 \id_N } 
     \label{eq:3.5} \\
-    \RA &\sim \norm\ppar{0, \text{diag}\ppar{\gamma_1, \gamma_2, \dots, \gamma_K}-\gamma_0 \id_N }
+    \RA &\sim \norm\ppar{0, 
+    \spar{\text{diag}\ppar{\gamma_1, \gamma_2, \dots, \gamma_K}-\gamma_0 \id_K} }
     \label{eq:3.6}
 \end{align}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Proposed Estimator}
 
-The proposed estimator is inspired by the concept of Maximum A Posteriori Estimators described in Chapter 2.
+Given the assumptions described in the previous section, we propose constructing a linear estimator for $S$ similar to those presented in Chapter \ref{ch:review}.
 %
-This choice follows the analysis of this type of estimator's strengths and weaknesses, balancing towards shorter computation times and memory requirements.
+%This choice follows the analysis of strengths and weaknesses. 
 %
-We expect that the additional information from P-regions will increase the low accuracy of this type of estimator.
+This choice follows the expectation of short computation times and memory requirements. 
+%
+We expect that the additional information from P-regions will decrease spatial dispersion while not significantly increasing computational speed.
 
-The estimator of $\SA$ will be constructed as 
+
+The estimator of $\SA$ will be constructed as a Maximum A Posteriori estimator, maximizing the log probability of $\left. \SA \given \Y \right.$, as
+\begin{align}
+    \hat{\SA} &= 
+    \argmax_{\SA }\, 
+    \phantom{.}
+    \log\ppar{
+    \text{Prob}\ppar{ \SA \given \Y }}
+    \nonumber \\
+    &=
+    \argmax_{\SA }\, 
+    \phantom{.}
+    \log \ppar{
+    \text{Prob}\ppar{ \Y \given \SA }\,  \text{Prob}\ppar{ \SA } }
+\end{align}
+the structure of P-regions is incorporated by using the following decomposition
 \begin{equation}
-    \hat{\SA} = \hat{\BA} + \PA \hat{\RA}
-    = \hat{\BA} + \sum_{k=1}^K \PA(:,k) \hat{\RA}(k)
+    {\SA} = {\BA} + \PA {\RA}
+    = {\BA} + \sum_{k=1}^K \PA(:,k) {\RA}(k)
     \label{eq:3.7_v2}
 \end{equation}
-where $\hat{\BA}$ and $\hat{\RA}$ are solutions of the following minimization problem
+and the model equation $\Y = \G \SA$ is incorporated as a constraint, resulting in the following optimization problem
 \begin{align}
-    \ppar{ \hat{\BA}, \hat{\RA} } 
+    \sset{ \hat{\BA}, \hat{\RA} } 
     =
     \argmax_{\BA, \RA }\, 
     &\phantom{.}
-    \frac{1}{2 \theta_0} \nnorm{\BA}^2
+    \frac{\sigma}{2 \gamma_0} \nnorm{\BA}^2
     +
-    \sum_{k=1}^K \frac{1}{2 \theta_0} \nnorm{\PA(:,k)\, \RA(k)}^2
+    \sum_{k=1}^K \frac{\sigma}{2\ppar{\gamma_0-\gamma_k} } \nnorm{\PA(:,k)\, \RA(k)}^2
     \nonumber \\
     \text{s.t.}
     \quad
@@ -130,8 +156,18 @@ where $\hat{\BA}$ and $\hat{\RA}$ are solutions of the following minimization pr
     {\G \ppar{\BA + \PA \RA} } - \Y = 0
     \label{eq:3.7}
 \end{align}
+where $\gamma_0, \gamma_1, \dots, \gamma_k, \sigma \in \R_+$ are parameters related to the assumed distributions of $\BA$ and $\SA$ given in equations \eqref{eq:3.5} and \eqref{eq:3.6}.
+%
+For ease of notation, we define the following equivalent parameters
+\begin{align}
+    \theta_0 &= \frac{1}{\sigma} \gamma_0 \\
+    \theta_k &= \frac{1}{\sigma} \ppar{ \gamma_k- \gamma_0 },
+    \text{ for } k = 1, 2, \dots, K.
+\end{align}
 
-A careful derivation will reveal that $\theta_0 = \frac{\gamma_0 }{\sigma}$ and $\theta_k = \frac{\gamma_k-\gamma_0}{\sigma}$, with $\sigma>0$ the variance of the external noise.
+Notice that the parameter $\sigma$ scales all the other parameters $\gamma_k$ equally, and thus, it can be ignored when discussing their relative magnitudes only.
+
+%A careful derivation will reveal that $\theta_0 = \frac{\gamma_0 }{\sigma}$ and $\theta_k = \frac{\gamma_k-\gamma_0}{\sigma}$, with $\sigma>0$ the variance of the external noise.
 %
 %However, we decided that the role of those parameters within the interpretability of the model is negligible; we use $\theta_k$ as generic parameters that need to be tuned using the heuristics discussed in Chapter 2.
 
@@ -209,7 +245,7 @@ which leads to the following identity
     } \G^T}^{-1} \Y
 \end{equation}
 
-For robustness, we propose using a regularized $\lambda_\rho$ defined as
+For robustness and to ensure that the resulting matrices are invertible, we propose using a regularized $\lambda_\rho$, defined as
 %\begin{equation}
 %    \lambda_\rho
 %    =
@@ -226,6 +262,7 @@ For robustness, we propose using a regularized $\lambda_\rho$ defined as
     \PA(:,k)\, \PA(:,k)^T
     } \G^T + \rho \id_M }^{-1}
 \end{align}
+where $\rho>0$ is a regularization parameter which must be determined using any of the heuristics defined in Chapter \ref{ch:review}.
 
 Using $\lambda_\rho$ in equations \eqref{eq:3.13} and \eqref{eq:3.14} lead to the estimators
 \begin{align}
@@ -311,7 +348,9 @@ Using the matrices $A_k$, we can construct $\hat{\SA}$ row-by-row as follows:
     \\
     \hat{\SA}
     &=
-    \theta_0 \hat{\BA}_0 + \G\, \text{diag}\ppar{\theta_1, \dots, \theta_K}\, \hat{\RA}
+    \theta_0 \hat{\BA}_0 + 
+    \sum_{k=1}^K
+    \theta_k \G\, \hat{\RA}_0(k)
     \label{eq:3.s1}
 \end{align}
 with $\hat{\BA}_0 \in \R^{N\times 1}$, $\hat{\RA}_0 \in \R^{K\times 1}$.
@@ -417,7 +456,8 @@ The results from the following section follow from implementing this method in M
 This results in an appreciably smaller computation time despite having a similar complexity.
 
 
-%\subsection{Functional P-regions}
+\subsection{Selection of P-regions}
+\label{sec:SelectPregions}
 
 \subsection{Relation to other models}
 
