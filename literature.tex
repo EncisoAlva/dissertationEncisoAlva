@@ -19,7 +19,7 @@ The terms $\nu \in \R^{N\times T}, \varepsilon\in\R^{M\times T}$ represent addit
 %
 Different authors have proposed different assumptions for such noise terms, some of which will be discussed later.
 
-In chapter \ref{ch:forward} it was discussed that if the orientation is known, then we can use $\SA\in \R^{N\times T}$, and otherwise, we should use $\SA\in \R^{3N\times T}$ from decomposing each dipole as the sum of dipoles with known orientations, parallel to the $x$-, $y$- and $z$-axis.
+In chapter \ref{ch:forward}, it was discussed that if the orientation is known, then we can use $\SA\in \R^{N\times T}$, and otherwise, we should use $\SA\in \R^{3N\times T}$ from decomposing each dipole as the sum of dipoles with known orientations, parallel to the $x$-, $y$- and $z$-axis.
 %
 Since the cases of known and unknown dipole orientations don't significantly change the model formulation, they will be treated as a single model whenever possible.
 
@@ -126,7 +126,7 @@ Since the MAP estimator is obtained by minimizing the norm of $\SA$ (in particul
 %
 This designation is ambiguous since many other estimators depend on minimizing some norm of the sources; thus, `minimal-norm estimator' refers to a family of estimators. 
 %
-In this work, this particular estimator will be referred to simply as MNE to avoid confusion.
+This particular estimator will be referred to simply as MNE in this work to avoid confusion.
 
 The MNE estimator admits a closed-form solution as follows,
 \begin{equation}
@@ -152,7 +152,7 @@ W &=
 \label{det:wMNE}
 \end{align}
 
-The underlying assumption is that the contribution of deep dipoles, located far from the scalp, is scaled by smaller coefficients in the leadfield matrix.
+The underlying assumption is that the contribution of deep dipoles located far from the scalp is scaled by smaller coefficients in the leadfield matrix.
 %
 These deeper dipoles must have larger magnitudes to contribute similarly to shallow dipoles in the generation of EEG.
 %
@@ -259,9 +259,7 @@ H +
 
 \subsection{Multivariate Source Prelocalization (MSP)}
 
-The MSP estimator was proposed by Mattout []
-%Mattout J, P\'{e}l\'{e}grini-Issac M, Garnero L, \& Benali H. (2005). Multivariate source prelocalization (MSP): use of functionally informed basis functions for better conditioning the MEG inverse problem. NeuroImage, 26(2), 356-373.}
-incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then gets the sources more correlated with their projections into that space.
+The MSP estimator proposed by Mattout \cite{mattout2005multivariate} incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then gets the sources more correlated with their projections into that space.
 %
 The obtained information is later used to construct a weight matrix, so the final estimation is similar to wMNE.
 \begin{equation}
@@ -317,7 +315,7 @@ leaving the MSP estimator as follows,
 
 Proposed by Uutel, Hamalainen, Somerselo.
 %
-This estmator incrporates the assumption that the sources patches are `sparse', i.e. most of the dipole have a magnitude of zero.
+This estimator incorporates the assumption that the source patches are `sparse', i.e., most of the dipoles have a magnitude of zero.
 
 Minimizing the number of non-zero entries of $\SA$ can be achieved by minimizing $\nnorm{\SA}_{1,1}$, which is defined as
 \begin{equation}
@@ -388,7 +386,7 @@ The collection of liner methods includes wMNE, FOCUSS, LORETA and their derivate
 
 On the other hand, methods like MCE, MxNE, SiSSY, etc, are not linear and can't be assigned to a Wiener kernel.
 
-In this section, we review some heuristics for selecting the parameter set $\Theta$.
+This section reviews some heuristics for selecting the parameter set $\Theta$.
 %
 The wMNE estimator is a reference model since it depends on a single parameter.
 %
@@ -416,21 +414,21 @@ To do that, define the quantities
 \label{det:Lcurve}
 \end{align}
 
-The L-curve denominations stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has an interesting appearance.
+The L-curve denominations stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has a characteristic appearance.
 %
 Look at the figure (to be added) for visual reference.
 %
 Notice that the quantities $\eta, \rho$ can be computed relatively quickly for a small set of potential values of $\lambda$, and more points can be added to get a more precise curve.
 
-The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving in the plotted curve.
+The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving point in the plotted curve.
 
 %Notice that the parametric curve in \eqref{det:Lcurve} can be easily generalized for other quantities.
 
 \subsection{Generalized Cross-Validation}
 
-This heuristic is based on the principle of leave-one-out cross-validation, in addition to some approximations that make it computationally efficient. 
+This heuristic is based on the principle of leave-one-out cross-validation and some approximations that make it computationally efficient. 
 %
-Although it was proposed by Golub in 1979 \cite{GCV_Golub}, it remains popular for methods that admit an inversion kernel.
+Although this method was proposed by Golub in 1979 \cite{GCV_Golub}, it remains popular for methods that admit an inversion kernel.
 
 Following the leave-one-out principle, we consider $\Y^{[m]}\in\R{(M-1)\times T}$ and $\G^{[m]} \in \R^{(M-1)\times N}$ with the $m$-th sensor missing,
 \begin{align}
@@ -466,7 +464,7 @@ K_\lambda^{[m]}
 K_\lambda^{[m]}\, \Y_\lambda^{[m]}
 \end{align}
 
-The cross-validation is incorporated by estimating the measurements from the $m$-th with information from $J_\lambda^{[m]}$ and then comparing with the actual measurements.
+The cross-validation is incorporated by estimating the measurements from the $m$-th with information from $J_\lambda^{[m]}$ and then comparing it with the actual measurements.
 %
 By performing this procedure over all the sensors and averaging, we obtain the following quantity
 \begin{equation}
@@ -488,9 +486,9 @@ Although the definition of GCV is based on the leave-one-out cross-validation il
 %
 The latter expression represents a balance between $K_\lambda$ as a pseudo-inverse of $\G$ in general vs only for the current sensor data.
 
-The heuristic employed is to select the parameters that minimize the function in \eqref{det:GCV}, and it can be extended easily to multiple parameters.
+The heuristic employed is to select the parameters that minimize the function in \eqref{det:GCV}, which can be extended easily to multiple parameters.
 
-It is important to emphasize that the approximation for the GCV error in equation \eqref{det:GCV} can only be computed for linear methods; for instance, estimators based on the $\ell_1$ norm or on neural networks can't be tuned using GCV.
+It is important to emphasize that the approximation for the GCV error in equation \eqref{det:GCV} can only be computed for linear methods; for instance, estimators based on the $\ell_1$ norm or neural networks can't be tuned using GCV.
 
 \subsection{Composite Residual and Smoothing Operator (CRESO)}
 
@@ -541,7 +539,7 @@ In the case of synthetic data with protocols similar to that of the next section
 %
 It is also possible to use the dipoles with a maximal magnitude as the center [] or the centers of mass with respect to the dipole magnitude [].
 %
-Since the minimal-norm estimators often produce a large number of dipoles with small magnitudes, some authors use only dipoles whose magnitude is relatively large [] or which are close to the dipole with maximal magnitude [].
+Since the minimal-norm estimators often produce many dipoles with small magnitudes, some authors use only dipoles whose magnitude is relatively large [] or which are close to the dipole with maximal magnitude [].
 
 In this work, we employ an operative definition based on the latter.
 %
@@ -567,11 +565,11 @@ k_i =
 \label{def:center1}
 \end{align}
 
-If the number of source patches is unknown, as it is with real data, the patches can be identified sequentially by finding the local maximum of the dipoles not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
+If the number of source patches is unknown, the patches can be identified sequentially by finding the local maximum of the dipoles not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
 
 The operative definition in \eqref{def:center1} is consistent with the cited definitions for source location on synthetic source patched, even in the case of point sources.
 %
-Thus, it is used to determine the `true' centers of the source patches, $k_i$.
+Thus, it can be used to determine the `true' centers of the source patches, $k_i$.
 %
 However, the definition may deviate in the case of reconstructed sources.
 
@@ -728,13 +726,13 @@ The interpretation of the Receiver-Operator Curve is that each selection of $\be
 \item 
 Using a large $\beta$ will cause the labels to be strict, with very few False Positives but many False Negatives.
 \item
-Using a small $\beta$ will cause the labels to be permissive, with very few False Negatives but many False Positives.
+A small $\beta$ will cause the labels to be permissive, with very few False Negatives but many False Positives.
 \end{itemize}
 In general, extreme values of $\beta$ will lead to the endpoints (0,0) and (1,1) of the ROC, and a somewhat smooth trajectory will be observed as $\beta$ increases.
 
 A classifier for which TPR$(\beta)$ and $1-$FPR$(\beta)$ are close to 1 for all $\beta$'s is preferable, and this phenomenon can be observed in the ROC as being `close to the top.'
 %
-This concept is formalized by taking the area under the Area Under ROC curve (AUROC), which is defined as the area under the ROC curve; AUROC$approx 1$ is preferable.
+This concept is formalized by taking the area under the Area Under ROC curve (AUROC), defined as the area under the ROC curve; AUROC$approx 1$ is preferable.
 %
 In practice, the AUROC can be computed numerically using the trapezoid rule as follows
 \begin{equation}
@@ -748,12 +746,13 @@ with $\beta_i$ the finite number of values that $\beta$ can actually take.
 
 The suffix `global' is added since all the dipoles are used to compute AUROC.
 %
-Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance; that is, we expect the proportion of active dipoles at any moment to be very low.
+Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance; we expect the proportion of active dipoles at any moment to be very low.
 %
 To alleviate that, they propose to use dipoles within a certain distance from the true center.
 %
 We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5 \si{mm}.
 
+\begin{comment}
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./img_dev/nsCurves4}
@@ -761,6 +760,7 @@ We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5
 %
 Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA}
 \end{figure}
+\end{comment}
 
 \subsection{Average Precision}
 
