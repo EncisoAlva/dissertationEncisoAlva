@@ -11,36 +11,73 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Derivation of the Forward Model}
-
-Electroencephalography (EEG) consists of the collocation of surface electrodes, whose contact surface is in the order of 20 \si{mm^2}, on the subjects' exposed scalp.
+Electroencephalography (EEG) is a type of electrophysiological recording that uses electrodes, whose contact surface is in the order of 20 \si{mm^2}, placed on the subject's scalp.
 %
-The recording circuit is often completed by setting a reference electrode at either a 'neutral' location or another electrode; the discussion of an appropriate reference electrode location can be skipped by re-referencing the recordings against their average.
-
-Within the distributed dipole paradigm, we assume that the electric scalar potential field is caused exclusively by a finite collection of electric dipoles. 
+The recording circuit is typically completed with a reference electrode at a 'neutral' location, like the contra-lateral earlobe or the nose; another electrode can also be used, resulting in referential channels. 
 %
-Such an assumption derives from the fact that post-synaptic potentials on neurons can be approximated as electric dipoles at a reasonable distance.
+%The effect of the reference electrode location may be neglected by re-referencing the recordings against the average.
 
-It is reasonable to state that the electric scalar field measured by the EEG electrodes is caused to post-synaptic potentials at the .
-%
-However, we must consider that those dipoles are small and far away from the sensors --to the size of EEG sensors.
-%
-This is in addition to the attenuation due to the tissues between the neurons and the EEG sensors and the possibility of silent sources whose total summation is close to zero due to their relative orientation.
-%
+In the century since the invention of the EEG machine, the simultaneous observation of behavioral data and EEG recordings has helped establish strong connections between specific EEG patterns and normal and pathological conditions.
 
+The neural origin of electrical signals measured by EEG can be traced to the post-synaptic potentials in neurons' axons.
+%
+Although each individual neuron cannot produce an electric potential field large enough to be measured by the EEG electrodes at the scalp, the simultaneous firing of all the neurons in the brain is sufficient to produce the EEG measurements.
 
-As the transition from neuron dipoles to EEG sensors loses information, activity from low-entropy regions (i.e., neurons with synchronous firing and similar orientations) can be recovered under appropriate assumptions.
+It is important to acknowledge that the EEG may also register events whose origin is not neural, referred to as artifacts. These include but are not limited to external electrical fields, eye movements, activity from facial muscles, and movement from the EEG electrodes —if they are not fixated adequately to the scalp or if the subject's movement is excessive.
+%
+This work does not discuss any methods for dealing with artifacts; the interested reader must refer to specialized manuals, for example, that from Fish and Spehlmann \cite{fisch1999fisch}.
+
+In the absence of artifacts, either biological or instrumental, the EEG measurements are produced exclusively by brain activity.
+%
+The electric potential fields at the EEG scale, often called macro-scale fields, correspond to large groups of neurons that fire simultaneously and have a common physical orientation.
+%
+It is estimated that groups of neurons of at least 6 \si{mm^2} are required to produce activity measurable at the EEG scale.
+
+Electrical Source Imaging (ESI), or Electrical Source Reconstruction, involves identifying the neural electrical sources responsible for the observed EEG.
+%
+ESI can be used to identify brain regions related to (and, in some cases, responsible for) the normal or pathological state under study.
+
+For a review of ESI paradigms, see []. 
+%
+In this work, we perform ESI under the distributed dipole paradigm: the current density field produced by neuronal activity is approximated by a finite set of electrical dipoles whose location is known --on a grid that covers the brain region of interest-- and whose magnitude is to be determined. 
+%
+This paradigm can be justified formally as a discretized multi-pole expansion of order 2 (using dipoles) of the current density field; this approximation is sufficient to explain measurements obtained 1 mm or farther from the electrical sources [cite Nunez and Srinivasan].
+
+ESI with distributed dipoles aims to produce a representative set of dipoles that will produce an equivalent current density of the real neurons at the EEG scale.
+%
+This paradigm is considered to be non-parametric in the sense that it is agnostic to the number and extent of the electric sources. 
+%
+Since an area with no discernible activity will produce a group of dipoles with a magnitude close to zero, this paradigm is considered robust to model misidentification.
+
+When interpreting the results, one should be aware of the limitations of this scale.
+%
+For example, `silent' neural activity doesn't produce a significant EEG fingerprint and thus is not identified by ESI.
+
+The task of performing ESI within the paradigm of distributed dipoles is an ill-posed inverse problem.
+
+The `inverse problem' denomination is earned since the reciprocal problem is relatively more straightforward: constructing EEG recordings given the current density.
+%
+This problem is explored in Section \ref{sec:forward_derivation}, following that of Hallez et al. \cite{hallez2007review}.
+
+The `ill-posed' denomination is earned since, given the data from EEG recordings, the current density is not uniquely defined.
+%
+In Chapter \ref{ch:review}, we review some methods used to solve this problem, while in Chapter \ref{ch:review}, we propose a novel method for this purpose.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Derivation of the Poisson equation}
+\section{Derivation of the Forward Problem}
+\label{sec:forward_derivation}
 
-EEG sensors register the electric scalar potential field, $V: \R^3 \rightarrow \R$, at numerous points in space, $s_{1}, s_2, \dots, s_M \in \R^3$; i.e., $V(s_m)$ represents the measurement from the $m$-th sensor.
+From a Physics framework, we can describe that EEG sensors measure the electric scalar potential field, $V: \R^3 \rightarrow \R$, at a finite set of points in space, $\sa_{1}, \sa_2, \dots, \sa_M \in \R^3$. 
 %
-As it is discussed in the previous section, we assume that the electric scalar potential field is caused by a finite number of dipoles with known locations ($d_1, d_2, \dots, d_N \in \R^3$) and whose momentum ($m_1, m_2, \dots m_N$) are to be determined.
+Thus, $V(\sa_m)$ represents the measurement from the $m$-th electrode.
 
-We first consider a single dipole with unit magnitude and a single sensor to model the interactions between the dipoles and the sensors. The whole model is later constructed by superposition.
+We assume that the electric scalar potential field is caused by a finite number of dipoles with known locations, ${\dd_1, \dd_2, \dots, \dd_N \in \R^3}$, and whose momentum, $m_1, m_2, \dots m_N \in \R$, are to be determined.
+
+We first construct a model for a single dipole and a single sensor. 
+%
+The full model will be constructed later by superposing multiple copies of this base model.
 
 Under these circumstances, we consider the electric field, $E: \R^3 \rightarrow \R^3$, and the current density field, $K: \R^3 \rightarrow \R^3$,
 \begin{align}
@@ -52,31 +89,33 @@ K &= \sigma E = - \sigma \nabla V
 with $\sigma: \R^3 \rightarrow \R^{3\times 3}$ the position-dependent conductivity tensor. 
 %
 In the isotropic case, we assume
-$\sigma(r) = \kappa Id$
-for all $r$ and some constant conductivity $\kappa>0$.
+$\sigma(\rr) = \kappa \id_3$
+for all $\rr$, where $\kappa>0$ is the constant conductivity and $\id_3 \in \R^{3\times 3}$ is the identity matrix.
 
 The current density field has the property that its divergence vanishes everywhere except near the dipole.
 %
 In more precise terms, the divergence of the current density field is defined as
 \begin{equation}
-\nabla \cdot K = \lim_{G(r) \rightarrow \sset{r}} \frac{1}{\text{vol}\ppar{G\ppar{r}}}
-\oint_{\partial G(r)} K(r)\, dS
+\nabla \cdot K = \lim_{G(\rr) \rightarrow \sset{\rr}} \frac{1}{\text{vol}\ppar{G\ppar{\rr}}}
+\oint_{\partial G(\rr)} K(\rr)\, dS
 \end{equation}
-whit $G(r)\subset \R^3$ a set that contains $r$; the limit must be interpreted in a similar way as Riemann sums, in the sense that the limit is not affected by the selections of $G(r)$ when it does exist.
+with $G(\rr)\subset \R^3$ a set that contains $\rr$. 
 %
+The limit must be interpreted in a similar way as Riemann sums, in the sense that the limit is not affected by the selections of $G(\rr)$.
+
 For the case of one single dipole, $\nabla \cdot K$ can be simplified,
 \begin{equation}
-\nabla \cdot K(\rr) = {\delta\ppar{r-\rr_+} - \delta\ppar{r-\rr_-}} =
+\nabla \cdot K(\rr) = {\delta\ppar{\rr-\rr_+} - \delta\ppar{\rr-\rr_-}} =
 \begin{cases}
-+1, &\text{if } r=r_+ \\
--1, &\text{if } r=r_- \\
++1, &\text{if } \rr=\rr_+ \\
+-1, &\text{if } \rr=\rr_- \\
 0, &\text{otherwise}.
 \end{cases}
 \label{eq:model2}
 \end{equation}
-with $r_-, r_+ \in \R^3$ the electric sink and source positions, respectively, related to the single source. 
+with $\rr_-, \rr_+ \in \R^3$ the electric sink and source positions related to the single source, respectively. 
 %
-For ease of notation, we select $r_-$ and $r_+$ so that the dipole locations position, $d$, is its midpoint ($d= \frac{1}{2}\ppar{r_-+r_+}$) and the dipole momentum is parallel to $r_+-r_-$.
+For ease of notation, we select $\rr_-$ and $\rr_+$ so that the dipole locations position, $\dd$, is its midpoint (i.e., $\dd= \frac{1}{2}\spar{\rr_-+\rr_+}$) and the dipole momentum is parallel to $\spar{\rr_+-\rr_-}$.
 %
 Refer to figure \ref{fig:diagrams1} for a graphical summary of this construction.
 
@@ -238,7 +277,8 @@ we need to compute the magnitude of these dipoles in order to recover the origin
 
 \begin{figure}
 \centering
-\includegraphics[width=0.4\linewidth]{./img_dev/nsOrthDecomp}
+%\includegraphics[width=0.4\linewidth]{./img_dev/OrthDecompOld}
+\includegraphics{./img_dev/OrthDecompOld}
 \caption{Decomposition of an arbitrary dipole as a sum of projections into the three canonical directions.}
 \label{fig:diagrams3}
 \end{figure}
@@ -272,7 +312,6 @@ Distributed dipoles of low magnitude may represent smaller source patches and re
 
 
 
-% an essential consideration in the practice is the location of the dipoles. 
 %
 The distributed dipole model is agnostic in that it doesn't make any assumptions about the location of the dipoles.
 %

@@ -60,7 +60,11 @@
 \usepackage{bbm}
 
 % to get the units correctly for printing
-\usepackage{layouts}
+%\usepackage{layouts}
+
+% for more bibtex templates
+\usepackage[backend=biber,style=apa]{biblatex}
+\addbibresource{refs.bib}
 
 % Sample bibliography materials
 % Entries found here: http://ctan.math.utah.edu/ctan/tex-archive/macros/latex/contrib/biblatex/bibtex/bib/biblatex/biblatex-examples.bib
@@ -148,14 +152,16 @@
 %%%%%%%%%%%%%%%%                 Bibliography                 %%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliographystyle{abbrv} % We choose the "plain" reference style
-\bibliography{./refs} % Entries are in the refs.bib file
+%\bibliographystyle{abbrv} % We choose the "plain" reference style
+%\bibliography{./refs} % Entries are in the refs.bib file
 
 %\renewcommand{\bibname}{REFERENCES}
 %\bibliographystyle{plain}
 %\nocite{*}      
 %\input{mybib.tex}
 
+% using biblatex
+\printbibliography
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%         Biographical Statement               %%%%%%%%%%%%%%%%%%%%
