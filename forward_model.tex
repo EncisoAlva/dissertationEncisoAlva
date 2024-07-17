@@ -73,9 +73,9 @@ From a Physics framework, we can describe that EEG sensors measure the electric 
 %
 Thus, $V(\sa_m)$ represents the measurement from the $m$-th electrode.
 
-We assume that the electric scalar potential field is caused by a finite number of dipoles with known locations, ${\dd_1, \dd_2, \dots, \dd_N \in \R^3}$, and whose momentum, $m_1, m_2, \dots m_N \in \R$, are to be determined.
+We assume that the electric scalar potential field is caused by a finite number of dipoles with known locations, ${\dd_1, \dd_2, \dots, \dd_N \in \R^3}$, and whose momentum, $\mm_1, \mm_2, \dots \mm_N \in \R$, are to be determined.
 
-We first construct a model for a single dipole and a single sensor. 
+We first construct a model for a single sensor and a single dipole with unit moment. 
 %
 The full model will be constructed later by superposing multiple copies of this base model.
 
@@ -105,42 +105,55 @@ The limit must be interpreted in a similar way as Riemann sums, in the sense tha
 
 For the case of one single dipole, $\nabla \cdot K$ can be simplified,
 \begin{equation}
-\nabla \cdot K(\rr) = {\delta\ppar{\rr-\rr_+} - \delta\ppar{\rr-\rr_-}} =
+\nabla \cdot K(\rr) = {\delta\ppar{\rr-\dd^+} - \delta\ppar{\rr-\dd^-}} =
 \begin{cases}
-+1, &\text{if } \rr=\rr_+ \\
--1, &\text{if } \rr=\rr_- \\
++1, &\text{if } \rr=\dd^+ \\
+-1, &\text{if } \rr=\dd^- \\
 0, &\text{otherwise}.
 \end{cases}
 \label{eq:model2}
 \end{equation}
-with $\rr_-, \rr_+ \in \R^3$ the electric sink and source positions related to the single source, respectively. 
+where $\dd^-, \dd^+ \in \R^3$ are the dipole's electric sink and source positions, respectively. 
 %
-For ease of notation, we select $\rr_-$ and $\rr_+$ so that the dipole locations position, $\dd$, is its midpoint (i.e., $\dd= \frac{1}{2}\spar{\rr_-+\rr_+}$) and the dipole momentum is parallel to $\spar{\rr_+-\rr_-}$.
+For ease of notation, we select $\dd^-$ and $\dd^+$ so that the dipole position, $\dd$, and momentum, $\mm$, satisfy the following
+\begin{align}
+    \dd &= \frac{1}{2}\spar{\dd^-+\dd^+} 
+    \\
+    \mm &= \spar{\dd^+-\dd^-}
+\end{align}
 %
 Refer to figure \ref{fig:diagrams1} for a graphical summary of this construction.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.4\linewidth]{./img_dev/nsNeuronDipole}
-\includegraphics[width=0.4\linewidth]{./img_dev/nsCurrDensField}
-\caption{A. The electrical field, $E$, is the gradient of the electric scalar potential field, $V$. In the quasi-static case, we assume that the magnetic field is constant in time, and thus, its influence over the electric fields is negligible. B. The gradient of the electric current density, $K$, banishes everywhere except on the sink and source created by the dipole. }
+%\includegraphics[width=0.4\linewidth]{./img_dev/nsNeuronDipole}
+\includegraphics{./img_dev/CurrDensFieldOld}
+\caption{Visual representation of a single dipole with electric sink and source located at $\dd^-$ and $\dd^+$, respectively.
+%
+We consider the position of the dipole, $\dd$, at the midpoint of $\dd^-$ and $\dd^+$.
+%
+The electrical field, $E= -\nabla V$, is shown as the lines of the fastest descent.
+%
+The divergence of $K = \nabla\cdot\ppar{\sigma E}$ is calculated as the limit of the surface integral of $K$ over $G(\rr)\rightarrow \sset{\rr}$, and it vanishes everywhere except at $\dd^+$ AND $\dd^-$.
+%
+In the quasi-static case, we assume that the magnetic field is constant in time, and thus, the time-varying influence over the electric fields is negligible}
 \label{fig:diagrams1}
 \end{figure}
 
 With equations \eqref{eq:model1} and \eqref{eq:model2} at hand, we may determine the electric scalar field, $V$, in terms of the only dipole as
 \begin{equation}
 \nabla \cdot\ppar{\sigma(\rr)\, \nabla V(\rr) } = 
-{\delta\ppar{r-\rr_+} - \delta\ppar{r-\rr_-}}
+{\delta\ppar{\rr-\dd^+} - \delta\ppar{\rr-\dd^-}}
 \label{eq:poisson_gral}
 \end{equation}
 or, in the isotropic case, as
 \begin{equation}
 \kappa \Delta V(r) = 
-{\delta\ppar{r-\rr_+} - \delta\ppar{r-\rr_-}}
+{\delta\ppar{\rr-\dd^+} - \delta\ppar{\rr-\dd^-}}
 \label{eq:poisson_isotropic}
 \end{equation}
 
-It is relevant to recall that the EEG measurement from the only sensor is $V(s)$, with $s$ the sensor's location.
+It is relevant to recall that the EEG measurement from the only sensor is $V(\sa)$, with $\sa$ the locations of the EEG sensors.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -203,71 +216,113 @@ Once the triangulated surfaces are obtained, the equation can be solved numerica
 
 Recall that both equations \eqref{eq:poisson_gral} and \eqref{eq:poisson_isotropic} are constructed for one sensor and one dipole with unit magnitude.
 %
-We now consider a large number of EEG sensors at locations $s_1, s_2, \dots, s_M \in \R^3$, and dipoles at locations $d_1, d_2, \dots, d_N \in \R^3$
-with magnitudes $m_1, m_2, \dots, m_N$.
+We now consider a finite number of EEG sensors at locations $\sa_1, \sa_2, \dots, \sa_M \in \R^3$, and dipoles at locations $\dd_1, \dd_2, \dots, \dd_N \in \R^3$
+with momenta $\mm_1, \mm_2, \dots, \mm_N$.
 %
-By making the same assumptions and formulations as in the previous sections, the conclusion is that the electric scalar field under these new circumstances is given by
+For ease of notation, write each momentum as
 \begin{equation}
-V(r) = 
-\sum_{n=1}^N m_n \tilde{V}_{d_n}(r)
+    \mm_n = \rho_n\, \ee_n
 \end{equation}
-where $\tilde{V}_n$ is the solution to 
-\begin{equation}
-\nabla \cdot\ppar{\sigma(\rr)\, \nabla \tilde{V}(\rr) } = 
-{\delta\ppar{r-d_n^+} - \delta\ppar{r-d_n^-}}
-\end{equation}
-under the boundary conditions in \eqref{eq:boundary1}, and with $d_n^\pm$ constructed from $d_n$.
+with $\rho_n\in \R, \ee_n\in \R^3$ such that $\ee_n$ has unit norm, i.e. $\nnorm{\ee_n}_2 = 1$.
 
+%
+After making the assumptions described in the previous sections, we may conclude that the electric scalar field, $V$, is given by
+\begin{equation}
+V(\rr) = 
+\sum_{n=1}^N \rho_n \tilde{V}_{n}(\rr)
+\end{equation}
+where $\tilde{V}_n$ is the solution to the following equation
+\begin{equation}
+\nabla \cdot\ppar{\sigma(\rr)\, \nabla \tilde{V}_n(\rr) } = 
+{\delta\ppar{\rr-\dd_n^+} - \delta\ppar{\rr-\dd_n^-}}
+\end{equation}
+under the boundary conditions from equation \eqref{eq:boundary1}, and with each $\dd_n^\pm$ constructed from $\dd_n$.
+%
 For ease of notation, define 
 \begin{align}
-g(r, d) &= \tilde{V}_d(r)
+g(\rr, \dd_n) &= \tilde{V}_n(\rr)
 \end{align}
 and thus, we can write
 \begin{equation}
-V(r) = 
-\sum_{n=1}^N m_n g\ppar{r, d_n} = 
-\spar{g\ppar{r, d_1}, g\ppar{r, d_2}, \cdots, g\ppar{r, d_N}}
-\spar{m_1, m_2, \cdots, m_N}\trans
+V(\rr) = 
+\sum_{n=1}^N \rho_n\, g\ppar{\rr, \dd_n} = 
+\begin{bmatrix}
+    g\ppar{\rr, \dd_1} & 
+    g\ppar{\rr, \dd_2} &
+    \cdots &
+    g\ppar{\rr, \dd_N}
+\end{bmatrix}
+\begin{bmatrix}
+    \rho_1 \\ \rho_2 \\ \vdots \\ \rho_N
+\end{bmatrix}
 \label{eq:back1}
 \end{equation}
+%\begin{equation}
+%V(\rr) = 
+%\sum_{n=1}^N \rho_n g\ppar{\rr, \dd_n} = 
+%\spar{g\ppar{\rr, \dd_1}, g\ppar{\rr, d_2}, \cdots, g\ppar{r, d_N}}
+%\spar{m_1, m_2, \cdots, m_N}\trans
+%\label{eq:back1}
+%\end{equation}
+
 Furthermore, by using the equation for all the sensor locations and stacking the results, we obtain the following vector equation
 \begin{equation}
 \begin{bmatrix}
-V\ppar{s_1} \\
-V\ppar{s_2} \\
-\vdots
-V\ppar{s_M}
+V\ppar{\sa_1} \\
+V\ppar{\sa_2} \\
+\vdots \\
+V\ppar{\sa_M}
 \end{bmatrix}
 =
 \begin{bmatrix}
-\spar{g\ppar{s_1, d_1}, g\ppar{s_1, d_2}, \cdots, g\ppar{s_1, d_N}} \\
-\spar{g\ppar{s_2, d_1}, g\ppar{s_2, d_2}, \cdots, g\ppar{s_2, d_N}} \\
-\vdots \\
-\spar{g\ppar{s_M, d_1}, g\ppar{s_M, d_2}, \cdots, g\ppar{s_M, d_N}}
+    g\ppar{\sa_1, \dd_1} & 
+    g\ppar{\sa_1, \dd_2} &
+    \cdots &
+    g\ppar{\sa_1, \dd_N} 
+    \\
+    g\ppar{\sa_2, \dd_1} & 
+    g\ppar{\sa_2, \dd_2} &
+    \cdots &
+    g\ppar{\sa_2, \dd_N} 
+    \\
+    \vdots & \vdots & \ddots & \vdots
+    \\
+    g\ppar{\sa_M, \dd_1} & 
+    g\ppar{\sa_M, \dd_2} &
+    \cdots &
+    g\ppar{\sa_M, \dd_N}
+\end{bmatrix}
+\begin{bmatrix}
+    \rho_1 \\ \rho_2 \\ \vdots \\ \rho_N
 \end{bmatrix}
 \label{eq:model3}
 \end{equation}
 
 Equation \eqref{eq:model3} can be rewritten as the following generic matrix equation
 \begin{equation}
-\Y = \G\, \J
+\Y = \G\, \SA
 \label{eq:model4}
 \end{equation}
-where $\Y \in \R^{M\times 1}$ is a vector of EEG measurements, $\J \in \R^{N\times 1}$ is a vector of dipole magnitudes, and $\G \in \R^{M\times N}$ is a matrix known as the leadfield matrix, gain matrix, forward operator, among other names.
+where $\Y \in \R^{M\times 1}$ encodes the EEG measurements, $\SA \in \R^{N\times 1}$ encodes the dipoles' magnitude, and $\G \in \R^{M\times N}$ is a matrix known as the leadfield matrix, gain matrix, forward operator, among other names; $\G$ encodes the mixture of current density to form the scalar electrical field measured by EEG sensors.
 
-The forward model can be extended trivially to account for $T$ EEG measurements in time by setting $\Y \in ]R^{M\times T}$, $\Y \in \R^{M\times T}$, and $\G$ unchanged.
+The forward model can be extended trivially to account for $T$ EEG measurements in time by setting $\Y \in \R^{M\times T}$, $\Y \in \R^{M\times T}$, and $\G$ unchanged; the resulting matrix equation will be identical to \eqref{eq:model4}.
 
 
-If the dipole's orientation is to be determined, we can consider each dipole as the sum of three dipoles parallel to some orthogonal directions. Such as in figure \ref{fig:diagrams3}, we can write
+If the dipole's orientation, $\ee_n$, is to be determined, we can consider each dipole as the sum of three dipoles parallel to some orthogonal directions. Such as in figure \ref{fig:diagrams3}, we can write
 \begin{equation}
-m_n d_n = m_n^x e_n^x + m_n^y e_n^y + m_n^z e_n^z
+\rho_n \ee_n = \rho^x_n \ee_n^x + \rho_n^y \ee_n^y + \rho_n^z \ee_n^z
 \end{equation}
-with $e_n^x, e_n^y, e_n^z \in \R^3$ unit-norm vectors located at $d_n$ and parallel to the respective $x-, y-, z-$axis.
+with $\ee_n^x, \ee_n^y, \ee_n^z \in \R^3$ vectors with unit norm located at $\dd_n$ and parallel to the respective $x-, y-, z-$axis.
 %
+
 Under these new circumstances, equation \eqref{eq:back1} changes to
 \begin{equation}
-V(r) = 
-\sum_{n=1}^N \ppar{m_n^x g\ppar{r, e_n^x} + m_n^y g\ppar{r, e_n^y} + m_n^y g\ppar{r, e_n^y}
+V(\rr) = 
+\sum_{n=1}^N 
+\spar{
+\rho_n^x\, g\ppar{\rr, \ee_n^x} +
+\rho_n^y\, g\ppar{\rr, \ee_n^y} +
+\rho_n^y\, g\ppar{\rr, \ee_n^z}
 }
 \end{equation}
 which can be written as a matrix equation such as \eqref{eq:model4}.
