@@ -13,7 +13,7 @@
 
 \section{Derivation of the Forward Model}
 
-Electroencephalography (EEG) consists of the collocation of surface electrodes, whose surface is in the order of 20 \si{mm^2}, on the subjects' exposed scalp.
+Electroencephalography (EEG) consists of the collocation of surface electrodes, whose contact surface is in the order of 20 \si{mm^2}, on the subjects' exposed scalp.
 %
 The recording circuit is often completed by setting a reference electrode at either a 'neutral' location or another electrode; the discussion of an appropriate reference electrode location can be skipped by re-referencing the recordings against their average.
 
@@ -21,13 +21,15 @@ Within the distributed dipole paradigm, we assume that the electric scalar poten
 %
 Such an assumption derives from the fact that post-synaptic potentials on neurons can be approximated as electric dipoles at a reasonable distance.
 
-It is reasonable to state that the electric scalar field obtained by the EEG is caused by the numerous electrical dipoles created by neurons' post-synaptic potentials.
+It is reasonable to state that the electric scalar field measured by the EEG electrodes is caused to post-synaptic potentials at the .
 %
 However, we must consider that those dipoles are small and far away from the sensors --to the size of EEG sensors.
 %
 This is in addition to the attenuation due to the tissues between the neurons and the EEG sensors and the possibility of silent sources whose total summation is close to zero due to their relative orientation.
 %
-As the transition from neuron dipoles to EEG sensors loses information, activity from low-entropy regions can be recovered under appropriate assumptions.
+
+
+As the transition from neuron dipoles to EEG sensors loses information, activity from low-entropy regions (i.e., neurons with synchronous firing and similar orientations) can be recovered under appropriate assumptions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,7 +126,7 @@ because those tissues are too far from the EEG sensors to make a significant dif
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{./img/HeadSurfacesVolumes}
-\caption{Geometric domain defined by relevant tissues in the subject's head. The 4-sphere model considers three media: brain, cerebrospinal fluid (CSF), and the rest of the head. Relevant interfaces between media are displayed: brain cortex, inner and outer skull, and scalp. (Left) Realistic illustration of a human head. Composition from diagrams by Patrick L. Lynch and C. Carl Jaffe. [TODO: BibTeX citation] (Right) Surfaces extracted from the ICBM152 template after performing a segmentation using OPENMEEG. The simplifications of anatomy described in the text become evident.}
+\caption{Geometric domain defined by relevant tissues in the subject's head. The 4-sphere model considers three media: brain, cerebrospinal fluid (CSF), and the rest of the head. Relevant interfaces between media are displayed: brain cortex, inner and outer skull, and scalp. Notice the anatomical simplifications described in the text. (Left) Realistic illustration of a human head. Composition from two diagrams by Patrick L. Lynch and C. Carl Jaffe \cite{wikipic1, wikipic2}.  (Right) Cross-section of the surfaces obtained from the ICBM152 template after segmentation}
 \label{fig:diagrams2}
 \end{figure}
 
@@ -136,48 +138,14 @@ With the media defined formally, we may state the reflective boundary conditions
 \end{equation}
 where $\mathbf{n}$ is a vector orthogonal to $\partial\mathcal{M}_1$.
 %
-Similarly, boundary conditions at the interfaces are just continuity for the derivative,
+At the interfaces between media, the boundary conditions are to have continuous first derivatives; this property can be requested for the whole domain,
 \begin{equation}
-\left\{
-\begin{array}{rl}
-\ppar{\lim_{
-\rr_i\rightarrow \rr 
-\rr_i\in \mathcal{M}_i
-}
-\sigma(\rr_i)
-\, 
-\nabla 
-V(\rr_i)
-} 
-\cdot 
-\mathbf{n}
-&=
-\ppar{\lim_{\rr_{i+1}\rightarrow \rr \rr_{i+1}\in \mathcal{M}_{i+1}}
-\sigma(\rr_{i+1})\, \nabla V(\rr_{i+1})} \cdot \mathbf{n} 
-\\
-{\lim_{\rr_i\rightarrow \rr \rr_i\in \mathcal{M}_i}
-V(\rr_i)} 
-&=
-{\lim_{\rr_{i+1}\rightarrow \rr \rr_{i+1}\in \mathcal{M}_{i+1}}
-V(\rr_{i+1})} 
-\end{array}
-\right.
-\label{eq:boundary2}
+    V \in C^1\ppar{\mathcal{M}_1 \cup \mathcal{M}_2 \cup \mathcal{M}_3 \cup \mathcal{M}_4 }
 \end{equation}
-%\begin{equation}
-%tmp
-%\label{eq:boundary2}
-%\end{equation}
-for $\rr \in \mathcal{M}_i \cap \mathcal{M}_{i+1}$, 
-with 
-$\mathbf{n}$ is a vector orthogonal to
-$\rr \in \mathcal{M}_i \cap \mathcal{M}_{i+1}$
-and
-$i = 1, 2, 3$.
 
 \subsubsection{Practical considerations}
 
-Either equation \eqref{eq:poisson_gral} or \eqref{eq:poisson_isotropic} must be solved within the geometric regions described previously, subject to the boundary conditions \eqref{eq:boundary1} and \eqref{eq:boundary2}.
+Either equation \eqref{eq:poisson_gral} or \eqref{eq:poisson_isotropic} must be solved within the geometric regions described previously, subject to the boundary conditions in \eqref{eq:boundary1}.
 %
 The construction and treatment of those regions and the solution per se require special discussion.
 
@@ -209,7 +177,7 @@ where $\tilde{V}_n$ is the solution to
 \nabla \cdot\ppar{\sigma(\rr)\, \nabla \tilde{V}(\rr) } = 
 {\delta\ppar{r-d_n^+} - \delta\ppar{r-d_n^-}}
 \end{equation}
-under the boundary conditions \eqref{eq:boundary1} and \eqref{eq:boundary2}, and with $d_n^\pm$ constructed from $d_n$.
+under the boundary conditions in \eqref{eq:boundary1}, and with $d_n^\pm$ constructed from $d_n$.
 
 For ease of notation, define 
 \begin{align}
