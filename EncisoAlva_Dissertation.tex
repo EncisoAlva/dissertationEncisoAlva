@@ -62,8 +62,11 @@
 % to get the units correctly for printing
 %\usepackage{layouts}
 
+% for commenting multiple lines efficiently
+\usepackage{comment}
+
 % for more bibtex templates
-\usepackage[backend=biber,style=apa]{biblatex}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
 \addbibresource{refs.bib}
 
 % Sample bibliography materials
@@ -134,9 +137,10 @@
 %%%%%%%%%%%%%%  First and Following Chapters  %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     \input macros.tex      % file containing author's macro definitions
-\input intro.tex       % file containing Chapter 1 contents
-\input{forward_model.tex}
+%\input intro.tex       % file containing Chapter 1 contents
+\input forward_model.tex
 \input literature.tex  % file containing Chapter 2 contents
+\input numerical_review.tex
 \input model.tex       % file containing Chapter 3 contents
 %\input virt_elec.tex      % file containing Chapter 4 contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -305,7 +305,6 @@ Equation \eqref{eq:model3} can be rewritten as the following generic matrix equa
 \end{equation}
 where $\Y \in \R^{M\times 1}$ encodes the EEG measurements, $\SA \in \R^{N\times 1}$ encodes the dipoles' magnitude, and $\G \in \R^{M\times N}$ is a matrix known as the leadfield matrix, gain matrix, forward operator, among other names; $\G$ encodes the mixture of current density to form the scalar electrical field measured by EEG sensors.
 
-The forward model can be extended trivially to account for $T$ EEG measurements in time by setting $\Y \in \R^{M\times T}$, $\Y \in \R^{M\times T}$, and $\G$ unchanged; the resulting matrix equation will be identical to \eqref{eq:model4}.
 
 
 If the dipole's orientation, $\ee_n$, is to be determined, we can consider each dipole as the sum of three dipoles parallel to some orthogonal directions. Such as in figure \ref{fig:diagrams3}, we can write
@@ -334,9 +333,28 @@ we need to compute the magnitude of these dipoles in order to recover the origin
 \centering
 %\includegraphics[width=0.4\linewidth]{./img_dev/OrthDecompOld}
 \includegraphics{./img_dev/OrthDecompOld}
-\caption{Decomposition of an arbitrary dipole as a sum of projections into the three canonical directions.}
+\caption{Decomposition of a dipole with arbitrary momentum as a sum of dipoles whose momentum is parallel to their respective $x-, y-, z-$axis. By definition, a dipole is made of a sink and a source with equal charges. For visual simplicity, only the source is shown; the sink can be constructed similarly}
 \label{fig:diagrams3}
 \end{figure}
+
+The forward model in equation \eqref{eq:model4} can be extended trivially to account for $T$ EEG measurements in time by setting $\Y \in \R^{M\times T}$, $\Y \in \R^{M\times T}$, and $\G$ unchanged.
+%
+This is possible due to the quasi-static Maxwell equations. 
+%
+Since the neural electric fields change in time at relatively low frequencies, they don't induce an important change to the magnetic field [cite Nunez book].
+%
+The magnetic fields produced by the electric potentials can be considered constant, and thus, any capacitance can be neglected.
+
+It is important to acknowledge that the changes in the electric and magnetic fields are independent of biological tissue.
+%
+However, the neural events that generate electrical fields also generate magnetic fields, which can be measured using Magnetoencephalography (MEG).
+
+The quasi-static properties of the system imply that the magnetic and electric fields don't interact with each other.
+%
+Any correlation between them comes from their neural generators.
+%
+A complete discussion of this phenomenon is beyond the scope of this work.
+
 
 \section{Limitations of surface electrodes}
 
@@ -372,6 +390,8 @@ The distributed dipole model is agnostic in that it doesn't make any assumptions
 %
 A region with no active dipoles leads to equivalent dipoles with zero magnitude, while a region with active dipoles leads to equivalent dipoles with non-zero magnitude.
 
+\begin{comment}
+
 \section{Extensions of the model}
 
 The 4-sphere model is a prevalent standard in the modern literature.
@@ -384,7 +404,6 @@ For instance, extending the 4-sphere model into 5 spheres has been proposed by d
 %
 The resulting model is almost identical, and the additional computational cost is not very large. 
 %
-%Unfortunately, 
 However, the gray and white matter are very similar when observed using T1 MRI, even under normal conditions, and thus, very robust segmentation algorithms are required.
 
 The assumption of isotropic conductivity has also been questioned.
@@ -404,3 +423,4 @@ Now, the 4-sphere model can be generalized to other types of electrical recordin
 For example, [] have used () to model intracranial electrodes, i.e., electrodes placed at the cortex surface or inside the brain.
 
 In Chapter 3 we use the 1-sphere model to locate sources. 
+\end{comment}

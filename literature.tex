@@ -8,43 +8,38 @@
 
 At some point, cite \cite{grech2008review}.
 
-The EEG model discussed presented on the previous can be summarized in the following matrix equation
+The forward model discussed in Chapter \ref{ch:forward} can be summarized in the following matrix equation
 \begin{equation}
-\Y = \G\, \ppar{ \J + \nu } + \varepsilon
+\Y = \G\, \ppar{ \SA + \nu } + \varepsilon
 \label{eq:general}
 \end{equation}
-where the variables encode the following elements,
-\begin{itemize}
-\item[$\Y \in \R^{M\times T}$] EEG measurements over time,
-\item[$\J \in \R^{N\times T}$] Dipole magnitudes over time,
-\item[$\G \in \R^{M\times N}$] Leadfield matrix,
-\end{itemize}
-%
+where $\Y \in \R^{M\times T}$ encodes the EEG measurements over time, $\SA$ encodes the magnitudes of a finite set of distributed dipoles with known locations, and $\G \in \R^{M\times N}$ is a mixing operator referred to as the Leadfield matrix.
+
 The terms $\nu \in \R^{N\times T}, \varepsilon\in\R^{M\times T}$ represent additive noise within the true values for the dipoles and sensors, respectively. 
 %
-Different authors have proposed different sets of assumptions for such noise terms; some of them will be discussed later.
+Different authors have proposed different assumptions for such noise terms, some of which will be discussed later.
 
-It was discussed how this model is constructed for $M$ EEG sensors and $N$ equivalent dipoles with known orientation; if the dipole orientation is to be determined, we may consider three superimposed dipoles parallel to the canonical axis for each dipole position.
+In chapter \ref{ch:forward} it was discussed that if the orientation is known, then we can use $\SA\in \R^{N\times T}$, and otherwise, we should use $\SA\in \R^{3N\times T}$ from decomposing each dipole as the sum of dipoles with known orientations, parallel to the $x$-, $y$- and $z$-axis.
 %
-The cases of known and unknown dipole orientations don't change the model formulation in a significant way, and thus, they will be treated as a single model.
+Since the cases of known and unknown dipole orientations don't significantly change the model formulation, they will be treated as a single model whenever possible.
 
 Within the context of Electrical Source Reconstruction, the computation of the leadfield matrix is referred to as the forward problem.
 %
-As discussed previously, this computation implies a large number of steps: identification of tissues from anatomical MRI or similar, construction of triangulated surfaces representing anatomical regions of interest (which may be simplified), setup of a number of PDEs within the anatomical regions as geometric domain, and the numerical solution of said equations by either BEM or FEM (or a different method).
+This computation implies a large number of steps: identification of tissues from anatomical MRI or similar, construction of triangulated surfaces representing anatomical regions of interest (which may be simplified), setup of several PDEs within the anatomical regions as geometric domain, and the numerical solution of said equations by either BEM or FEM (or a different method).
 
-A further discussion of the forward model is beyond the scope of this work.
+All these points were discussed in Chapter \ref{ch:forward}. 
 %
-After this point, we will consider the leadfield matrix $\G$ to be given for each set of anatomical data and electrode montage.
+Thus, after this point, we will consider the leadfield matrix $\G$ to be given for each set of anatomical data and electrode montage.
 
 \section{Inverse problem formulations}
 
-The main aim of this work will be the task of `recovering' $\J$ once the data $\Y$ and some additional assumptions are considered.
+The main aim of this work will be the task of `recovering' $\SA$ once the data $\Y$ and some additional assumptions are considered.
 
 In the absence of biological noise ($\nu = 0$),
-the most straightforward path of action is to find the $\J$ that minimizes the reconstruction error
+the most straightforward path of action is to find the $\SA$ that minimizes the reconstruction error
 \begin{equation}
-\hat{\J}_{\text{naive}} =
-\argmin_{\J}\, \nnorm{\G\, \J- \Y}_F^2 %+ \lambda\, f\ppar{\mathbf{S}}
+\hat{\SA}_{\text{naive}} =
+\argmin_{\SA}\, \nnorm{\G\, \SA- \Y}_F^2 %+ \lambda\, f\ppar{\mathbf{S}}
 \label{est:naive}
 \end{equation}
 with $\nnorm{A}_F$ the Frobenius norm of $A$, defined as
@@ -62,7 +57,7 @@ The first statement is straightforward since we assumed $M\ll N$.
 %
 The second statement becomes clear if we choose the Least-Square solution,
 \begin{equation}
-\hat{\J}_{\text{LS}} =
+\hat{\SA}_{\text{LS}} =
 \G^T \ppar{\G\, \G^T}\pinv \Y
 \end{equation}
 where $A\pinv$ is the Moore-Penrose pseudoinverse of $A=\G\, \G\trans$.
@@ -72,22 +67,21 @@ It can be proven that the eigenvalues of $A\pinv$ are given by
 \ppar{\sigma_i}\pinv =
 \begin{cases}
 \sigma_i\iinv, &\text{if } \sigma_i\neq 0 \\
-0, &\text{oterwise}.
+0, &\text{otherwise}.
 \end{cases}
 \end{equation}
 where $\sigma_i$ are the eigenvalues of $A=\G\, \G\trans$. 
 %
-Notice that the case $0\neq \sigma_i \approx 0$ leads to $\hat{\J}_{\text{LS}}$ being `unstable' as a function of $\G$ and $\Y$.
+Notice that the case $0\neq \sigma_i \approx 0$ leads to $\hat{\SA}_{\text{LS}}$ being `unstable' as a function of $\G$ and $\Y$.
 
-As it is discussed later, one way to alleviate the instability of the Least-Squares estimator is to change the inverse problem to
+As is discussed later, one way to alleviate the instability of the Least-Squares estimator is to modify the inverse problem by introducing a regularisation parameter $\lambda$, resulting in
 \begin{equation}
-\hat{\J} = \argmin_{\J}\, \nnorm{\G\, \J - \Y} + \lambda\, f\ppar{\J}
+\hat{\SA} = \argmin_{\SA}\, \nnorm{\G\, \SA - \Y} + \lambda\, f\ppar{\SA}
 \label{est:gral}
 \end{equation}
-with $\lambda>0$ a regularization parameters and
-$f: \R^{M\times T} \rightarrow \R_+$ a penalization function, usually related to the norm of $\J$.
+with $\lambda>0$ and $f: \R^{M\times T} \rightarrow \R_+$ a penalization function, usually related to the norm of $\SA$.
 %
-It will be shown how this formulation comes naturally as a result of certain assumptions, but it can also be designed to impose certain desirable properties over the solution.
+It will be shown how this formulation naturally results from certain assumptions, but it can also be designed to impose certain desirable properties on the solution.
 
 \subsection{Minimal Norm Estimator}
 
@@ -97,37 +91,38 @@ For this estimator, we assume that both the sensor and internal noise are Gaussi
 \varepsilon &\sim \norm\ppar{0, \lambda^2 \id_M \otimes \id_T}
 \end{align}
 
-The Maximum A Posteriori (MAP) estimator of $\J$ is defined as
+The Maximum A Posteriori (MAP) estimator of $\SA$ is defined as
 \begin{align}
-\hat{\J}_\text{MAP} 
+\hat{\SA}_\text{MAP} 
 &=
-\argmax_\J \prob\ppar{ \J \given \Y }
+\argmax_\SA\,\, \prob\ppar{ \SA \given \Y }
 \nonumber \\
 &=
-\argmax_\J \prob\ppar{ \Y \given \J }\, \prob{\J}.
+\argmax_\SA\,\, \prob\ppar{ \Y \given \SA }\, \prob{\SA}.
 \end{align}
-The above problem is simplified by (1) taking the logarithm of the expression since it is a monotonic function, (2) considering the independence in time so that columns of $\J$ are computed independently, and (3) considering the normal distribution of $\nu$ and $\varepsilon$.
+
+The above problem can be simplified by (1) taking the logarithm of the expression since $\log$ is a monotonic function, and by (2) considering the independence in time so that columns of $\SA$ are computed independently, and (3) considering the normal distribution of $\nu$ and $\varepsilon$.
 %
 Thus we have
 \begin{align}
-\hat{\J}(:,t)_\text{MAP} 
+\hat{\SA}(:,t)_\text{MAP} 
 &=
-\argmax_\J \prob\ppar{ \Y(:,t) \given \J }\, \prob\ppar{\J}
+\argmax_\SA \,\, \log\ppar{ \prob\ppar{ \Y(:,t) \given \SA }\, \prob\ppar{\SA} }
 \nonumber \\
 &=
-\argmax_\J
-- \frac{1}{2\sigma^2} \nnorm{\G\, \J - \Y(:,t)}_2^2 
-- \frac{1}{2\lambda^2} \nnorm{\J }_2^2 
+\argmax_\SA \,\,
+- \frac{1}{2\sigma^2} \nnorm{\G\, \SA - \Y(:,t)}_2^2 
+- \frac{1}{2\lambda^2} \nnorm{\SA }_2^2 
 \nonumber \\
 &=
-\argmin_\J
-\nnorm{\G\, \J - \Y(:,t)}_2^2 
-+ \frac{\sigma^2}{2\lambda^2} \nnorm{\J }_2^2 
+\argmin_\SA \,\,
+\nnorm{\G\, \SA - \Y(:,t)}_2^2 
++ \frac{\sigma^2}{2\lambda^2} \nnorm{\SA }_2^2 
 \end{align}
 
 Notice how the MAP estimator can be interpreted as a regularized optimization problem in the form of \eqref{est:gral}.
 %
-Since the MAP estimator is obtained by minimizing the norm of $\J$ (in particular, the $\ell_2$ norm), it is referred to as the Minimal-Norm Estimator (MNE).
+Since the MAP estimator is obtained by minimizing the norm of $\SA$ (in particular, the $\ell_2$ norm), it is referred to as the Minimal-Norm Estimator (MNE).
 %
 This designation is ambiguous since many other estimators depend on minimizing some norm of the sources; thus, `minimal-norm estimator' refers to a family of estimators. 
 %
@@ -135,9 +130,9 @@ In this work, this particular estimator will be referred to simply as MNE to avo
 
 The MNE estimator admits a closed-form solution as follows,
 \begin{equation}
-\hat{\J}_\text{MNE}
+\hat{\SA}_\text{MNE}
 =
-\hat{\J}_\text{MAP}
+\hat{\SA}_\text{MAP}
 =
 \G\trans\ppar{ \G\, \G\trans + \frac{\sigma^2}{\lambda^2}\id_M }\iinv \Y
 \end{equation}
@@ -180,19 +175,19 @@ The Weighted Minimal Norm Estimator (wMNE) is then defined as
 
 The Low-Resolution Electric Tomography (LORETA) estimator was proposed by Marqui\cite{sloreta}.
 %
-One key idea from this method is to use a Laplacian operator to impose spatial smoothness over $\J$, additional to using the same depth-weighting from wMNE.
+One key idea from this method is to use a Laplacian operator to impose spatial smoothness over $\SA$ and use the same depth-weighting from wMNE.
 
-In its original formulation, which is included here, the dipoles are assumed to be located on a cubic grid with a distance $d$ between any two neighboring dipoles. 
+In its original formulation, the dipoles are assumed to be located on a cubic grid with a distance $d$ between neighboring dipoles. 
 
 The LORETA estimator can be expressed as an optimization problem
 \begin{align}
-\hat{\J}_\text{sLORETA} 
+\hat{\SA}_\text{sLORETA} 
 &=
-\argmin_\J \,
-\nnorm{ B\, W\, \J } _2^2 
+\argmin_\SA \,
+\nnorm{ B\, W\, \SA } _2^2 
 \nonumber \\
 &\text{s.t. }
-\G\, \J = \Y
+\G\, \SA = \Y
 \end{align}
 with $W$ as in \eqref{det:wMNE}, and $B$ the laplacian operator defined as
 \begin{equation}
@@ -207,7 +202,7 @@ where $d$ is the distance between dipoles.
 
 The estimator is computed as follows:
 \begin{equation}
-\hat{\J}_\text{LORETA} 
+\hat{\SA}_\text{LORETA} 
 = 
 \ppar{ W\, B\trans\, B\, W }\iinv
 \G\trans
@@ -224,11 +219,11 @@ Despite their similar name, LORETA and sLORETA are two different methods.
 %
 The sLORETA estimator considers the following minimization problem
 \begin{equation}
-\hat{\J}_\text{sLORETA} 
+\hat{\SA}_\text{sLORETA} 
 = 
-\argmin_{\J}\, \nnorm{\G\, \J - \Y - c \ones }_2^2 + \lambda\, \nnorm{\J}_F^2
+\argmin_{\SA}\, \nnorm{\G\, \SA - \Y - c \ones }_2^2 + \lambda\, \nnorm{\SA}_F^2
 \end{equation}
-with $\ones=\{1\}^{M\times 1}$ a vector of ones.
+with $\ones=\{1\}^{M\times 1}$ a column vector of ones.
 
 The underlying assumption is that the measurements are re-referenced to the average, i.e., the raw observations $\Y_0\in \R^{M\times T}$ are pre-processed as follows
 \begin{equation}
@@ -239,13 +234,19 @@ with $H \in \R^{M \times M}$ an averaging operator constructed as
 H = \ppar{\ones_M \ones_M\trans}/\ppar{\ones_M\trans \ones_M}.
 \end{equation}
 
+Alternatively, we can construct $H$ element-wise as
+\begin{equation}
+    H(m_1, m_2) = \frac{1}{M}
+\end{equation}
+for $m_i = 1, 2, \dots, M$ and $i=1,2$.
+
 It is relevant to mention that this type of re-reference can be interpreted as constructing a phantom electrode with neutral electric activity and using it to close the recording circuit.
 %
 This process is expected to eliminate noises that are common to all electrodes.
 
 Assuming that $\Y$ was re-referenced to the average, then the parameter $c$ is always zero, and the estimator is as follows
 \begin{equation}
-\hat{\J}_{\text{sLORETA}} =
+\hat{\SA}_{\text{sLORETA}} =
 \G^T H 
 \ppar{
 H\, \G \,\G\trans 
@@ -260,11 +261,11 @@ H +
 
 The MSP estimator was proposed by Mattout []
 %Mattout J, P\'{e}l\'{e}grini-Issac M, Garnero L, \& Benali H. (2005). Multivariate source prelocalization (MSP): use of functionally informed basis functions for better conditioning the MEG inverse problem. NeuroImage, 26(2), 356-373.}
-incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then gets the sources that are more correlated with their projections into that space.
+incorporates the idea of using Single Value Decomposition (SVD) to produce a subspace that captures the most relevant information in $\Y$ and $\G$, then gets the sources more correlated with their projections into that space.
 %
-The obtained information is later used to construct a weight matrix, so the finale estimation is similar to wMNE.
+The obtained information is later used to construct a weight matrix, so the final estimation is similar to wMNE.
 \begin{equation}
-\hat{\J}_\text{MSP} = \argmin_{\J} \nnorm{\Y - \G \J}_F^2 + \lambda\nnorm{W_\text{MSP} \J}_F^2
+\hat{\SA}_\text{MSP} = \argmin_{\SA} \nnorm{\Y - \G \SA}_F^2 + \lambda\nnorm{W_\text{MSP} \SA}_F^2
 \end{equation}
 
 The leadfield matrix is column-normalized as in \ref{det:wMNE}, and the SVD decomposition is performed, 
@@ -275,7 +276,7 @@ W_G &= \diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
 \end{align}
 with $\U\in \R^{M\times M},\V\in \R^{N\times N}$ such that $\U\trans \U = \id_M, \V\trans\V = \id_N$, and $\mathbf{\Lambda} \in \R{M\times N}$ a matrix with the singular values of $\Gbar$ in descending order on its diagonal.
 
-The first $s$ columns of $\U$ are selected based on the Velicer criterion,
+The first $s$ columns of $\U$ are selected based on the Velicer criterion \cite{velicer1996criterion},
 \begin{align}
 \U_s 
 &= 
@@ -297,7 +298,7 @@ The authors of MSP propose interpreting $\mathbf{A}_s$ as a correlation matrix o
 %
 Following this interpretation, the authors define {Activation Probability Map} (APM) as
 \begin{align}
-{D}_s(j) = \mathbf{A}_s(j,j) = \norm{\Gbar(:,j)\trans \Ybar_s  }_2^2
+{D}_s(j) = \mathbf{A}_s(j,j) = \nnorm{\Gbar(:,j)\trans \Ybar_s  }_2^2
 \end{align}
 %with the additional information that ${D}_s(j) \sim Gamma(a,b)$.
 
@@ -307,8 +308,8 @@ W_\text{MSP}(j,j) = 1-{D}_s(j)
 \end{equation}
 leaving the MSP estimator as follows,
 \begin{align}
-\hat{\J}_\text{MSP} &=
-{W\text{MSP}}^{-2} \G^T \ppar{ \G\ppar{W\text{MSP}^2}^{-1}\G^T + \lambda \id_m  }^{-1} \Y
+\hat{\SA}_\text{MSP} &=
+{W_\text{MSP}}^{-2} \G^T \ppar{ \G\ppar{W\text{MSP}^2}^{-1}\G^T + \lambda \id_m  }^{-1} \Y
 \label{est:MSP}
 \end{align}
 
@@ -318,15 +319,15 @@ Proposed by Uutel, Hamalainen, Somerselo.
 %
 This estmator incrporates the assumption that the sources patches are `sparse', i.e. most of the dipole have a magnitude of zero.
 
-Minimizing the number of non-zero entries of $\J$ can be achieved by minimizing $\nnorm{\J}_{1,1}$, which is defined as
+Minimizing the number of non-zero entries of $\SA$ can be achieved by minimizing $\nnorm{\SA}_{1,1}$, which is defined as
 \begin{equation}
 \nnorm{A}_{1,1} = \sum_{m=1}^M \sum_{n=1}^N \abss{A(m,n)}
 \end{equation}
 
 The MCE estimator is defined as
 \begin{align}
-\hat{\J}_\text{MCE} &=
-\argmin_{\J}\, \nnorm{\G\, \J - \Y }_2^2 + \lambda\, \nnorm{\J}_{1,1}
+\hat{\SA}_\text{MCE} &=
+\argmin_{\SA}\, \nnorm{\G\, \SA - \Y }_2^2 + \lambda\, \nnorm{\SA}_{1,1}
 \label{est:MCE}
 \end{align}
 
@@ -345,11 +346,11 @@ This algorithm proposed by Gramfort incorporates the assumption that the source 
 %
 This assumption is enforced by solving the following optimization problem.
 \begin{align}
-\hat{\J}_\text{MxNE} &=
-\argmin_{\J}\, \nnorm{\G\, \J - \Y }_2^2 + \lambda\, \nnorm{\J}_{2,1}
+\hat{\SA}_\text{MxNE} &=
+\argmin_{\SA}\, \nnorm{\G\, \SA - \Y }_2^2 + \lambda\, \nnorm{\SA}_{2,1}
 \label{est:MxNE}
 \end{align}
-with $\nnorm{\J}_{2,1}$ the $\ell_{2,1}$ norm of $\J$.
+with $\nnorm{\SA}_{2,1}$ the $\ell_{2,1}$ norm of $\SA$.
 %
 In general, the bi-level $\ell_{p,q}$ norm is defined as
 \begin{equation}
@@ -371,13 +372,13 @@ The algorithm called Source Imaging based on Structured Sparsity (SISSY) was pro
 
 From all the estimation methods described in the previous section, all of them converge in a general form
 \begin{equation}
-\hat{\J}_\Theta = F\ppar{ \Y, \G; \Theta }
+\hat{\SA}_\Theta = F\ppar{ \Y, \G; \Theta }
 \end{equation}
 with $\Theta$ a set of parameters that must be selected beforehand.
 
 One particular case is the linear method, for which the estimator can be written as
 \begin{equation}
-\hat{\J}_\Theta
+\hat{\SA}_\Theta
 =
 \mathbf{K}_{\Theta}\, \Y
 \end{equation}
@@ -397,19 +398,19 @@ Such a generalization is not made explicit.
 
 \subsection{L-curve}
 
-This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{\J}_F^2$ and $\nnorm{\G\, \J - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
+This heuristic incorporates the idea that the parameter $\lambda$ balances the factors $\nnorm{\SA}_F^2$ and $\nnorm{\G\, \SA - \Y}_F^2$, trying to minimize both of them evenly \cite{Lcurve}.
 %
 To do that, define the quantities
 \begin{align}
 \rho(\lambda)
 &=
-\nnorm{\G\, \hat{\J}_\lambda - \Y}_F^2
+\nnorm{\G\, \hat{\SA}_\lambda - \Y}_F^2
 %=
 %\nnorm{\G\, K_\lambda\Y - \Y}_F^2
 \\
 \eta(\lambda)
 &=
-\nnorm{\hat{\J}_\lambda}_F^2 
+\nnorm{\hat{\SA}_\lambda}_F^2 
 %= 
 %\nnorm{ K_\lambda \Y }_F^2
 \label{det:Lcurve}
@@ -460,7 +461,7 @@ K_\lambda^{[m]}
 &=
 \ppar{\G^{[m]}}\trans\ppar{ \G^{[m]}\, \ppar{\G^{[m]}}\trans + \lambda\id_M }\iinv
 \\
-\J_\lambda^{[m]}
+\SA_\lambda^{[m]}
 &=
 K_\lambda^{[m]}\, \Y_\lambda^{[m]}
 \end{align}
@@ -493,12 +494,12 @@ It is important to emphasize that the approximation for the GCV error in equatio
 
 \subsection{Composite Residual and Smoothing Operator (CRESO)}
 
-This heuristic incorporates the idea that the residual, $\nnorm{\G\, \J - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
+This heuristic incorporates the idea that the residual, $\nnorm{\G\, \SA - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
 %
 To achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
 \begin{equation}
 C\ppar{\lambda} = 
-\frac{d}{d\lambda} \spar{ -\nnorm{\G\J_\lambda - \Y}_2^2 + \lambda \nnorm{\J_\lambda}_2^2}
+\frac{d}{d\lambda} \spar{ -\nnorm{\G\SA_\lambda - \Y}_2^2 + \lambda \nnorm{\SA_\lambda}_2^2}
 =
 \frac{d}{d\lambda} \spar{ - \nnorm{\ppar{\G K_\lambda + \id_M}\Y}_2^2 - \lambda \nnorm{K_\lambda \Y}_2^2}
 \end{equation}
@@ -513,7 +514,7 @@ This heuristic incorporates the idea that both the largest among the residual an
 In particular, the following function is constructed
 \begin{equation}
 U(\lambda) = 
-\nnorm{\G\J_\lambda - \Y}_2^{-2} + \nnorm{\J_\lambda}_2^{-2}
+\nnorm{\G\SA_\lambda - \Y}_2^{-2} + \nnorm{\SA_\lambda}_2^{-2}
 \end{equation}
 
 Similar to the L-curve heuristic, the U-curve heuristic gets its denomination from the typical shape of the plot of $U(\lambda)$.
@@ -523,7 +524,10 @@ The optimal $\lambda$ is the global minimum of $U(\lambda)$.
 \begin{figure}
 \centering
 \includegraphics[width=1\linewidth]{./img_MATLAB/ParTuning_sLORETA}
-\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generalized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interest is different for each heuristic, which is computed for a large number of candidate values and then used to select one of those values.}
+\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generalized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interest is different for each heuristic, which is computed for many candidate values and then used to select one of those values.
+%
+Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA
+}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -543,7 +547,7 @@ In this work, we employ an operative definition based on the latter.
 %
 First, we estimate a patch $\mathcal{I}_i$ as the dipoles that are close to the $i$-th local maximum, indexed by $x_i$, and whose magnitude is significant enough to be relevant.
 \begin{align}
-x_i &= \argmax_{n} \nnorm{\J_n}_2
+x_i &= \argmax_{n} \nnorm{\SA_n}_2
 \nonumber \\
 &\phantom{=} \text{s.t. }
 n\not\in \mathcal{I}_j, j<i
@@ -552,14 +556,14 @@ n\not\in \mathcal{I}_j, j<i
 &=
 \sset{ n\in \sset{1, \dots, N} \given 
 \nnorm{r_n - r_{x_i}} < \nnorm{r_n - r_{x_j}} \text{ for } j<i,
-\nnorm{\J_n}_2\geq \alpha\nnorm{\J_{x_i}}_2 }
+\nnorm{\SA_n}_2\geq \alpha\nnorm{\SA_{x_i}}_2 }
 \end{align}
 with $0<\alpha<1$; usually $\alpha=10\%$.
 
-With this information, the center of the patch is merely the center of mass with respect to $\nnorm{\J}_2^2$,
+With this information, the center of the patch is merely the center of mass with respect to $\nnorm{\SA}_2^2$,
 \begin{align}
 k_i = 
-\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\J_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\J_n}_2^2}
+\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\SA_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\SA_n}_2^2}
 \label{def:center1}
 \end{align}
 
@@ -579,10 +583,10 @@ The patches are defined similarly, but the true centers of the source patches, $
 &=
 \sset{ n\in \sset{1, \dots, N} \given 
 \nnorm{r_n - k_i} < \nnorm{r_n - k_j} \text{ for } j\neq i,
-\nnorm{\hat{\J}_n}_2\geq \nnorm{\hat{\J}_{x_i}}_2 }
+\nnorm{\hat{\SA}_n}_2\geq \nnorm{\hat{\SA}_{x_i}}_2 }
 \\
 \hat{k}_i &= 
-\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\hat{\J}_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\hat{\J}_n}_2^2}
+\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\hat{\SA}_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\hat{\SA}_n}_2^2}
 \end{align}
 In practice, $\hat{\mathcal{I}}_i$ can be constructed by first selecting the dipoles close to the true centers and later filtering the dipoles based on the local maxima.
 
@@ -605,7 +609,7 @@ This metric proposed by Hamalainen is defined as
 \text{SD}
 =
 \ppar{
-\frac{ \sum_{i=1}^I \sum_{n\in \mathcal{I}_i} \nnorm{r_n-k_i}\,  \nnorm{\hat{\J}_n}_2^2 }{\sum_{n=1}^N \nnorm{\hat{\J}_n}_2^2}
+\frac{ \sum_{i=1}^I \sum_{n\in \mathcal{I}_i} \nnorm{r_n-k_i}\,  \nnorm{\hat{\SA}_n}_2^2 }{\sum_{n=1}^N \nnorm{\hat{\SA}_n}_2^2}
 }^{1/2}
 \end{equation}
 
@@ -616,7 +620,7 @@ Also referred to as relative Reconstruction Error, this metric represents the es
 It is defined as
 \begin{equation}
 \text{rMSE} = 
-\frac{\nnorm{\J - \hat{\J}}_2}{\nnorm{\J}_2}
+\frac{\nnorm{\SA - \hat{\SA}}_2}{\nnorm{\SA}_2}
 \end{equation}
 
 \subsection{Effective Mean Square Error (fMSE)}
@@ -626,7 +630,7 @@ This metric is similar to the rMSE, but as perceived by the sensors.
 It is defined as
 \begin{equation}
 \text{fMSE} = 
-\frac{\G\ppar{\nnorm{\J - \hat{\J}}_2}}{\nnorm{\G\, \J}_2}
+\frac{\G\ppar{\nnorm{\SA - \hat{\SA}}_2}}{\nnorm{\G\, \SA}_2}
 \end{equation}
 
 \subsection{Area Under Receiver-Operator Curve (AUROC)}
@@ -646,13 +650,13 @@ Hamalainen proposed using the relative magnitude to
 
 This metric, very common in Data Science, is used in this context by interpreting the dipoles' magnitude as scores to label them as active or non-active.
 %
-Within this interpretation $\nnorm{\J}$ is used to create the reference labels, $\mathcal{A}^{\text{ref}}: \R \rightarrow \sset{0,1}^N$, and $\hat{\J}$ is used to create the estimated labels, $\mathcal{A}^{\text{est}}: \R \rightarrow \sset{0,1}^N$, as follows
+Within this interpretation $\nnorm{\SA}$ is used to create the reference labels, $\mathcal{A}^{\text{ref}}: \R \rightarrow \sset{0,1}^N$, and $\hat{\SA}$ is used to create the estimated labels, $\mathcal{A}^{\text{est}}: \R \rightarrow \sset{0,1}^N$, as follows
 \begin{align}
 \mathcal{A}_n^{\text{ref}}(\beta)
 &=
 \begin{cases}
 1, &\text{if }
-\nnorm{\J}_2 \geq \beta \max\sset{\nnorm{\J}_2}
+\nnorm{\SA}_2 \geq \beta \max\sset{\nnorm{\SA}_2}
 \\
 0, &\text{otherwise}
 \end{cases}
@@ -661,7 +665,7 @@ Within this interpretation $\nnorm{\J}$ is used to create the reference labels, 
 &=
 \begin{cases}
 1, &\text{if }
-\nnorm{\hat{\J}}_2 \geq \beta \max\sset{\nnorm{\hat{\J}}_2}
+\nnorm{\hat{\SA}}_2 \geq \beta \max\sset{\nnorm{\hat{\SA}}_2}
 \\
 0, &\text{otherwise}
 \end{cases}
@@ -711,9 +715,12 @@ $\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, with the False Positive
 
 \begin{figure}
 \centering
-\includegraphics{./img_dev/AUROC_sketch.pdf}
+\includegraphics[width=\linewidth]{./img_dev/AUROC_sketch.pdf}
 %
-\caption{Construction of Receiver-Operator Curve and Precision-Recall Curve from the reference and estimated dipole magnitudes, $\nnorm{{\J}}_2$ and $\nnorm{\hat{\J}}_2$, respectively.}
+\caption{Construction of Receiver-Operator Curve and Precision-Recall Curve from the reference and estimated dipole magnitudes, $\nnorm{{\SA}}_2$ and $\nnorm{\hat{\SA}}_2$, respectively.
+%
+Reference $\SA$ was constructed using the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimate $\hat{\SA}$ was computed using sLORETA.
+}
 \end{figure}
 
 The interpretation of the Receiver-Operator Curve is that each selection of $\beta$ balances the ratios of True Positives and False Negatives:
@@ -750,7 +757,9 @@ We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./img_dev/nsCurves4}
-\caption{Effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. To attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.}
+\caption{Effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. To attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.
+%
+Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA}
 \end{figure}
 
 \subsection{Average Precision}
@@ -781,168 +790,3 @@ Similar to AUROC, Average Precision can be computed numerically as follows
 The characteristic shape of the Precision-Recall Curve is quite different. 
 %
 For instance, see FIGURE.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Numerical experiments}
-
-The methods described in this section are first used over synthetic data to illustrate their characteristics and performance.
-
-The anatomical data is obtained from the ICBM 152 template[], constructed as an `average' of T1 MRI scans from several subjects.
-%
-Segmentation and surface extraction were omitted since the 4-sphere surfaces are provided.
-%
-Those triangulated surfaces are displayed in figure \ref{fig:surfaces}.
-
-\begin{figure}
-\centering
-%\includegraphics[width=0.8\linewidth]{./img_dev/nsSetupForward}
-%
-\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_top - Copy2}
-\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_front}
-\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_left}
-\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_left_inner}
-\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_bottom}
-%
-\includegraphics[width=0.2\linewidth]{./img_dev/combined - Copy}
-\includegraphics[width=0.18\linewidth]{./img_dev/combined_scalp}
-\includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_outer}
-\includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_inner}
-\includegraphics[width=0.18\linewidth]{./img_dev/combined_cortex}
-\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head.}
-\label{fig:surfaces}
-\end{figure}
-
-Electrodes were placed according to the 10-10 International System [], resulting in $M=90$ electrodes. See either figure \ref{fig:1010system} for visual reference or [] for a more precise description of the electrode placement protocol.
-%
-The electrodes would be re-referenced to the average, so no reference electrode is considered at this stage.
-
-Dipole locations were determined using the $N=15,002$ available in the triangulated cortex surface.
-%
-Dipole orientations were assumed to be orthogonal to the cortex surface.
-
-Additionally, this section considers only a single time stamp, $ T=1$, for illustrative purposes.
-
-\begin{figure}
-\centering
-%\includegraphics[width=0.8\linewidth]{./img_dev/nsElectrodeSetup}
-\includegraphics[width=0.4\linewidth]{./img_dev/10-10_sketch}
-\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_top}
-\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_left}
-%\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_right}
-\caption{Electrode Placement according to the 10-10 International System.}
-\label{fig:1010system}
-\end{figure}
-
-%\subsubsection{Synthetic data protocol}
-
-Following the forward model from equation \eqref{eq:general}, the synthetic data is constructed by (1) constructing $\J$ based on a source distribution described later, then (2) constructing $\nu$ and $\varepsilon$ to meet a prescribed Signal-to-Noise Ratio (SNR), and finally (3) constructing $\Y$ as in the forward model.
-
-The source distribution consists of selecting an arbitrary dipole indexed by $n^*$ and then constructing $J$ as
-\begin{equation}
-\J_n = f\ppar{ \nnorm{r_n-r_{n^*}} / \kappa }
-\end{equation}
-with $f:\R_+\rightarrow \R_+$ a decreasing function and $\kappa>0$ a scaling parameters.
-%
-See figure \ref{fig:exaple_true} for a representation of the location and extent of the extended source.
-
-\begin{figure}
-\centering
-%\includegraphics[width=0.8\linewidth]{./img_dev/nsCurves1}
-%\includegraphics{./img/gauss_center}
-%\includegraphics{./img/square_GroundTruth}
-\includegraphics{./img_MATLAB/square_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/square_Profile}
-\includegraphics{./img_MATLAB/gauss_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/gauss_Profile}
-\includegraphics{./img_MATLAB/exp_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/exp_Profile}
-\includegraphics{./img_MATLAB/circ_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/circ_Profile}
-\caption{Cortical patch used for the creation of synthetic data.}
-\label{fig:exaple_true}
-\end{figure}
-
-This type of configuration is referred to as `source patches' or `extended sources' since it occupies an area too large to be modeled as a single dipole.
-
-For the synthetic data in this section, the dipole $n^*$ was selected within the frontal cortex for visibility.
-%
-We use 
-\begin{equation}
-f(x) = \begin{cases}
-1, &\text{if } x\leq 1 \\
-0, &\text{otherwise}.
-\end{cases}
-\end{equation}
-and $\kappa = $ 12.6 \si{mm}, to obtain a source patch with an area of approximately 5 \si{cm^2}.
-
-For simplicity within the model formulation, we considered no internal noise ($\nu=0$) and independent Gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
-%
-Under these conditions, the distribution of $\Y$ is given by
-\begin{equation}
-\ppar{\Y \given \J} =
-\norm\ppar{ \G\, \J, \diag{\sigma_1, \dots, \sigma_M}^2 }
-\end{equation}
-
-The channel SNR (in dB) for the $m-th$ sensor is given by
-\begin{equation}
-\text{SNR}_m = 
-10\, \log\ppar{ \frac{ \ppar{ \spar{\G\, \J}(m)}^2 }{\sigma_m^2} }
-\end{equation}
-With a prescribed SNR value, the parameters $\sigma_m$ are selected as follows
-\begin{equation}
-\sigma_m = 
-\spar{\G\, \J}(m)\,
-10\wedge \ppar{-\frac{SNR}{10}}
-\end{equation}
-
-For the synthetic data in this section, we consider an SNR level of 20 dB, which we consider a low-noise condition.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\section{Multi-modal asymmetric methods}
-%
-%A common framework
-%to enhance ESI is to incorporate 
-%`information' from the additional {modalities} of data:
-%%and then constrain ESI to it.
-%%
-%%Multiple authors have explored the idea 
-%%of enhancing 
-%%the EEG Source Localization
-%%by adding data from other `modes' of data: 
-%MEG, MRI/fMRI\cite{he2008multimodal, huster2012methods}, PET, fNIRS\cite{fnirs}, etc.
-%(Figure based on \cite{he2008multimodal}).
-%%of using additional data to aid the EEG Source Localization, would it be MEG.
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.65\linewidth]{./img_final/sketch07}
-%\caption{PET=Positron Emission Tomography, NIRS=Near Infrared Spectroscopy, SPECT=Single-Photon Emission Computed Tomography}
-%\end{figure}
-%
-%
-%One big conceptual challenge for multimodal data integration is to model the interaction of the underlying physical phenomena. 
-%%
-%Focusing only on unilateral interactions results in asymmetric data integration.
-%
-%%For
-%%asymmetric data integration, 
-%%such as enhanced ESI, 
-%%some bilateral interactions may be simplified. 
-%%Thus 
-%
-%{Asymmetric data fusion} is the extraction of some parameters from one modality, which then are used to further the  for ESIanalysis of the other modaliFor ESI, the obtained parameters are typically used within the penalty functions.
-%%Some simplifying assumptions considered in the literature for asymmetric data fusion for ESI are:
-%%A common framework
-%%Some techniques used in the literature 
-%%to ESI enhancing is to extract `information' from the additional modalities and then constrain ESI to it.
-%Some of the parameters extracted include:
-%\begin{itemize}
-%    \item Correlation networks
-%    \item Statistical Parametric Maps (SPM)
-%    \item Hidden activation variables \cite{fire}
-%\end{itemize}
-
