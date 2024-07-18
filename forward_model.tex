@@ -98,6 +98,7 @@ In more precise terms, the divergence of the current density field is defined as
 \begin{equation}
 \nabla \cdot K = \lim_{G(\rr) \rightarrow \sset{\rr}} \frac{1}{\text{vol}\ppar{G\ppar{\rr}}}
 \oint_{\partial G(\rr)} K(\rr)\, dS
+\label{eq:divK}
 \end{equation}
 with $G(\rr)\subset \R^3$ a set that contains $\rr$. 
 %
@@ -127,16 +128,17 @@ Refer to figure \ref{fig:diagrams1} for a graphical summary of this construction
 \begin{figure}
 \centering
 %\includegraphics[width=0.4\linewidth]{./img_dev/nsNeuronDipole}
-\includegraphics{./img_dev/CurrDensFieldOld}
+\includegraphics{./img/CurrDensField.pdf}
 \caption{Visual representation of a single dipole with electric sink and source located at $\dd^-$ and $\dd^+$, respectively.
 %
-We consider the position of the dipole, $\dd$, at the midpoint of $\dd^-$ and $\dd^+$.
+The `position' of the dipole, $\dd$, is the midpoint of $\dd^-$ and $\dd^+$.
 %
-The electrical field, $E= -\nabla V$, is shown as the lines of the fastest descent.
+The electric scalar field, $V$, is denoted by its isopotential lines, while the electrical field, $E= -\nabla V$, is shown as the lines of the fastest descent.
 %
-The divergence of $K = \nabla\cdot\ppar{\sigma E}$ is calculated as the limit of the surface integral of $K$ over $G(\rr)\rightarrow \sset{\rr}$, and it vanishes everywhere except at $\dd^+$ AND $\dd^-$.
+On this diagram is shown an example of a set $G\ppar{\rr} \subset \R^3$ that contains $\rr$; these sets are used in equation \eqref{eq:divK}
 %
-In the quasi-static case, we assume that the magnetic field is constant in time, and thus, the time-varying influence over the electric fields is negligible}
+%In the quasi-static case, we assume that the magnetic field is constant in time, and thus, the time-varying influence over the electric fields is negligible
+}
 \label{fig:diagrams1}
 \end{figure}
 
