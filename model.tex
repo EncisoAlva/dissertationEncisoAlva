@@ -43,11 +43,13 @@ For notation, define
 
 \begin{figure}
     \centering 
-    \includegraphics[width=0.6\linewidth]{./img_dev/Pregions.jpg}
+    \includegraphics{./img/Pregions.pdf}
     \caption{Construction of labels based on P-regions, representing regions when a particular symptom, independent of electrophysiological measurements, was observed.}
 \end{figure}
 
 As a remark, the P-regions are defined independently of the dipoles; each $P_k$ is the set of dipoles inside a specific P-region.
+%
+If a different set of dipoles is selected for the same subject and pathology data, the P-regions will change but will be constructed in the same anatomical space.
 
 For ease of handling in the model, the P-regions regions are encoded using the matrix 
 $\PA\in \sset{0,1}^{N\times K}$ defined as
@@ -441,10 +443,13 @@ The similarity can be made more clear by using similar steps.
 \end{align}
 with $\G_\RA \in \R^{K\times M}$.
 %
-Notice that, once $\ppar{A_\Theta \G^T}$ is computed, it can be subject to 
-SVD decomposition in order to compute $W_\rho$.
+Notice that, once $\ppar{\G \AAA_\Theta}$ is computed, it can be subject to 
+SVD decomposition in order to compute $W_\rho$ efficiently.
 %
-This process is similar to all the kernels described in Chapter \ref{ch:forward} for linear methods; thus, it is omitted.
+This process is similar to all the kernels described in Chapter \ref{ch:forward} for linear methods.
+
+Start by finding matrices 
+
 
 With this list of considerations, we claim that this new method is not significantly more computationally expensive than the linear methods presented in Chapter 2.
 %
@@ -498,7 +503,7 @@ As a result, tissue colored white was affected by necrosis, and tissue colored r
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{./img_dev/Pregions.png}
+\includegraphics{./img_dev/Pregions.png}
 \caption{Designation of P-regions based on observed pathology data: hypoxia due to acute ischemic stroke, observed using TTC staining}
 \end{figure}
 
