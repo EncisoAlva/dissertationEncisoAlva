@@ -162,7 +162,7 @@ In order to alleviate the effect mentioned above, the depth-weighting matrix $W$
 %
 The Weighted Minimal Norm Estimator (wMNE) is then defined as
 \begin{align}
-\hat{J}_\text{wMNE} 
+\hat{\SA}_\text{wMNE} 
 &=
 \ppar{\G\trans \G + \lambda\, W^T W}\pinv \G^T \Y \\
 &=
@@ -440,9 +440,9 @@ Following the leave-one-out principle, we consider $\Y^{[m]}\in\R{(M-1)\times T}
 \Y(m+1,:) \\
 \vdots \\
 \Y(M,:) 
-\end{bmatrix}
-\\
-\G^{[m]} &=
+\end{bmatrix},
+\quad
+\G^{[m]} =
 \begin{bmatrix}
 \G(1,:) \\
 \vdots \\
@@ -453,7 +453,7 @@ Following the leave-one-out principle, we consider $\Y^{[m]}\in\R{(M-1)\times T}
 \end{bmatrix}
 \end{align}
 
-Based on this incomplete information, we construct a restricted Wiener kernel, $K_\lambda^{[m]} \in \R^{N\times(M-1)}$, and a restricted estimation, $J_\lambda^{[m]} \in \R^{N\times T}$,
+Based on this incomplete information, we construct a restricted Wiener kernel, $K_\lambda^{[m]} \in \R^{N\times(M-1)}$, and a restricted estimation, $\SA_\lambda^{[m]} \in \R^{N\times T}$,
 \begin{align}
 K_\lambda^{[m]}
 &=
@@ -464,14 +464,14 @@ K_\lambda^{[m]}
 K_\lambda^{[m]}\, \Y_\lambda^{[m]}
 \end{align}
 
-The cross-validation is incorporated by estimating the measurements from the $m$-th with information from $J_\lambda^{[m]}$ and then comparing it with the actual measurements.
+The cross-validation is incorporated by estimating the measurements from the $m$-th with information from $\SA_\lambda^{[m]}$ and then comparing it with the actual measurements.
 %
 By performing this procedure over all the sensors and averaging, we obtain the following quantity
 \begin{equation}
 V(\lambda) = 
 \frac{1}{M}
 \sum_{m=1}^M
-\nnorm{ \ppar{ \G J_\lambda^{[m]} }(m, :) - \Y(m,:) }_F^2
+\nnorm{ \spar{ \G \SA_\lambda^{[m]} }(m, :) - \Y(m,:) }_F^2
 \label{det:GCV_pre}
 \end{equation}
 
@@ -492,15 +492,16 @@ It is important to emphasize that the approximation for the GCV error in equatio
 
 \subsection{Composite Residual and Smoothing Operator (CRESO)}
 
-This heuristic incorporates the idea that the residual, $\nnorm{\G\, \SA - \Y}_F^2$, and the norm of the solution, $\nnorm{J}_F^2$, should be approximately equal \cite{creso}.
+This heuristic incorporates the idea that the residual, $\nnorm{\G\, \SA - \Y}_F^2$, and the norm of the solution, $\SA_F^2$, should be approximately equal \cite{creso}.
 %
 To achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
-\begin{equation}
-C\ppar{\lambda} = 
+\begin{align}
+    C\ppar{\lambda} &= 
 \frac{d}{d\lambda} \spar{ -\nnorm{\G\SA_\lambda - \Y}_2^2 + \lambda \nnorm{\SA_\lambda}_2^2}
-=
+\nonumber \\
+&=
 \frac{d}{d\lambda} \spar{ - \nnorm{\ppar{\G K_\lambda + \id_M}\Y}_2^2 - \lambda \nnorm{K_\lambda \Y}_2^2}
-\end{equation}
+\end{align}
 with $K_\lambda \Y$ the inversion kernel, understood explicitly as a function of $\lambda$. 
 %
 The optimal $\lambda$ is the smallest solution to the equation $C(\lambda)=0$.
