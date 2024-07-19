@@ -139,7 +139,7 @@ The MNE estimator admits a closed-form solution as follows,
 
 \subsection{Weighted Minimal Norm Estimator}
 
-Hamalainen proposed to consider $\nu$ as follows
+H\"{a}m\"{a}l\"{a}inen proposed to consider $\nu$ as follows
 \begin{align}
 \nu &\sim
 \norm\ppar{
@@ -307,13 +307,13 @@ W_\text{MSP}(j,j) = 1-{D}_s(j)
 leaving the MSP estimator as follows,
 \begin{align}
 \hat{\SA}_\text{MSP} &=
-{W_\text{MSP}}^{-2} \G^T \ppar{ \G\ppar{W\text{MSP}^2}^{-1}\G^T + \lambda \id_m  }^{-1} \Y
+\spar{W_\text{MSP}}^{-2} \G^T \ppar{ \G\spar{W_\text{MSP}}^{-2}\G^T + \lambda \id_m  }^{-1} \Y
 \label{est:MSP}
 \end{align}
 
 \subsection{Minimum Current Estimate (MCE)}
 
-Proposed by Uutel, Hamalainen, Somerselo.
+Proposed by Uutel, H\"{a}m\"{a}l\"{a}inen, Somerselo.
 %
 This estimator incorporates the assumption that the source patches are `sparse', i.e., most of the dipoles have a magnitude of zero.
 
@@ -331,9 +331,9 @@ The MCE estimator is defined as
 
 Unlike the other estimators described until this point, the MCE estimator does not admit a closed-form solution.
 %
-It can be solved efficiently using the Alternating Direction Method of Multipliers (ADMM) proposed by Boyd.
+It can be solved efficiently using the Alternating Direction Method of Multipliers (ADMM) proposed by Boyd \cite{boyd2011admm}.
 
-A thorough description of the ADMM methodology is beyond the scope of this chapter, and the interested reader should refer to the book by Boyd [].
+A thorough description of the ADMM methodology is beyond the scope of this chapter, and the interested reader should refer to the book by Boyd \cite{boyd2011admm}.
 %
 These algorithms are included to compare the results.
 
@@ -358,9 +358,11 @@ In general, the bi-level $\ell_{p,q}$ norm is defined as
 
 The MxNE estimator does not admit a closed-form solution but can be computed using ADMM or similar algorithms.
 
+\begin{comment}
 \subsection{SISSY}
 
 The algorithm called Source Imaging based on Structured Sparsity (SISSY) was proposed by Becker ().
+\end{comment}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -414,13 +416,25 @@ To do that, define the quantities
 \label{det:Lcurve}
 \end{align}
 
-The L-curve denominations stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has a characteristic appearance.
+The L-curve denominations come from the graph of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which resembles the letter `L' in some cases.
 %
-Look at the figure (to be added) for visual reference.
+This graph is typically displayed in log-log scale, i.e. the parametric curve $\ppar{\log\ppar{\rho(\lambda)}, \log\ppar{\eta(\lambda)} }$.
 %
-Notice that the quantities $\eta, \rho$ can be computed relatively quickly for a small set of potential values of $\lambda$, and more points can be added to get a more precise curve.
+%stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has a characteristic appearance.
 
-The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving point in the plotted curve.
+According to this criterion, the optimal value for $\lambda$ is the one on the point of maximal curvature of the parametric curve, often referred to as the `elbow' of the curve.
+%
+Look at the figure \ref{fig:tuning} for visual reference.
+
+It is important to mention that the selection of parameters using the L-curve criterion depends on visual perception, and it may be affected by the precision with which the curve is constructed.
+%
+Without prior knowledge, $\eta$ and $\rho$ shall be computed for a number of potential values of $\lambda$.
+%
+Exploring the obtained parametric curve visually allows us to better identify the range where the optimal values may be found.
+
+%The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving point in the plotted curve.
+
+%Notice that the quantities $\eta, \rho$ can be computed relatively quickly for a small set of potential values of $\lambda$, and more points can be added to get a more precise curve.
 
 %Notice that the parametric curve in \eqref{det:Lcurve} can be easily generalized for other quantities.
 
@@ -486,7 +500,13 @@ Although the definition of GCV is based on the leave-one-out cross-validation il
 %
 The latter expression represents a balance between $K_\lambda$ as a pseudo-inverse of $\G$ in general vs only for the current sensor data.
 
-The heuristic employed is to select the parameters that minimize the function in \eqref{det:GCV}, which can be extended easily to multiple parameters.
+According to this criterion, the optimal value for $\lambda$ is the one that minimizes the function in \eqref{det:GCV}.
+%, which can be extended easily to multiple parameters.
+In other words,
+\begin{equation}
+    \lambda^\star_\text{GCV} = 
+    \argmin_\lambda\,\, \text{GCV}(\lambda)
+\end{equation}
 
 It is important to emphasize that the approximation for the GCV error in equation \eqref{det:GCV} can only be computed for linear methods; for instance, estimators based on the $\ell_1$ norm or neural networks can't be tuned using GCV.
 
@@ -494,7 +514,8 @@ It is important to emphasize that the approximation for the GCV error in equatio
 
 This heuristic incorporates the idea that the residual, $\nnorm{\G\, \SA - \Y}_F^2$, and the norm of the solution, $\SA_F^2$, should be approximately equal \cite{creso}.
 %
-To achieve that, the residual and norm are written as the following function, referred to as the Composite Residual and Smoothing Operator (CRESO),
+To achieve that, the residual and norm are written as the following function, 
+%referred to as the Composite Residual and Smoothing Operator (CRESO),
 \begin{align}
     C\ppar{\lambda} &= 
 \frac{d}{d\lambda} \spar{ -\nnorm{\G\SA_\lambda - \Y}_2^2 + \lambda \nnorm{\SA_\lambda}_2^2}
@@ -504,7 +525,13 @@ To achieve that, the residual and norm are written as the following function, re
 \end{align}
 with $K_\lambda \Y$ the inversion kernel, understood explicitly as a function of $\lambda$. 
 %
-The optimal $\lambda$ is the smallest solution to the equation $C(\lambda)=0$.
+This function is called the Composite Residual and Smoothing Operator (CRESO).
+
+According to this criterion, the optimal value for $\lambda$ is the smallest solution to the equation $C(\lambda)=0$, or in other words,
+\begin{equation}
+    \lambda^\star_\text{CRESO} = 
+    \min_\lambda \sset{\lambda\in \R_+ \given C(\lambda)=0}.
+\end{equation}
 
 \subsection{U-curve}
 
@@ -517,8 +544,14 @@ U(\lambda) =
 \end{equation}
 
 Similar to the L-curve heuristic, the U-curve heuristic gets its denomination from the typical shape of the plot of $U(\lambda)$.
+
+According to this criterion, the optimal value for $\lambda$ is the global minimum of $U(\lambda)$.
 %
-The optimal $\lambda$ is the global minimum of $U(\lambda)$.
+In other words,
+\begin{equation}
+    \lambda^\star_\text{U-curve} = 
+    \argmin_\lambda\,\, U(\lambda)
+\end{equation}
 
 \begin{figure}
 \centering
@@ -527,6 +560,7 @@ The optimal $\lambda$ is the global minimum of $U(\lambda)$.
 %
 Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA
 }
+\label{fig:tuning}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -534,81 +568,164 @@ Data for these graphs was obtained from a single run of the protocol for synthet
 
 \section{Performance metrics}
 
-There is no single definition for the location of the source in the case of multiple extended sources.
-%
-In the case of synthetic data with protocols similar to that of the next section, it is possible to use each `seed' node as the center of each source patch [].
-%
-It is also possible to use the dipoles with a maximal magnitude as the center [] or the centers of mass with respect to the dipole magnitude [].
-%
-Since the minimal-norm estimators often produce many dipoles with small magnitudes, some authors use only dipoles whose magnitude is relatively large [] or which are close to the dipole with maximal magnitude [].
+\subsection{Definitions of a Source Patch Location}
 
-In this work, we employ an operative definition based on the latter.
+In many early works, like the original paper for sLORETA \cite{sloreta}, synthetic data for ESI methods used `point sources' in the form of
+\begin{equation}
+    \SA_\text{ref}(n) = \begin{cases}
+        1, &\text{if } n = n^* \\
+        0, &\text{otherwise}
+    \end{cases}
+\end{equation}
+with $n^*$ the index of one dipole.
 %
-First, we estimate a patch $\mathcal{I}_i$ as the dipoles that are close to the $i$-th local maximum, indexed by $x_i$, and whose magnitude is significant enough to be relevant.
-\begin{align}
-x_i &= \argmax_{n} \nnorm{\SA_n}_2
-\nonumber \\
-&\phantom{=} \text{s.t. }
-n\not\in \mathcal{I}_j, j<i
-\\
-\mathcal{I}_i
-&=
-\sset{ n\in \sset{1, \dots, N} \given 
-\nnorm{r_n - r_{x_i}} < \nnorm{r_n - r_{x_j}} \text{ for } j<i,
-\nnorm{\SA_n}_2\geq \alpha\nnorm{\SA_{x_i}}_2 }
-\end{align}
-with $0<\alpha<1$; usually $\alpha=10\%$.
+Point sources are easy to evaluate in the forward model: we only need to select a column of $\G$ instead of performing a multiplication.
 
-With this information, the center of the patch is merely the center of mass with respect to $\nnorm{\SA}_2^2$,
-\begin{align}
-k_i = 
-\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\SA_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\SA_n}_2^2}
-\label{def:center1}
-\end{align}
-
-If the number of source patches is unknown, the patches can be identified sequentially by finding the local maximum of the dipoles not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
-
-The operative definition in \eqref{def:center1} is consistent with the cited definitions for source location on synthetic source patched, even in the case of point sources.
+The location of a point source indexed by $n^*$ is $\rr_{n^*}$, a very straightforward definition.
 %
-Thus, it can be used to determine the `true' centers of the source patches, $k_i$.
-%
-However, the definition may deviate in the case of reconstructed sources.
+On the other side, there is not a single unified definition for more complicated source distributions, including multiple source patches.
 
-For evaluation purposes, we employ the definition proposed by Hamalainen []. 
+%There is no single definition for the location of the source in the case of multiple extended sources.
 %
-The patches are defined similarly, but the true centers of the source patches, $k_i$, are used instead of the local maxima.
-\begin{align}
-\hat{\mathcal{I}}_i
-&=
-\sset{ n\in \sset{1, \dots, N} \given 
-\nnorm{r_n - k_i} < \nnorm{r_n - k_j} \text{ for } j\neq i,
-\nnorm{\hat{\SA}_n}_2\geq \nnorm{\hat{\SA}_{x_i}}_2 }
-\\
-\hat{k}_i &= 
-\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\hat{\SA}_n}_2^2 }{\sum_{n\in \mathcal{I}_i} \nnorm{\hat{\SA}_n}_2^2}
-\end{align}
-In practice, $\hat{\mathcal{I}}_i$ can be constructed by first selecting the dipoles close to the true centers and later filtering the dipoles based on the local maxima.
+%In the case of synthetic data with protocols similar to that of the next section, we use the `seed' node as the center of each source patch.
+%
+%It is also possible to use the dipoles with a maximal magnitude or the centers of mass with respect to the dipole magnitude.
+%
+%Since the minimal-norm estimators often produce many dipoles with small magnitudes, some authors use only dipoles whose magnitude is relatively large or which are close to the dipole with maximal magnitude.
+
+%In this work, we employ an operative definition based on the latter.
+%
+%First, we estimate a patch $\mathcal{I}_i$ as the dipoles that are close to the $i$-th local maximum, indexed by $x_i$, and whose magnitude is significant enough to be relevant.
+%\begin{align}
+%x_i &= \argmax_{n} \nnorm{\SA_n}_2
+%\nonumber \\
+%&\phantom{=} \text{s.t. }
+%n\not\in \mathcal{I}_j, j<i
+%\\
+%\mathcal{I}_i
+%&=
+%\sset{ n\in \sset{1, \dots, N} \given 
+%\nnorm{r_n - r_{x_i}} < \nnorm{r_n - r_{x_j}} \text{ for } j<i,
+%\nnorm{\SA_n}_2\geq \alpha\nnorm{\SA_{x_i}}_2 }
+%\end{align}
+%with $0<\alpha<1$; usually $\alpha=10\%$.
+
+%With this information, the center of the patch is merely the center of mass with respect to $\nnorm{\SA}_2^2$,
+%\begin{align}
+%k_i = 
+%\frac{\sum_{n\in \mathcal{I}_i} r_n \nnorm{\SA_n}_2^2 }{\sum_{n\in %\mathcal{I}_i} \nnorm{\SA_n}_2^2}
+%\label{def:center1}
+%\end{align}
+
+%If the number of source patches is unknown, the patches can be identified sequentially by finding the local maximum of the dipoles not included in any patch; this process is repeated until all the dipoles with significant magnitude are classified.
+
+%The operative definition in \eqref{def:center1} is consistent with the cited definitions for source location on synthetic source patched, even in the case of point sources.
+%
+%Thus, it can be used to determine the `true' centers of the source patches, $k_i$.
+%
+%However, the definition may deviate in the case of reconstructed sources.
+
+In this work, for the sake of comparability,
+%
+%For evaluation purposes, 
+we employ the definition proposed by H\"{a}m\"{a}l\"{a}inen []; this definition considers one single measurement in time and multiple disconnected source patches, each one created from a `seed dipole'. 
+%
+Informally, a seed dipole is a dipole around which the source patch is constructed.
+
+One key property of a seed dipole is that it must be one of the most active dipoles in the patch,
+\begin{equation}
+    \nnorm{\SA\ppar{k_p^*}} = \max\, 
+    \sset{ \nnorm{\SA\ppar{n}} \given n\in \mathcal{I}_p }
+\end{equation}
+
+Let be $k_1^*, k_2^*, \dots, k_{P} \in \sset{1, 2, \dots, N}$ the indexes of the seed dipoles.
+%
+Formally, the $p$-th source patch, $\mathcal{I}_p$, is defined as the set of dipoles that have significant activity and are closer to the $p$-th seed dipole, $k_p^*$, than to the other seed dipoles.
+%
+%In other words,
+\begin{equation}
+    \mathcal{I}_p = 
+    \sset{n 
+    \given
+    \nnorm{\rr_n-\rr_{k_p^*}}_2 < \nnorm{\rr_n-\rr_{k_j^*}}_2
+    \text{ for } p\neq j,
+    \,\,
+    \nnorm{\SA(n)}_2 \geq 
+    \alpha \nnorm{\SA \ppar{k_p^*}}_2
+    }
+\end{equation}
+where $\alpha\in [0,1]$ filters sources whose magnitude is very small.
+%
+The authors suggest using $\alpha = 10\%$ as a cutoff for significance.
+
+The location of the $p$-th source patch, $\mm_p$, is defined as a center of mass of the dipoles in the source patch,
+\begin{equation}
+    \mm_p = 
+\frac{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{{\SA}(n)}_2^2 \rr_n }{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{{\SA}(n)}_2^2}
+\end{equation}
+
+Notice that this definition depends heavily on knowing the true locations of the seed dipoles, if any, so it can't be used with real data.
+
+On the other side, the definition is trivially extended to the location of an estimated source patch,
+\begin{equation}
+    \hat{\mm}_p = 
+\frac{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2 \rr_n }{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2}
+\end{equation}
+
+This definition is deficient for the case when an ESI method does not recover all source patches, in which the performance is overestimated.
+
+\subsubsection{Other Defintions}
+
+Although the definition presented is compatible with other definitions in the case of a single source patch, it is not the only one.
+
+For instance, some authors have used the location of the seed dipole as the location of the source patch
+\begin{equation}
+    {\mm}_p = \rr_{k_p^*}
+\end{equation}
+which shouldn't be very different from the center of mass if the source patch is symmetric and centered around the seed.
+%
+For example, these assumptions are broken for volumetric source patches near the cortex.
+
+Some authors define the location as the local maximum magnitude
+\begin{equation}
+    {\mm}_p = \sset{\rr_k \given k = \argmax_n\,\,
+    \sset{\nnorm{\SA(n)} \given n\in \mathcal{I}_p }
+    }
+\end{equation}
+which is also very similar if the source patch is symmetrical and decays monotonically far from the seed.
+%
+This is not the case if $\nnorm{\SA(n)}$ is constant in the patch.
+
+The source location based on maximal magnitude can be trivially extended to define the location of an estimated source patch
+\begin{equation}
+    \hat{\mm}_p = \sset{\rr_k \given k = \argmax_n\,\,
+    \sset{\nnorm{\hat{\SA}(n)} \given n\in \mathcal{I}_p }
+    }
+\end{equation}
+
+This definition is not robust to noise if the true source is large in space.
 
 \subsection{Distance Localization Error (DLE)}
 
 Given the definitions of the true and estimated centers for the source patches, the Distance Localization Error is defined as
 \begin{equation}
 \text{DLE} = 
-\frac{1}{I} \sum_{i=1}^I \nnorm{ k_i - \hat{k}_i }_2
+\frac{1}{P} \sum_{p=1}^P \nnorm{ \mm_p - \hat{\mm}_p }_2
 \label{def:DLE}
 \end{equation}
-with $I$ the number of true dipoles.
+with $P$ the number of true source patches.
 %
 This definition does not account for whether the reconstruction has more or fewer source patches than it should.
 
 \subsection{Spatial Dispersion (SD)}
 
-This metric proposed by Hamalainen is defined as
+This metric, proposed by H\"{a}m\"{a}l\"{a}inen, is defined as
 \begin{equation}
 \text{SD}
 =
 \ppar{
-\frac{ \sum_{i=1}^I \sum_{n\in \mathcal{I}_i} \nnorm{r_n-k_i}\,  \nnorm{\hat{\SA}_n}_2^2 }{\sum_{n=1}^N \nnorm{\hat{\SA}_n}_2^2}
+\frac{ \displaystyle
+\sum_{p=1}^P \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2\, \nnorm{\rr_n-\mm_p} }{\sum_{n=1}^N \nnorm{\hat{\SA}(n))}_2^2}
 }^{1/2}
 \end{equation}
 
@@ -629,18 +746,18 @@ This metric is similar to the rMSE, but as perceived by the sensors.
 It is defined as
 \begin{equation}
 \text{fMSE} = 
-\frac{\G\ppar{\nnorm{\SA - \hat{\SA}}_2}}{\nnorm{\G\, \SA}_2}
+\frac{\nnorm{\G\ppar{\SA - \hat{\SA}}}_2}{\nnorm{\G\, \SA}_2}
 \end{equation}
 
 \subsection{Area Under Receiver-Operator Curve (AUROC)}
 
-Hamalainen proposed interpreting the estimation from Electric Source Imaging as a binary classification problem over the dipoles, with active and non-active classes.
+H\"{a}m\"{a}l\"{a}inen proposed interpreting the estimation from Electric Source Imaging as a binary classification problem over the dipoles, with active and non-active classes.
 %
 This interpretation is consistent with the usability of ESI data to identify brain regions related to specific cognitive or pathological processes.
 
 Within this interpretation, the active/non-active labels can be created in many ways. 
 %
-Hamalainen proposed using the relative magnitude to 
+H\"{a}m\"{a}l\"{a}inen proposed using the relative magnitude to 
 \begin{align}
 \mathcal{A}^{\text{ref}}(\beta)
 &=
