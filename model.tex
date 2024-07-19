@@ -448,8 +448,32 @@ SVD decomposition in order to compute $W_\rho$ efficiently.
 %
 This process is similar to all the kernels described in Chapter \ref{ch:forward} for linear methods.
 
-Start by finding matrices 
+We may skip part of the construction and use the eigendecomposition of $\ppar{{\G \AAA_\Theta}}\ppar{{\G \AAA_\Theta}}^T$ directly, which is 
+\begin{equation}
+    \ppar{\ppar{\G \AAA_\Theta}} \ppar{\ppar{\G \AAA_\Theta}}^T
+    =
+    \mathbf{U} \mathbf{\Sigma}^2 \mathbf{U}^T
+\end{equation}
+where $\mathbf{U}\in \R^{M\times M}$ is an orthogonal matrix with eigenvectors of $\ppar{{\G \AAA_\Theta}} \ppar{{\G \AAA_\Theta}}^T$ as columns, and $\mathbf{\Sigma}\in \R^{M\times M}$ a diagonal matrix given by
+\begin{equation}
+    \mathbf{\Sigma}(m,m) = \sigma_m
+\end{equation}
+for $m=1, 2, \dots, M$ and $\sigma_m$ an eigenvalue of 
+$\ppar{{\G \AAA_\Theta}} \ppar{{\G \AAA_\Theta}}^T$.
+%
+Without loss of generalization, we may assume
+\begin{equation}
+    \sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_M
+\end{equation}
 
+With these matrices at hand, it is possible to compute $W_\rho$ as
+\begin{equation}
+    W_\rho = \mathbf{U} \ppar{ \mathbf{\Sigma}^2 + \rho \id_M}^{-1} \mathbf{U}^T
+\end{equation}
+with the diagonal matrix in the middle given by
+\begin{equation}
+    \ppar{ \mathbf{\Sigma}^2 + \rho \id_M}^{-1} (m,m) = \frac{1}{\sigma_m^2 + \rho}
+\end{equation}
 
 With this list of considerations, we claim that this new method is not significantly more computationally expensive than the linear methods presented in Chapter 2.
 %
