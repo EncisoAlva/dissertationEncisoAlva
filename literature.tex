@@ -42,9 +42,9 @@ the most straightforward path of action is to find the $\SA$ that minimizes the 
 \argmin_{\SA}\, \nnorm{\G\, \SA- \Y}_F^2 %+ \lambda\, f\ppar{\mathbf{S}}
 \label{est:naive}
 \end{equation}
-with $\nnorm{A}_F$ the Frobenius norm of $A$, defined as
+with $\nnorm{A}_F$ the Frobenius norm of $A\in \R^{M\times N}$, defined as
 \begin{equation}
-\nnorm{M}_F =
+\nnorm{A}_F =
 \ppar{
 \sum_{n=1}^N \sum_{m=1}^M \spar{A(m,n)}^2
 }^{1/2}
@@ -138,6 +138,7 @@ The MNE estimator admits a closed-form solution as follows,
 \end{equation}
 
 \subsection{Weighted Minimal Norm Estimator}
+\label{sec:wMNE}
 
 H\"{a}m\"{a}l\"{a}inen proposed to consider $\nu$ as follows
 \begin{align}

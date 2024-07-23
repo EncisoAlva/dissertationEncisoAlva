@@ -2,7 +2,6 @@
 \label{ch:forward}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Electrical Source Imaging Framework}
 
 %TODO: Better intro to the intro
 
@@ -13,7 +12,7 @@
 
 Electroencephalography (EEG) is a type of electrophysiological recording that uses electrodes, whose contact surface is in the order of 20 \si{mm^2}, placed on the subject's scalp.
 %
-The recording circuit is typically completed with a reference electrode at a 'neutral' location, like the contra-lateral earlobe or the nose; another electrode can also be used, resulting in referential channels. 
+The recording circuit is typically completed with a reference electrode at a `neutral' location, like the contra-lateral earlobe or the nose; another electrode can also be used, resulting in referential channels. 
 %
 %The effect of the reference electrode location may be neglected by re-referencing the recordings against the average.
 
@@ -33,6 +32,8 @@ The electric potential fields at the EEG scale, often called macro-scale fields,
 %
 It is estimated that groups of neurons of at least 6 \si{mm^2} are required to produce activity measurable at the EEG scale.
 
+\section{Electrical Source Imaging Framework}
+
 Electrical Source Imaging (ESI), or Electrical Source Reconstruction, involves identifying the neural electrical sources responsible for the observed EEG.
 %
 ESI can be used to identify brain regions related to (and, in some cases, responsible for) the normal or pathological state under study.
@@ -40,8 +41,8 @@ ESI can be used to identify brain regions related to (and, in some cases, respon
 For a review of ESI paradigms, see []. 
 %
 In this work, we perform ESI under the distributed dipole paradigm: the current density field produced by neuronal activity is approximated by a finite set of electrical dipoles whose location is known --on a grid that covers the brain region of interest-- and whose magnitude is to be determined. 
-%
-This paradigm can be justified formally as a discretized multi-pole expansion of order 2 (using dipoles) of the current density field; this approximation is sufficient to explain measurements obtained 1 mm or farther from the electrical sources [cite Nunez and Srinivasan].
+
+This paradigm can be justified formally as a discretized multi-pole expansion of order 2 (using dipoles) of the current density field; this approximation is sufficient to explain measurements obtained 1 mm or farther from the electrical sources \cite{nunez2019multi}.
 
 ESI with distributed dipoles aims to produce a representative set of dipoles that will produce an equivalent current density of the real neurons at the EEG scale.
 %
@@ -49,9 +50,11 @@ This paradigm is considered to be non-parametric in the sense that it is agnosti
 %
 Since an area with no discernible activity will produce a group of dipoles with a magnitude close to zero, this paradigm is considered robust to model misidentification.
 
-When interpreting the results, one should be aware of the limitations of this scale.
+When interpreting the results obtained from ESI, one should be aware of the limitations inherited from EEG.
 %
-For example, `silent' neural activity doesn't produce a significant EEG fingerprint and thus is not identified by ESI.
+For example, the lack of synchronization of time and direction of some active neuron patches may prevent them from producing an electric potential that can be measured by the EEG.
+%
+This silent activity can't be measured by ESI methods based on EEG data.
 
 The task of performing ESI within the paradigm of distributed dipoles is an ill-posed inverse problem.
 
@@ -160,7 +163,7 @@ It is relevant to recall that the EEG measurement from the only sensor is $V(\sa
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Boundary conditions Poisson equation}
+\subsection{Boundary Conditions}
 
 To have a meaningful solution for equation \eqref{eq:poisson_gral} or \eqref{eq:poisson_isotropic} in the context of EEG, we must consider appropriate domain and boundary conditions.
 
@@ -184,7 +187,7 @@ because those tissues are too far from the EEG sensors to make a significant dif
 \label{fig:diagrams2}
 \end{figure}
 
-With the media defined formally, we may state the reflective boundary conditions,
+With the media defined formally, reflective boundary conditions can be written as follows,
 \begin{equation}
 \sigma(\rr)\, \nabla V(\rr) \cdot \mathbf{n} = 0, 
 \text{ for } \rr \in \mathcal{M}_1
@@ -193,26 +196,31 @@ With the media defined formally, we may state the reflective boundary conditions
 where $\mathbf{n}$ is a vector orthogonal to $\partial\mathcal{M}_1$.
 %
 At the interfaces between media, the boundary conditions are to have continuous first derivatives; this property can be requested for the whole domain,
-\begin{equation}
-    V \in C^1\ppar{\mathcal{M}_1 \cup \mathcal{M}_2 \cup \mathcal{M}_3 \cup \mathcal{M}_4 }
-\end{equation}
+\begin{align}
+    V\ppar{\bullet}, \sigma\ppar{\bullet} V\ppar{\bullet}  
+    &\in C^1\ppar{\mathcal{M}_1 \cup \mathcal{M}_2 \cup \mathcal{M}_3 \cup \mathcal{M}_4 }
+\end{align}
 
-\subsubsection{Practical considerations}
+The continuity of $\sigma(\rr) V(\rr)$ is particularly important on the interfaces between media because the conductivity, $\sigma$, is expected to be homogeneous within each media but to change drastically between different media. 
 
-Either equation \eqref{eq:poisson_gral} or \eqref{eq:poisson_isotropic} must be solved within the geometric regions described previously, subject to the boundary conditions in \eqref{eq:boundary1}.
-%
-The construction and treatment of those regions and the solution per se require special discussion.
+To make sense of the magnitudes of the discontinuities of the conductivity, $\sigma$, among different media, in table \ref{tab:conductivity} are displayed typical values for the four media described before; data is from Ramon et al \cite{ramon2006influence}. See figure \ref{fig:diagrams2} for a visual reference of these tissues.
 
-Regions are often defined from the subject's anatomical data or an appropriately matched template.
-%
-The anatomical information is usually a T1 or T2 MRI, which is later segmented to identify relevant tissues. The segmented MRI is then used to obtain triangulated surfaces. 
-%
-More media can be incorporated into the model, such as a division of the brain into white matter and grey matter;
-Those approaches are limited in the reliability with which these tissues can be identified.
-
-Multiple commercial software is available for the segmentation of MRI and extraction of triangulated surfaces, such as ...
-
-Once the triangulated surfaces are obtained, the equation can be solved numerically by either using Boundary Element Method (BEM), Finite Element Method (FEM), or others.
+\begin{table}[]
+\centering
+\begin{tabular}{lr}
+\toprule
+Tissue              & Conductivity (\unit{\micro \siemens/\cm}) \\ 
+\midrule
+White matter        & 1.43         \\
+Gray Matter         & 3.33         \\
+Cerebrospinal Fluid & 15.38        \\
+Skull Tissue        & 625.00       \\
+Scalp               & 1.74        \\
+\bottomrule
+\end{tabular}
+\caption{Conductivity for different head tissues considered in the Four-sphere model, measured in microsiemens per centimeter. Data from \cite{ramon2006influence}}
+\label{tab:conductivity}
+\end{table}
 
 \subsection{Construction of the leadfield operator}
 
@@ -335,7 +343,7 @@ we need to compute the magnitude of these dipoles in order to recover the origin
 \centering
 %\includegraphics[width=0.4\linewidth]{./img_dev/OrthDecompOld}
 \includegraphics[scale=1.2]{./img/OrthDecomp}
-\caption{Decomposition of a dipole with arbitrary momentum as a sum of dipoles whose momentum is parallel to their respective $x-, y-, z-$axis. By definition, a dipole is made of a sink and a source with equal charges. For visual simplicity, only the source is shown; the sink can be constructed similarly}
+\caption{Decomposition of a dipole with arbitrary momentum as a sum of dipoles whose momentum is parallel to their respective $x-, y-, z-$axis. By definition, a dipole is made of a sink and a source with equal charges. For visual simplicity, only the source $\mathbf{d}^+$ is shown; the sink $\mathbf{d}^-$ can be constructed similarly}
 \label{fig:diagrams3}
 \end{figure}
 
@@ -358,9 +366,8 @@ Any correlation between them comes from their neural generators.
 A complete discussion of this phenomenon is beyond the scope of this work.
 
 
+\begin{comment}
 \section{Limitations of surface electrodes}
-
-
 
 There are several neural activity patterns that surface electrodes cannot represent properly.
 %
@@ -391,6 +398,88 @@ Distributed dipoles of low magnitude may represent smaller source patches and re
 The distributed dipole model is agnostic in that it doesn't make any assumptions about the location of the dipoles.
 %
 A region with no active dipoles leads to equivalent dipoles with zero magnitude, while a region with active dipoles leads to equivalent dipoles with non-zero magnitude.
+\end{comment}
+
+\section{Practical considerations}
+
+\subsection{Geometry Identification from Data}
+
+Recall that the construction of the leadfield matrix, $\G$, is based on solving the equation \eqref{eq:poisson_gral} (or equation \eqref{eq:poisson_isotropic} in the isotropic case) 
+subject to the boundary conditions in \eqref{eq:boundary1}.
+
+These equations can be solved numerically using Boundary Element Methods (BEM) or Finite Element Methods.
+%
+A full review of these methods --even in the particular case of ESI-- is beyond the scope of this work, and the interested reader may refer to the review by Hallez \cite{hallez2007review} or that by Vorwerk et al \cite{vorwerk2012comparison}.
+
+Needless to say, these methods are implemented in commercially available software such as OpenMEEG \cite{gramfort2010openmeeg}, DUNEuro \cite{schrader2021duneuro}, and MNE Python \cite{GramfortEtAl2013a}.
+
+In this section, the goal is to describe the identification of the tissue media from an operative standpoint.
+%
+Tissues are often defined from the subject's anatomical data or an appropriately matched template.
+
+The anatomical data often originates as the result of T1 or T2 magnetic resonance imaging (MRI) from the subject. 
+%
+Later, the MRI images are segmented: relevant tissues are identified, and triangulated 3D surfaces are constructed from them. 
+%
+Relevant algorithms for these tasks are available on commercial software such as CAT12 \cite{gaser2022cat} and Fieldtrip \cite{oostenveld2011fieldtrip}.
+
+It is relevant to mention that the Fours Sphere model is not the only option for constructing the leadfield matrix. 
+%
+For instance, the model can be trivially extended to include five media by separating the brain into gray matter and white matter.
+%
+Such division requires a robust algorithm to distinguish between those tissues; since the interface is known to be non-smooth, robustness is a strong requirement.
+
+\subsection{Location of Distributed Dipoles}
+
+Over the previous sections, the locations of the distributed dipoles, $\mathbf{d}_n$, were assumed to be known.
+%
+Two cases were considered: if their orientation, $\mathbf{m}_n$, was assumed to be known or not.
+
+Formally, the goal of ESI is to gain knowledge from the neural sources of electrical activity, including their location. 
+%
+Thus, we shouldn't make assumptions about their location.
+
+In that sense, the most inclusive assumption is that the dipoles should be located `anywhere' inside the brain.
+%
+This assumption can be enforced by setting the locations of the distributed dipoles over a grid covering the entire brain volume.
+%
+In figure \ref{fig:dipoles}, two of these arrangements are displayed: a cubic grid and an adaptive grid. 
+%
+The adaptive grid, as implemented on the Brainstorm software \cite{brainstorm}, is constructed following these steps:
+\begin{enumerate}
+    \item Use cortex as initial layer.
+    \item Downsample to locate dipoles with prescribed distance between them.
+    \item Shrink to obtain next layer.
+    \item Repeat until no more layer can be constructed.
+\end{enumerate}
+%first building multiple surfaces are constructed by shrinking the outer surface (cortex) and setting the dipoles over the obtained surfaced.
+
+Adaptive grids offer some advantages since they are conceptually consistent with depth weighting (see section \ref{sec:wMNE}), and they can be constructed so that the outer layer falls within a certain distance from the cortex.
+
+\begin{figure}
+\centering
+%\includegraphics[width=0.4\linewidth]{./img_dev/OrthDecompOld}
+\includegraphics[scale=1.2]{./img/OrthDecomp}
+%DipoleGrid.pdf
+\caption{Some configurations for distributed dipoles, depending on further assumptions}
+\label{fig:dipoles}
+\end{figure}
+
+In certain scenarios, the assumption of a total lack of information may be replaced by the assumption that the dipoles are located in the cortex and are oriented orthogonally to it.
+%
+This is justified by the peculiar geometry of the outer layers of the gray matter, which consist of neuron dendrites orthogonal to the cortex surface.
+%
+In figure \ref{fig:dipoles}, we may observe an arrangement of distributed dipoles that encodes this assumption.
+
+Whether we may or not assume that the dipoles are located only in the cerebral cortex depends on additional assumptions of the neural processes under study.
+%
+Many `higher' cognitive processes are known to occur in the cerebral cortex: speech generation and recognition, face recognition, and spatial orientation, among others \cite{Saladin_Gan_2020}.
+%
+Conversely, we may ignore some deeper brain regions if their associated neural functions are not part of the phenomenon under study.
+
+Many software dedicated to ESI refers to the case when dipoles are orthogonal to the cortex surface as `constrained,' while the other case is `unconstrained.' 
+%
+Other setups are possible, yet their discussion is outside the scope of this work.
 
 \begin{comment}
 
