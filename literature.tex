@@ -555,9 +555,11 @@ In other words,
 \begin{figure}
 \centering
 \includegraphics[width=1\linewidth]{./img_MATLAB/ParTuning_sLORETA}
-\caption{Selection of parameters depending on different heuristics: L-curve criterion, Generalized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve criterion. The quantity of interest is different for each heuristic, which is computed for many candidate values and then used to select one of those values.
+\caption{Selection of parameters using various criteria: L-curve, Generalized Cross-Validation (GCV), Composite Residual and Smoothing Operator (CRESO), and U-curve. 
 %
-Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA
+Each criterion's quantity of interest is computed for many candidate values of $\lambda$, then the optimal value is decided.
+%
+Data for these graphs was obtained from a single trial of synthetic data described in Chapter \ref{ch:numeric}. Data $\Y$ is constructed with no-noise, inversion kernel $\mathbf{K}_\lambda$ and the source estimate $\SA_\lambda = \mathbf{K}_\lambda \Y$ are computed using sLORETA
 }
 \label{fig:tuning}
 \end{figure}
@@ -832,9 +834,10 @@ $\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, with the False Positive
 \centering
 \includegraphics[width=\linewidth]{./img_dev/AUROC_sketch.pdf}
 %
-\caption{Construction of Receiver-Operator Curve and Precision-Recall Curve from the reference and estimated dipole magnitudes, $\nnorm{{\SA}}_2$ and $\nnorm{\hat{\SA}}_2$, respectively.
+\caption{Construction of Receiver-Operator Curve and Precision-Recall Curve.
+%from the reference and estimated dipole magnitudes, $\nnorm{{\SA}}_2$ and $\nnorm{\hat{\SA}}_2$, respectively.
 %
-Reference $\SA$ was constructed using the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimate $\hat{\SA}$ was computed using sLORETA.
+Data for these graphs was obtained from a single trial of synthetic data described in Chapter \ref{ch:numeric}. Reference source distribution $\SA$ was constructed with no-noise and the source estimate $\hat{\SA}$ was computed using sLORETA
 }
 \end{figure}
 
