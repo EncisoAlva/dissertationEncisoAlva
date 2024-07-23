@@ -69,7 +69,7 @@ For illustrative purposes, the duration of the recordings was set to a total of 
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_top}
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_left}
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_right}
-\caption{Electrode Placement according to the 10-10 International System. A. Schematic with the electrode labels. B. Electrode positions at the ICBM152 template head.}
+\caption{Electrode Placement according to the 10-10 International System. A. Schematic with the electrode labels. B. Electrodes at the ICBM152 template head}
 \label{fig:1010system}
 \end{figure}
 
@@ -131,13 +131,13 @@ See figure \ref{fig:exaple_true} for a visual example of these properties.
 %\includegraphics{./img/gauss_center}
 %\includegraphics{./img/square_GroundTruth}
 \includegraphics{./img_MATLAB/square_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/square_Profile}
+\includegraphics[width=1.8in]{./img_MATLAB/square_Profile}
 \includegraphics{./img_MATLAB/gauss_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/gauss_Profile}
+\includegraphics[width=1.8in]{./img_MATLAB/gauss_Profile}
 \includegraphics{./img_MATLAB/exp_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/exp_Profile}
+\includegraphics[width=1.8in]{./img_MATLAB/exp_Profile}
 \includegraphics{./img_MATLAB/circ_GroundTruth}
-\includegraphics[height=2in]{./img_MATLAB/circ_Profile}
+\includegraphics[width=1.8in]{./img_MATLAB/circ_Profile}
 \caption{Cortical patch used for the creation of synthetic data.}
 \label{fig:exaple_true}
 \end{figure}
@@ -148,17 +148,21 @@ For the synthetic data in this chapter, we set $\kappa = $ 12.6 \si{mm} in order
 
 \subsection{Noise}
 
+For simplicity, only additive white noise is added to the sensors, i.e. we use 
+\begin{equation}
+    \varepsilon(t,:) \sim \nnorm{0, \diag{\sigma_1, \dots, \sigma_M}^2}
+\end{equation}
+with $\sigma_m \geq 0$ for $m=1, \dots, M$ the noise variances for each EEG electrode.
 
-
-For simplicity within the model formulation, we considered no internal noise ($\nu=0$) and independent Gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
+%within the model formulation, we considered no internal noise ($\nu=0$) and independent Gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
 %
-Under these conditions, the distribution of $\Y$ is given by
+Under these conditions the noisy recordings, $\Y$, have the following distribution
 \begin{equation}
 \ppar{\Y \given \SA} =
 \norm\ppar{ \G\, \SA, \diag{\sigma_1, \dots, \sigma_M}^2 }
 \end{equation}
 
-The channel SNR (in dB) for the $m$-th sensor is given by
+The channel SNR (in decibels) for the $m$-th sensor is given by
 \begin{equation}
 \text{SNR}_m = 
 10\, \log_{10}\ppar{ \frac{ \ppar{ \spar{\G\, \SA}(m)}^2 }{\sigma_m^2} }
@@ -170,8 +174,9 @@ With a prescribed SNR value, the parameters $\sigma_m$ are selected as follows
 \spar{\G\, \SA}(m)
 \end{equation}
 
-For the synthetic data in this section, we consider an SNR level of 20 dB, which we consider a low-noise condition.
-
+Based on informal observations, we consider that an SNR level of 20 dB is a low-noise condition.
+%
+Notice that the condition of lack of noise is attached to $\sigma_m = 0$ and $\text{SNR} = \infty$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
