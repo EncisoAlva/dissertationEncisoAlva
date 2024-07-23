@@ -1,18 +1,16 @@
 \chapter{Review Methods for Electrical Source Reconstruction}
-
+\label{ch:review}
 % \pagestyle{plain}
 
 %textwidth in inches: \printinunitsof{in}\prntlen{\textwidth}
 
-\label{ch:review}
-
 At some point, cite \cite{grech2008review}.
 
 The forward model discussed in Chapter \ref{ch:forward} can be summarized in the following matrix equation
-\begin{equation}
+\begin{equation*}
 \Y = \G\, \ppar{ \SA + \nu } + \varepsilon
 \label{eq:general}
-\end{equation}
+\end{equation*}
 where $\Y \in \R^{M\times T}$ encodes the EEG measurements over time, $\SA$ encodes the magnitudes of a finite set of distributed dipoles with known locations, and $\G \in \R^{M\times N}$ is a mixing operator referred to as the Leadfield matrix.
 
 The terms $\nu \in \R^{N\times T}, \varepsilon\in\R^{M\times T}$ represent additive noise within the true values for the dipoles and sensors, respectively. 

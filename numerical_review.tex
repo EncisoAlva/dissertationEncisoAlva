@@ -1,15 +1,35 @@
 \chapter{Numerical Experiments}
 \label{ch:numeric}
 
-The ESI methods described in Chapter \ref{ch:review} are tested using synthetic data and evaluated using the metrics defined in the same chapter.
+%The ESI methods described in Chapter \ref{ch:review} are tested using synthetic data and evaluated using the metrics defined in the same chapter.
 
-The synthetic data was created using anatomical data from the ICBM 152 template[]. 
-%
-As the name suggests, the ICBM152 template was constructed as an `average' of T1 MRI scans from 152 subjects.
+Following the model equation from the forward model,
+$\Y = \G \SA + \varepsilon$,
+each trial of synthetic data is constructed following these steps:
+\begin{enumerate}
+    \item Construct the leadfield matrix $\G$ based on pertinent anatomical data.
+    \item Select a `seed' dipole at random to determine the location of the source patch.
+    \item Construct the source distribution, $\SA$, based on the source patch.
+    \item Construct a noiseless version of the EEG measurements, $\Y_0 = \G \SA$.
+    \item Construct some additive noise, $\varepsilon$, in order to achieve a prescribed Signal-to-Noise Ratio $\ppar{\text{SNR}_\text{dB}}$ measured in decibels.
+    \item Construct the EEG measurements, $\Y = \Y_0 + \varepsilon$.
+\end{enumerate}
 
-Segmentation and surface extraction were omitted since these surfaces are provided with the template, and the methods for segmentation and surface extraction are not the focus of this work.
+After each trial of synthetic data is created, ESI is performed to estimate the source distribution by using some of the methods described in Chapter \ref{ch:review}.
 %
-Those triangulated surfaces are displayed in figure \ref{fig:surfaces}.
+The performance of these methods is then measured using the performance metrics described in the same chapter.
+
+It is important to mention that whenever an ESI method depended on a parameter, its value was determined using either Generalized Cross-Validation (GCV) or U-curve criterion when GCV was not possible.
+
+\section{Forward Model}
+
+For the construction of synthetic data, anatomy data was taken from the ICBM 152 template \cite{icbm152_2011}. 
+%
+%As the name suggests, the ICBM152 template was constructed as an `average' T1 MRI scan from 152 subjects.
+%
+Segmentation and surface extraction were omitted since these surfaces are provided with the template.
+%
+These surfaces are displayed in figure \ref{fig:surfaces}.
 
 \begin{figure}
 \centering
@@ -26,46 +46,84 @@ Those triangulated surfaces are displayed in figure \ref{fig:surfaces}.
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_outer}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_inner}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_cortex}
-\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head.}
+\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head}
 \label{fig:surfaces}
 \end{figure}
 
-Electrodes were placed according to the 10-10 International System [], resulting in $M=90$ electrodes. See either figure \ref{fig:1010system} for visual reference or [] for a more precise description of the electrode placement protocol.
+Electrodes were placed according to the 10-10 International System; a total of $M=90$ electrodes were considered. 
 %
-The electrodes would be re-referenced to the average, so no reference electrode is considered at this stage.
-
-Dipole locations were determined using the $N=15,002$ available in the triangulated cortex surface.
+See either figure \ref{fig:1010system} for visual reference or \cite{1020comparison} for a more precise description of the electrode placement protocol.
 %
-Dipole orientations were assumed to be orthogonal to the cortex surface.
+No reference electrode is considered for the synthetic data; the sensor data will be re-referenced to the average.
 
-Additionally, this section considers only a single time stamp, $ T=1$, for illustrative purposes.
+The positions of the distributed dipoles were set along the brain cortex, and their orientation was orthogonal to the cortex.
+%
+A total of $N=15,002$ electrodes were considered.
+
+For illustrative purposes, the duration of the recordings was set to a total of $T=1$ time stamps.
 
 \begin{figure}
 \centering
 %\includegraphics[width=0.8\linewidth]{./img_dev/nsElectrodeSetup}
-\includegraphics[width=0.4\linewidth]{./img_dev/10-10_sketch}
+\includegraphics[width=0.35\linewidth]{./img/EEG_10-10.pdf}
 \includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_top}
 \includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_left}
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_right}
-\caption{Electrode Placement according to the 10-10 International System.}
+\caption{Electrode Placement according to the 10-10 International System}
 \label{fig:1010system}
 \end{figure}
 
 %\subsubsection{Synthetic data protocol}
 
-Following the forward model from equation \eqref{eq:general}, the synthetic data is constructed by (1) constructing $\SA$ based on a source distribution described later, then (2) constructing $\nu$ and $\varepsilon$ to meet a prescribed Signal-to-Noise Ratio (SNR), and finally (3) constructing $\Y$ as in the forward model.
+\subsection{Source Distribution}
 
-The source distribution, $\SA$, is constructed by considering a small source patch.
+The source distribution, $\SA$, is constructed by considering one small source patch; the dipoles in the source patch are selected as those being close to a seed dipole, indexed by $n^*$.
 %
-The dipoles in the source patch are selected as those being close to a seed dipole, indexed by $n^*$, which is selected randomly.
+The seed dipole was selected randomly for each trial; a total of 30 trials were simulated.
 
 After selecting the seed dipole, indexed by $n^*$, $\SA$ is constructed as
 \begin{equation}
 \SA(n) = f\ppar{ \nnorm{\rr_n-\rr_{n^*}} / \kappa }
 \end{equation}
-with $\rr_n$ the location of the $n$-t dipole, $f:\R_+\rightarrow \R_+$ a decreasing function and $\kappa>0$ a scaling parameters.
+with $\rr_n$ the location of the $n$-t dipole, $f:\R_+\rightarrow \R$ a decreasing function, and $\kappa>0$ a scaling parameters.
+
+For illustrative purposes, four different options for $f$ are considered:
+\begin{align}
+\text{Square} &&
+    f_\text{sq}(x) 
+    &= 
+    \begin{cases}
+1, &\text{if } x\leq 1 \\
+0, &\text{otherwise}.
+\end{cases}
+    \\
+\text{Gaussian} &&
+    f_\text{Gauss}(x) 
+    &= 
+    e^{-x^2/\kappa}
+    \\
+\text{Exponential} &&
+    f_\text{exp}(x) 
+    &= 
+    e^{-x/\kappa}
+    \\
+\text{Polynomial} &&
+    f_\text{pol}(x) 
+    &= 
+    \sqrt{ \max\,\, \sset{1-\ppar{\frac{x}{\kappa}}^2, 0 }}
+\end{align}
+
+%The selection of these functions follows a survey of the literature.
 %
-See figure \ref{fig:exaple_true} for a representation of the location and extent of the extended source.
+Apart from point sources, source patches created using $f_\text{sq}$ are fairly common; their sharp edges facilitate determining the size of the source patch without ambiguity.
+%
+Some other papers have used $f_\text{Gauss}$ to obtain source patches that are smooth in space. 
+
+Functions $f_\text{exp}$ and $f_\text{pol}$ are introduced here to produce source patches with intermediate properties.
+%
+The source patches constructed using $f_\text{pol}$ have a finite support and a smooth peak, while the ones built using $f_\text{exp}$ present spatial smoothness, a sharp peak, and a `heavy tail' in space.
+%
+See figure \ref{fig:exaple_true} for a visual exploration of these properties.
 
 \begin{figure}
 \centering
@@ -86,16 +144,11 @@ See figure \ref{fig:exaple_true} for a representation of the location and extent
 
 %This type of configuration is referred to as `source patches' or `extended sources' since it occupies an area too large to be modeled as a single dipole.
 
-For the synthetic data in this section, the dipole $n^*$ was selected within the frontal cortex for visibility.
-%
-We use the square profile, defined by using
-\begin{equation}
-f(x) = \begin{cases}
-1, &\text{if } x\leq 1 \\
-0, &\text{otherwise}.
-\end{cases}
-\end{equation}
-and $\kappa = $ 12.6 \si{mm}, to obtain a source patch with an area of approximately 5 \si{cm^2}.
+For the synthetic data in this chapter, we set $\kappa = $ 12.6 \si{mm} in order to obtain source patches with a surface area of approximately 5 \si{cm^2}.
+
+\subsection{Noise}
+
+
 
 For simplicity within the model formulation, we considered no internal noise ($\nu=0$) and independent Gaussian noise at the sensors, i.e. $\varepsilon_m \sim\norm\ppar{0, \sigma_m^2}$ for $m = 1, \dots, M$ for some parameters $\sigma_m\geq 0$.
 %
