@@ -834,10 +834,16 @@ $\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, with the False Positive
 
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{./img_dev/AUROC_sketch.pdf}
+\includegraphics[width=\linewidth]{./img/AUROC_sketch.pdf}
 %
-\caption{Construction of Receiver-Operator Curve and Precision-Recall Curve.
-%from the reference and estimated dipole magnitudes, $\nnorm{{\SA}}_2$ and $\nnorm{\hat{\SA}}_2$, respectively.
+\caption{
+A. The true class labels are defined from the true sources, $\SA$, while the estimated labels are constructed from the ESI estimation, $\hat{\SA}$.
+Notice the severe class imbalance between yellow and colorless (gray).
+%
+B. Construction of Receiver Operator Curve (ROC) and Precision-Recall Curve; the area under them is called AUROC and Average Precision, respectively.
+%
+C. To alleviate the class imbalance, only the dipoles within a certain distance of the patch center are considered; such distance is set to 25.7 \si{mm} to consider approximately 50\% of dipoles in each category.
+\\
 %
 Data for these graphs was obtained from a single trial of synthetic data described in Chapter \ref{ch:numeric}. Reference source distribution $\SA$ was constructed with no-noise and the source estimate $\hat{\SA}$ was computed using sLORETA
 }
