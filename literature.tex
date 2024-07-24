@@ -626,18 +626,30 @@ On the other side, there is not a single unified definition for more complicated
 %
 %However, the definition may deviate in the case of reconstructed sources.
 
-In this work, for the sake of comparability,
+%In this work, for the sake of comparability,
 %
-%For evaluation purposes, 
-we employ the definition proposed by H\"{a}m\"{a}l\"{a}inen []; this definition considers one single measurement in time and multiple disconnected source patches, each one created from a `seed dipole'. 
+%%For evaluation purposes, 
+%we employ the definition proposed by H\"{a}m\"{a}l\"{a}inen []; this definition considers one single measurement in time and multiple disconnected source patches, each one created from a `seed dipole'. 
 %
-Informally, a seed dipole is a dipole around which the source patch is constructed.
+%Informally, a seed dipole is a dipole around which the source patch is constructed.
 
-One key property of a seed dipole is that it must be one of the most active dipoles in the patch,
+In this work, the location of a source patch, either the estimation or the reference, is defined as the center of mass with respect to magnitude.
+%
+The reasoning for this decision is discussed in the following subsection.
+
+In order to establish a formal definition, we first must consider the concept of a seed dipole.
+%
+Informally, the idea of a seed dipole is that the source patch is constructed around it, and thus, the seed dipole is a proto-center for the source patch.
+%
+This definition only works for sources with known locations; thus, it is unusable for estimated sources.
+
+One key property of a seed dipole, which will be later exploited, is that it must be one of the most active dipoles in the patch, i.e.
 \begin{equation}
     \nnorm{\SA\ppar{k_p^*}} = \max\, 
     \sset{ \nnorm{\SA\ppar{n}} \given n\in \mathcal{I}_p }
 \end{equation}
+
+In the case of estimated sources, the role of seed dipoles can be fulfilled by local maxima of the estimated magnitudes.
 
 Let be $k_1^*, k_2^*, \dots, k_{P} \in \sset{1, 2, \dots, N}$ the indexes of the seed dipoles.
 %
@@ -655,11 +667,13 @@ Formally, the $p$-th source patch, $\mathcal{I}_p$, is defined as the set of dip
     \alpha \nnorm{\SA \ppar{k_p^*}}_2
     }
 \end{equation}
-where $\alpha\in [0,1]$ filters sources whose magnitude is very small.
+where $\alpha\in [0,1]$ filters sources whose magnitude is very small;
 %
-The authors suggest using $\alpha = 10\%$ as a cutoff for significance.
+for instance, we may set $\alpha = 10\%$ as a cutoff for significance.
 
-The location of the $p$-th source patch, $\mm_p$, is defined as a center of mass of the dipoles in the source patch,
+In the case of estimated dipoles, the number of source patches can be adjusted algorithmically by either joining or breaking other source patches.
+
+The location of the $p$-th source patch, $\mm_p$, is defined as the center of mass of the dipoles in the source patch with respect to their magnitude,
 \begin{equation}
     \mm_p = 
 \frac{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{{\SA}(n)}_2^2 \rr_n }{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{{\SA}(n)}_2^2}
@@ -675,7 +689,7 @@ On the other side, the definition is trivially extended to the location of an es
 
 This definition is deficient for the case when an ESI method does not recover all source patches, in which the performance is overestimated.
 
-\subsubsection{Other Defintions}
+\subsubsection{Other Definitions}
 
 Although the definition presented is compatible with other definitions in the case of a single source patch, it is not the only one.
 
@@ -860,7 +874,7 @@ In general, extreme values of $\beta$ will lead to the endpoints (0,0) and (1,1)
 
 A classifier for which TPR$(\beta)$ and $1-$FPR$(\beta)$ are close to 1 for all $\beta$'s is preferable, and this phenomenon can be observed in the ROC as being `close to the top.'
 %
-This concept is formalized by taking the area under the Area Under ROC curve (AUROC), defined as the area under the ROC curve; AUROC$approx 1$ is preferable.
+This concept is formalized by taking the area under the Area Under ROC curve (AUROC), defined as the area under the ROC curve; AUROC$\approx 1$ is preferable.
 %
 In practice, the AUROC can be computed numerically using the trapezoid rule as follows
 \begin{equation}
