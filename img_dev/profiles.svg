@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="3.5in"
-   height="8in"
-   viewBox="0 0 88.9 203.2"
+   width="7in"
+   height="4in"
+   viewBox="0 0 177.79999 101.6"
    version="1.1"
    id="svg5"
    xml:space="preserve"
@@ -25,9 +25,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="in"
      showgrid="false"
-     inkscape:zoom="4"
-     inkscape:cx="96.625"
-     inkscape:cy="685.25"
+     inkscape:zoom="1"
+     inkscape:cx="587.5"
+     inkscape:cy="214"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="1912"
@@ -1776,7 +1776,7 @@
     </clipPath>
   </defs><g
      id="g8291"
-     transform="matrix(0.3610784,0,0,0.3610784,35.56,149.43668)"><use
+     transform="matrix(0.36107838,0,0,0.3610784,125.25368,47.095843)"><use
        xlink:href="#source-1020931"
        transform="matrix(0.12,0,0,0.119975,0,122.85481)"
        id="use8091" /><use
@@ -1925,7 +1925,7 @@
        transform="matrix(0.12,0,0,0.119975,195.84002,0)"
        id="use8187" /></g><g
      id="g7139"
-     transform="matrix(0.3610784,0,0,0.3610784,35.56,98.636668)"><use
+     transform="matrix(0.36107838,0,0,0.3610784,125.25368,-3.7041668)"><use
        xlink:href="#source-896036"
        transform="matrix(0.12,0,0,0.119975,0,122.85481)"
        id="use6939" /><use
@@ -2074,7 +2074,7 @@
        transform="matrix(0.12,0,0,0.119975,195.84002,0)"
        id="use7035" /></g><g
      id="g6886"
-     transform="matrix(0.3610784,0,0,0.3610784,35.56,47.836668)"><use
+     transform="matrix(0.3610784,0,0,0.3610784,29.739163,47.836668)"><use
        xlink:href="#source-863211"
        transform="matrix(0.12,0,0,0.119975,0,122.85481)"
        id="use6686" /><use
@@ -2226,7 +2226,7 @@
      inkscape:groupmode="layer"
      id="layer1" /><g
      id="g6633"
-     transform="matrix(0.3610784,0,0,0.36107093,35.56,-2.9633332)"><use
+     transform="matrix(0.3610784,0,0,0.36107093,29.739163,-2.9633332)"><use
        xlink:href="#source-623563"
        transform="matrix(0.12,0,0,0.119975,0,122.85481)"
        id="use6433" /><use
@@ -4434,7 +4434,7 @@
          d="m 105.55859,104.72266 c 0,-1.65625 -1.34375,-3 -3,-3 -1.65625,0 -2.999996,1.34375 -2.999996,3 0,1.66015 1.343746,3 2.999996,3 1.65625,0 3,-1.33985 3,-3 z m 0,0"
          id="path2561" /></g></g><g
      id="g5096"
-     transform="matrix(0.22826025,0,0,0.22826025,0.01864251,103.70241)"><path
+     transform="matrix(0.22826024,0,0,0.22826025,95.533227,1.3615751)"><path
        fill-rule="nonzero"
        fill="#ffffff"
        fill-opacity="1"
@@ -5811,7 +5811,7 @@
        d="m 105.55859,155.25781 c 0,-1.65625 -1.34375,-3 -3,-3 -1.65625,0 -2.999996,1.34375 -2.999996,3 0,1.66016 1.343746,3 2.999996,3 1.65625,0 3,-1.33984 3,-3 z m 0,0"
        id="path4437" /></g><g
      id="g5795"
-     transform="matrix(0.22826025,0,0,0.22826025,-90.084107,123.65643)"><g
+     transform="matrix(0.22826024,0,0,0.22826025,5.4304827,21.315593)"><g
        id="g5948"
        transform="translate(394.73693,135.13516)"><path
          fill-rule="nonzero"
@@ -6559,25 +6559,25 @@
      id="rect10969"
      width="33.998959"
      height="6.4822917"
-     x="56.620834"
+     x="50.799995"
      y="47.228127" /><rect
-     style="fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
+     style="fill:#ffffff;stroke-width:0.265376;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486634, 0.486634;paint-order:markers fill stroke"
      id="rect11023"
-     width="33.998959"
+     width="33.998951"
      height="6.4822917"
-     x="54.768749"
-     y="98.95417" /><rect
-     style="fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
+     x="144.46268"
+     y="-3.386668" /><rect
+     style="fill:#ffffff;stroke-width:0.265376;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486634, 0.486634;paint-order:markers fill stroke"
      id="rect11025"
-     width="33.998959"
+     width="33.998951"
      height="6.4822917"
-     x="55.69479"
-     y="150.15102" /><rect
+     x="145.38869"
+     y="47.810135" /><rect
      style="fill:#ffffff;stroke-width:0.292693;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.536726, 0.536726;paint-order:markers fill stroke"
      id="rect12654"
      width="33.998959"
      height="7.8854566"
-     x="55.5625"
+     x="49.741661"
      y="-4.7625003" /><rect
      style="fill:#ffffff;stroke-width:0.2579;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.472924, 0.472924;paint-order:markers fill stroke"
      id="rect14502"
@@ -6611,38 +6611,38 @@
        style="font-size:3.52778px;fill:#000000;stroke-width:0.265378"
        x="27.638412"
        y="54.804108">Gaussian patch</tspan></text><rect
-     style="fill:#ffffff;stroke-width:0.2579;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.472924, 0.472924;paint-order:markers fill stroke"
+     style="fill:#ffffff;stroke-width:0.257899;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.472924, 0.472924;paint-order:markers fill stroke"
      id="rect14510"
-     width="26.473047"
+     width="26.473042"
      height="3.1805074"
-     x="12.160764"
-     y="102.87759" /><text
+     x="107.67537"
+     y="0.53674322" /><text
      xml:space="preserve"
-     style="font-size:3.52778px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
-     x="27.638412"
-     y="105.60411"
+     style="font-size:3.52778px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;stroke-width:0.265376;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486634, 0.486634;paint-order:markers fill stroke"
+     x="123.15299"
+     y="3.2632613"
      id="text14514"><tspan
        sodipodi:role="line"
        id="tspan14512"
-       style="font-size:3.52778px;fill:#000000;stroke-width:0.265378"
-       x="27.638412"
-       y="105.60411">Exponential patch</tspan></text><rect
-     style="fill:#ffffff;stroke-width:0.2579;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.472924, 0.472924;paint-order:markers fill stroke"
+       style="font-size:3.52778px;fill:#000000;stroke-width:0.265377"
+       x="123.15299"
+       y="3.2632613">Exponential patch</tspan></text><rect
+     style="fill:#ffffff;stroke-width:0.257899;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.472924, 0.472924;paint-order:markers fill stroke"
      id="rect14516"
-     width="26.473047"
+     width="26.473042"
      height="3.1805074"
-     x="12.160764"
-     y="153.67725" /><text
+     x="107.67537"
+     y="51.336372" /><text
      xml:space="preserve"
-     style="font-size:3.52778px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
-     x="27.638412"
-     y="156.40373"
+     style="font-size:3.52778px;font-family:Helvetica;-inkscape-font-specification:Helvetica;text-align:center;text-anchor:middle;fill:#ffffff;stroke-width:0.265376;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486634, 0.486634;paint-order:markers fill stroke"
+     x="123.15299"
+     y="54.062836"
      id="text14520"><tspan
        sodipodi:role="line"
        id="tspan14518"
-       style="font-size:3.52778px;fill:#000000;stroke-width:0.265378"
-       x="27.638412"
-       y="156.40373">Polynomial patch</tspan></text><rect
+       style="font-size:3.52778px;fill:#000000;stroke-width:0.265377"
+       x="123.15299"
+       y="54.062836">Polynomial patch</tspan></text><rect
      style="fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
      id="rect21241"
      width="3.5057292"
@@ -6929,14 +6929,14 @@
     </g>
   </g>
 </g><rect
-     style="fill:#ffffff;stroke-width:0.265377;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486635, 0.486635;paint-order:markers fill stroke"
+     style="fill:#ffffff;stroke-width:0.265376;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.486634, 0.486634;paint-order:markers fill stroke"
      id="rect21299"
-     width="3.5057292"
+     width="3.5057287"
      height="7.9044271"
-     x="0"
-     y="122.174" /><g
+     x="94.98542"
+     y="19.833126" /><g
      inkscape:label=""
-     transform="matrix(0,-0.63608119,0.63608119,0,0.08895124,129.72221)"
+     transform="matrix(0,-0.63608119,0.63608105,0,95.07437,27.381373)"
      id="g21351"
      style="fill:#000000"><g
    fill="#000000"
@@ -7072,14 +7072,14 @@
     </g>
   </g>
 </g><rect
-     style="fill:#ffffff;stroke-width:0.264501;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.485029, 0.485029;paint-order:markers fill stroke"
+     style="fill:#ffffff;stroke-width:0.264502;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.485029, 0.485029;paint-order:markers fill stroke"
      id="rect21353"
-     width="3.4941583"
+     width="3.4941576"
      height="7.8783379"
-     x="0"
-     y="172.974" /><g
+     x="94.98542"
+     y="70.633118" /><g
      inkscape:label=""
-     transform="matrix(0,-0.63398176,0.63398176,0,0.08669278,180.4973)"
+     transform="matrix(0,-0.63398176,0.6339817,0,95.0721,78.156487)"
      id="g21405"
      style="fill:#000000"><g
    fill="#000000"
