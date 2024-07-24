@@ -499,13 +499,20 @@ Also, in the particular case of a single P-region containing all sources, this m
 
 \section{Results}
 
-\subsection{Synthetic Data}
+The battery of tests described in Chapter \ref{ch:numeric} is repeated for the proposed method described in this section to compare it with different methods using somewhat standard anatomy.
 
-The battery of analysis described in Chapter 2 is repeated for the new method, which is compared to 3 methods (this is already done, I haven't made the gaps yet).
+Later, in section \ref{sec:real_data}, the new method is used with a real dataset to explore the effects of an induced stroke in an animal model.
+%
+Prior to that, we carry numerical experiments similar to those in Chapter \ref{ch:numeric} using the anatomy of the animal subject.
 
-An additional set of similar analyses was done for ECoG and considering pig brain.
+\subsection{Synthetic Data (Human)}
+
+\subsection{Synthetic Data (Animal Model)}
+
+\subsubsection{Forward Model}
 
 \subsection{Real Data}
+\label{sec:real_data}
 
 The effectiveness of the ESI method is tested using data from an experiment of acute ischemic stroke on an animal model performed by Dr. J. Pascal et al. at UT Southwestern Medical Center [cite].
 
@@ -525,10 +532,20 @@ See figure \ref{fig:pig_elecs} for a visual guide of these electrodes.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_borrow/electrodes_short.png}
+\includegraphics{./img/electrodes_pig.pdf}
 \caption{Electrode locations for the subject. ECoG electrodes are labeled as L1--8 and R1--8. Inserted electrodes are labeled LD1--8 and RD1--8}
 \label{fig:pig_elecs}
 \end{figure}
+
+Further anatomical data was obtained from an age-matched publicly available MRI template published by Joanne et al. \cite{pig_template}.
+
+The cortex surface was extracted using CAT12 \cite{gaser2022cat}; neither the scalp nor skull layers were considered due to the experimental conditions.
+
+An adaptive layer of $N=26,903$ unconstrained dipole sources was constructed.
+%
+For the forward model, we considered only the surface ECoG electrodes ($M=8$).
+%
+The leadfield matrix was computed using OpenMEEG \cite{gramfort2010openmeeg}.
 
 \subsection{Pathology Data}
 
