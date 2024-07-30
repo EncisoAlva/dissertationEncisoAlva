@@ -43,7 +43,7 @@ For notation, define
 
 \begin{figure}
     \centering 
-    \includegraphics{./img/Pregions.pdf}
+    \includegraphics{./img/Pregions_pic.pdf}
     \caption{Construction of labels based on P-regions, representing regions when a particular symptom, independent of electrophysiological measurements, was observed.}
 \end{figure}
 
@@ -513,6 +513,15 @@ Notice that in the absence of P-regions, the model is equivalent to the Weighted
 Also, in the particular case of a single P-region containing all sources, this model is equivalent to sLORETA, which was presented in Chapter \ref{ch:review}.
 \end{comment}
 
+\section{Code Availability}
+
+The ESI method described in this section is available on the GitHub repository from the author at 
+%https://github.com/EncisoAlva/Region-Priors
+
+This implementation is compatible with the Brainstorm toolbox \cite{brainstorm} so that it can be incorporated into a regular pipeline for clinical data.
+
+As part of the extensibility of Brainstorm 
+
 \section{Results}
 
 The battery of tests described in Chapter \ref{ch:numeric} is repeated for the proposed method described in this section to compare it with different methods using somewhat standard anatomy.
@@ -530,7 +539,7 @@ Prior to that, we carry numerical experiments similar to those in Chapter \ref{c
 \subsection{Real Data}
 \label{sec:real_data}
 
-The effectiveness of the ESI method is tested using data from an experiment of acute ischemic stroke on an animal model performed by Dr. J. Pascal et al. at UT Southwestern Medical Center [cite].
+The effectiveness of the ESI method is tested using data from an experiment of acute ischemic stroke on an animal model performed by Dr. J. Pascal et al. at UT Southwestern Medical Center \cite{pig_lesion1, PMID_36109613}.
 
 Acute Ischemic Stroke was induced in the subject by obstruction of the Middle Cerebral Artery.
 %
