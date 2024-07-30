@@ -341,7 +341,7 @@ With this notation at hand, we can rewrite equation \eqref{eq:3.24} as
 \begin{align}
     \hat{\SA}
     &=
-    \ppar{\theta_0 \id_N + \sum_{k=1}^K \theta_k A_k}\G^T W_\rho \Y
+    \ppar{\id_N + \sum_{k=1}^K \tau_k A_k}\G^T W_\lambda \Y
 \end{align}
 
 %Instead of constructing the matrix $\ppar{\theta_0 \id_N + \sum_{k=1}^K \theta_k A_k}$ explicitly 
@@ -350,7 +350,7 @@ Using the matrices $A_k$, we can construct $\hat{\SA}$ row-by-row as follows:
 \begin{align}
     \hat{\BA}_0
     &=
-    \G^T W_\rho \Y \\
+    \G^T W_\lambda \Y \\
     \hat{\RA}_0(k)
     &=
     {\displaystyle \frac{1}{\abss{P_k}} \sum_{n\in P_k} \hat{\BA}_0(n)},
@@ -358,9 +358,9 @@ Using the matrices $A_k$, we can construct $\hat{\SA}$ row-by-row as follows:
     \\
     \hat{\SA}
     &=
-    \theta_0 \hat{\BA}_0 + 
+    \hat{\BA}_0 + 
     \sum_{k=1}^K
-    \theta_k \G\, \hat{\RA}_0(k)
+    \tau_k \G\, \hat{\RA}_0(k)
     \label{eq:3.s1}
 \end{align}
 with $\hat{\BA}_0 \in \R^{N\times 1}$, $\hat{\RA}_0 \in \R^{K\times 1}$.
@@ -369,10 +369,10 @@ Alternatively, we can construct $\hat{\SA}$ row by row as
 \begin{equation}
     \hat{\SA}(n) =
     \begin{cases}
-        \theta_0 \hat{\BA}_0(n) + \theta_k \hat{\RA}_0(k),
+        \hat{\BA}_0(n) + \tau_k \hat{\RA}_0(k),
         &\text{if } n\in P_k \text{ with } 1\leq k \leq K,
         \\
-        \theta_0 \hat{\BA}_0(n), &\text{if } n\in P_0
+        \hat{\BA}_0(n), &\text{if } n\in P_0
     \end{cases}
     \label{eq:3.s2}
 \end{equation}
@@ -407,20 +407,20 @@ In particular, we have the following
 \end{equation}
 which leads to the following identity
 \begin{equation}
-    \spar{\sqrt{\theta_0} \id_N + \sum_{k=1}^K \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} A_k}^2
+    \spar{\id_N + \sum_{k=1}^K \ppar{\sqrt{1+\tau_k}-1} A_k}^2
     =
-    {\theta_0} \id_N + \sum_{k=1}^K {\theta_k} A_k
+    \id_N + \sum_{k=1}^K {\tau_k} A_k
 \end{equation}
 
 For ease of notation, define
 \begin{align}
     \AAA_{\Theta} &=
-    \sqrt{\theta_0} \id_N + \sum_{k=1}^K \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} A_k
+    \id_N + \sum_{k=1}^K \ppar{\sqrt{1+\tau_k}-1} A_k
 \end{align}
 
-With this decomposition at hand, we can rewrite $W_\rho$ as
+With this decomposition at hand, we can rewrite $W_\lambda$ as
 \begin{equation}
-    W_\rho =
+    W_\lambda =
     \spar{ \ppar{\G \AAA_{{\Theta}}} \ppar{\G \AAA_{{\Theta}}}^T
     + \rho \id_M }^{-1}
 \end{equation}
@@ -432,10 +432,9 @@ We can conclude that $\AAA_\Theta$ acts as a weighted average operator over the 
 \begin{equation}
     \spar{\G \AAA_\Theta}(:, n) =
     \begin{cases}
-    \sqrt{\theta_0} \G^T(:,n) 
-    \\
-    \quad + \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} \displaystyle\frac{1}{\abss{P_k}} \sum_{n' \in P_k} \G^T(:, n'), &\text{for } n\in P_k, 1\leq k \\
-    \sqrt{\theta_0} \G^T(:,n).
+    \G^T(:,n) 
+    +  \displaystyle\frac{\ppar{\sqrt{1+\tau_k}-1}}{\abss{P_k}} \sum_{n' \in P_k} \G^T(:, n'), &\text{for } n\in P_k, 1\leq k \\
+    \G^T(:,n).
     &\text{for } n\in P_0
     \end{cases}
 \end{equation}
@@ -452,16 +451,16 @@ The similarity can be made more clear by using similar steps.
     \spar{\G \AAA_\Theta}(:, n) 
     &=
     \begin{cases}
-    \sqrt{\theta_0} \G^T(:,n) 
-     + \ppar{\sqrt{\theta_0+\theta_k}-\sqrt{\theta_0}} \G_\RA(:,k), &\text{for } 1\leq k \leq K \\
-    \sqrt{\theta_0} \G^T(:,n).
+    \G^T(:,n) 
+     + \ppar{\sqrt{1+\tau_k}-1} \G_\RA(:,k), &\text{for } 1\leq k \leq K \\
+    \G^T(:,n).
     &\text{for } n\in P_0
     \end{cases}
 \end{align}
 with $\G_\RA \in \R^{K\times M}$.
 %
 Notice that, once $\ppar{\G \AAA_\Theta}$ is computed, it can be subject to 
-SVD decomposition in order to compute $W_\rho$ efficiently.
+SVD decomposition in order to compute $W_\lambda$ efficiently.
 %
 This process is similar to all the kernels described in Chapter \ref{ch:forward} for linear methods.
 
@@ -483,9 +482,9 @@ Without loss of generalization, we may assume
     \sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_M
 \end{equation}
 
-With these matrices at hand, it is possible to compute $W_\rho$ as
+With these matrices at hand, it is possible to compute $W_\lambda$ as
 \begin{equation}
-    W_\rho = \mathbf{U} \ppar{ \mathbf{\Sigma}^2 + \rho \id_M}^{-1} \mathbf{U}^T
+    W_\lambda = \mathbf{U} \ppar{ \mathbf{\Sigma}^2 + \rho \id_M}^{-1} \mathbf{U}^T
 \end{equation}
 with the diagonal matrix in the middle given by
 \begin{equation}
