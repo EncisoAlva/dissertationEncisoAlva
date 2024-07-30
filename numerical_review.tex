@@ -173,14 +173,46 @@ Notice that the condition of lack of noise is attached to $\sigma_m = 0$ and $\t
 
 \section{Results}
 
-\begin{comment}
+Different ESI algorithms, described in Chapter \ref{ch:review}, were tested using this data: Weighted Minimal Norm, Multivariate Source Prelocalisation, sLORETA, and SISSY.
+%
+These algorithms were selected due to their presence in the literature and because of their small computational time.
+
+Notice that only one $\ell_1$-norm-based method is accounted for.
+%
+Although it would be optimal to consider many more methods, the large number of trials reduced the number of methods that can be effectively used.
+%
+The priority of this work is the ESI method presented in Chapter \ref{ch:new_model}.
+
+The solutions produced by these methods, referred to as `solvers' in the figures, are evaluated using the quantities described in Chapter \ref{ch:review}.
+%
+Some of these results are displayed in Figure \ref{fig:results1}.
+
+The wide variability observed in the results is affected by a large group of factors.
+%
+For instance, Figure [] shows the results for only the SYSSY solver.
+%
+We can observe that some shapes of source patches are recovered with more accuracy than others; see Figure \ref{fig:exaple_true}.
+%
+Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci.
+
+%Figure [] is similar to Figure [] for sLORETA. 
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{}
-    \caption{Caption}
-    \label{fig:enter-label}
+    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30DLE.pdf}
+    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30SpaDis.pdf}
+    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30AUROC.pdf}
+    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30AvgPre.pdf}
+    \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB.}
+    \label{fig:results1}
 \end{figure}
-\end{comment}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30DLE.pdf}
+    \caption{Data for this graph is the same from Figure \ref{fig:results1} for the SISSY solver and SNR = 30 dB.}
+    \label{fig:results2}
+\end{figure}
 
 %\section{Multi-modal asymmetric methods}
 %
