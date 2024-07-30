@@ -288,14 +288,31 @@ Thus, the proposed estimator is given by
     \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
     \PA(:,k)\, \PA(:,k)^T
     } \G^T W_\rho \Y
-    \label{eq:3.24}
+    %\label{eq:3.24}
     \\
     W_\rho &=
     \spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
     \PA(:,k)\, \PA(:,k)^T
     } \G^T + \rho \id_M }^{-1}
+    %\label{eq:3.25}
+\end{align}
+
+For ease of notation, the parameter $\theta_0$ will be replaced by rewriting
+\begin{align}
+    \hat{\SA}
+    &=
+    \ppar{ \id_N + \sum_{k=1}^K \tau_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T W_\lambda \Y
+    \label{eq:3.24}
+    \\
+    W_\lambda &=
+    \spar{\G \ppar{ \id_N + \sum_{k=1}^K \tau_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T + \lambda \id_M }^{-1}
     \label{eq:3.25}
 \end{align}
+with $\tau_k = \theta_k/\theta_0 > 1$ and $\lambda=\rho/\theta_0$.
 
 \subsection{Implementation notes}
 
@@ -450,7 +467,7 @@ This process is similar to all the kernels described in Chapter \ref{ch:forward}
 
 We may skip part of the construction and use the eigendecomposition of $\ppar{{\G \AAA_\Theta}}\ppar{{\G \AAA_\Theta}}^T$ directly, which is 
 \begin{equation}
-    \ppar{\ppar{\G \AAA_\Theta}} \ppar{\ppar{\G \AAA_\Theta}}^T
+    {\ppar{\G \AAA_\Theta}} {\ppar{\G \AAA_\Theta}}^T
     =
     \mathbf{U} \mathbf{\Sigma}^2 \mathbf{U}^T
 \end{equation}

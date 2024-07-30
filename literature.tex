@@ -267,17 +267,17 @@ The obtained information is later used to construct a weight matrix, so the fina
 
 The leadfield matrix is column-normalized as in \ref{det:wMNE}, and the SVD decomposition is performed, 
 \begin{align}
-\Gbar &= W_G\iinv \G = \U \mathbf{\Lambda} \V\trans
+\Gbar &=  \G\, W_G\iinv = \U \mathbf{\Lambda} \V\trans
 \\
 W_G &= \diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
 \end{align}
-with $\U\in \R^{M\times M},\V\in \R^{N\times N}$ such that $\U\trans \U = \id_M, \V\trans\V = \id_N$, and $\mathbf{\Lambda} \in \R{M\times N}$ a matrix with the singular values of $\Gbar$ in descending order on its diagonal.
+with $\U\in \R^{M\times M},\V\in \R^{N\times N}$ such that $\U\trans \U = \id_M, \V\trans\V = \id_N$, and $\mathbf{\Lambda} \in \R^{M\times N}$ a matrix with the singular values of $\Gbar$ in descending order on its diagonal.
 
 The first $s$ columns of $\U$ are selected based on the Velicer criterion \cite{velicer1996criterion},
 \begin{align}
 \U_s 
 &= 
-\ppar{ \U(:,1), \U(:,2), \dots, \U(:,s) }
+\spar{ \U(:,1), \U(:,2), \dots, \U(:,s) }
 \end{align}
 
 $\Y$ is normalized on a similar way as $\Gbar$, and then it is projected into $\U_s\, \U_s\trans$,
@@ -635,7 +635,9 @@ On the other side, there is not a single unified definition for more complicated
 
 In this work, the location of a source patch, either the estimation or the reference, is defined as the center of mass with respect to magnitude.
 %
-The reasoning for this decision is discussed in the following subsection.
+%The reasoning for this decision is discussed in the following subsection.
+%
+This particular definition can be traced back to the paper by Molins et al. \cite{molins2008quantification}, and the reasoning for its use is discussed in the following subsection.
 
 In order to establish a formal definition, we first must consider the concept of a seed dipole.
 %
@@ -734,7 +736,7 @@ This definition does not account for whether the reconstruction has more or fewe
 
 \subsection{Spatial Dispersion (SD)}
 
-This metric, proposed by H\"{a}m\"{a}l\"{a}inen, is defined as
+This metric, proposed by Molins et al \cite{molins2008quantification}, is defined as
 \begin{equation}
 \text{SD}
 =
@@ -743,6 +745,12 @@ This metric, proposed by H\"{a}m\"{a}l\"{a}inen, is defined as
 \sum_{p=1}^P \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2\, \nnorm{\rr_n-\mm_p} }{\sum_{n=1}^N \nnorm{\hat{\SA}(n))}_2^2}
 }^{1/2}
 \end{equation}
+
+This quantity can be understood as a variance in space for the source location. 
+%
+A small spatial dispersion is desirable.
+
+It is possible to replace $\hat{\SA}$ for ${\SA}$ in order to compute a `baseline' spatial dispersion for source patches, which is especially useful if they are large in space.
 
 \subsection{Relative Mean Square Error (rMSE)}
 
