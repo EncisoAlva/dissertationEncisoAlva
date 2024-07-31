@@ -537,6 +537,32 @@ Prior to that, we carry numerical experiments similar to those in Chapter \ref{c
 
 The effectiveness of the proposed ESI method is tested using synthetic data created following the same protocol described in Chapter \ref{ch:numeric}.
 
+Figures \ref{fig:results1_P}, \ref{fig:deets_P}, and \ref{fig:noise_degradation_P} are extensions of figures
+\ref{fig:results1}, \ref{fig:deets}, and \ref{fig:noise_degradation} including data using the proposed solver.
+%
+This allows for a quick comparison.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30ALL.pdf}
+    \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB.}
+    \label{fig:results1_P}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \label{fig:deets_P}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\linewidth]{img_stats/SNRdegradation_EvalMetrics_Protocol04_30.pdf}
+    \caption{Changes in performance metrics as the SNR decreases}
+    \label{fig:noise_degradation_P}
+\end{figure}
+
 \subsection{Synthetic Data (Animal Model)}
 
 %The effectiveness of the proposed ESI method is tested using synthetic data.
