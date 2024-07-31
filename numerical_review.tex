@@ -41,12 +41,12 @@ These surfaces are displayed in figure \ref{fig:surfaces}.
 \includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_left_inner}
 \includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_bottom}
 %
-\includegraphics[width=0.2\linewidth]{./img_dev/combined - Copy}
+\includegraphics[width=0.18\linewidth]{./img_dev/combined - Copy}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_scalp}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_outer}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_inner}
 \includegraphics[width=0.18\linewidth]{./img_dev/combined_cortex}
-\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, left, right, back. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head}
+\caption{A. Cortex surface for the ICBM 152 template, consisting of 15,002 vertices. Views from top, front, left, right (interior), bottom. B. Triangulated surfaces used for the 4-sphere forward model: cortex, inner skull, outer skull, head}
 \label{fig:surfaces}
 \end{figure}
 
@@ -183,36 +183,53 @@ Although it would be optimal to consider many more methods, the large number of 
 %
 The priority of this work is the ESI method presented in Chapter \ref{ch:new_model}.
 
-The solutions produced by these methods, referred to as `solvers' in the figures, are evaluated using the quantities described in Chapter \ref{ch:review}.
-%
-Some of these results are displayed in Figure \ref{fig:results1}.
-
-The wide variability observed in the results is affected by a large group of factors.
-%
-For instance, Figure [] shows the results for only the SYSSY solver.
-%
-We can observe that some shapes of source patches are recovered with more accuracy than others; see Figure \ref{fig:exaple_true}.
-%
-Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci.
-
-%Figure [] is similar to Figure [] for sLORETA. 
-
 \begin{figure}
     \centering
-    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30DLE.pdf}
-    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30SpaDis.pdf}
-    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30AUROC.pdf}
-    \includegraphics[width=0.45\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30AvgPre.pdf}
+    \includegraphics[width=\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30ALL.pdf}
     \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB.}
     \label{fig:results1}
 \end{figure}
 
+The solutions produced by these methods, referred to as `solvers' in the figures, are evaluated using the quantities described in Chapter \ref{ch:review}.
+%
+Some of these results are displayed in Figure \ref{fig:results1}.
+
+\subsection{Effect of Shape of Source Patch}
+
+The wide variability observed in the results is affected by a large group of factors.
+%
+For instance, figure \ref{fig:deets_SISSY} shows the results for only the SYSSY solver.
+%
+We can observe that some shapes of source patches are recovered with more accuracy than others; see Figure \ref{fig:exaple_true}.
+%
+Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci, whose geometry is not parallel to the head.
+
+Figure \ref{fig:deets_sLORETA} is similar to figure \ref{fig:deets_SISSY} but uses information for sLORETA. 
+%
+This new figure's objective is to state, at least informally, that the shape of the source patch is a factor to consider in ESI,
+and this is not exclusive to one particular solver.
+
+A profound exploration of this statement is beyond the scope of this work and thus not explored in further detail.
+%
+It will only influence numerical experiments in Chapter \ref{ch:new_model} by considering source patches with these shapes.
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30DLE.pdf}
-    \caption{Data for this graph is the same from Figure \ref{fig:results1} for the SISSY solver and SNR = 30 dB.}
-    \label{fig:results2}
+    \includegraphics[width=0.9\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \label{fig:deets_SISSY}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img_stats/sLORETA_scatter_EvalMetrics_Protocol04_30.pdf}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \label{fig:deets_sLORETA}
+\end{figure}
+
+\section{Effect of Noise}
+
+Knowing that 
 
 %\section{Multi-modal asymmetric methods}
 %
