@@ -69,7 +69,7 @@ For illustrative purposes, the duration of the recordings was set to a total of 
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_top}
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_left}
 %\includegraphics[width=0.25\linewidth]{./img_dev/EEG_3D_Subject_ICBM152_2019b_right}
-\caption{Electrode Placement according to the 10-10 International System. A. Schematic with the electrode labels. B. Electrodes at the ICBM152 template head}
+\caption{Electrode Placement according to the 10-10 International System. A. Schematic with the electrode labels. B. Electrodes at the ICBM152 head}
 \label{fig:1010system}
 \end{figure}
 
@@ -110,7 +110,7 @@ For illustrative purposes, four different options for $f$ are considered:
 \text{Polynomial} &&
     f_\text{pol}(x) 
     &= 
-    \sqrt{ \max\,\, \sset{1-\ppar{\frac{x}{\kappa}}^2, 0 }}
+    \sqrt{ \max \sset{1-{x}^2, 0 }}
 \end{align}
 
 %The selection of these functions follows a survey of the literature.
@@ -138,9 +138,9 @@ For the synthetic data in this chapter, we set $\kappa = $ 12.6 \si{mm} in order
 
 \subsection{Noise}
 
-For simplicity, only additive white noise is added to the sensors, i.e. we use 
+For simplicity, only additive white noise is added to the sensors, i.e., we use 
 \begin{equation}
-    \varepsilon(t,:) \sim \nnorm{0, \diag{\sigma_1, \dots, \sigma_M}^2}
+    \varepsilon(:) \sim \norm \ppar{0, \diag{\sigma_1, \dots, \sigma_M}^2}
 \end{equation}
 with $\sigma_m \geq 0$ for $m=1, \dots, M$ the noise variances for each EEG electrode.
 
@@ -204,6 +204,14 @@ We can observe that some shapes of source patches are recovered with more accura
 %
 Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci, whose geometry is not parallel to the head.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \label{fig:deets_SISSY}
+\end{figure}
+
+\begin{comment}
 Figure \ref{fig:deets_sLORETA} is similar to figure \ref{fig:deets_SISSY} but uses information for sLORETA. 
 %
 This new figure's objective is to state, at least informally, that the shape of the source patch is a factor to consider in ESI,
@@ -215,21 +223,33 @@ It will only influence numerical experiments in Chapter \ref{ch:new_model} by co
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
-    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
-    \label{fig:deets_SISSY}
-\end{figure}
-
-\begin{figure}
-    \centering
     \includegraphics[width=0.9\linewidth]{img_stats/sLORETA_scatter_EvalMetrics_Protocol04_30.pdf}
-    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the sLORETA solver}
     \label{fig:deets_sLORETA}
 \end{figure}
+\end{comment}
 
 \section{Effect of Noise}
 
 Knowing that 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
+    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \label{fig:noise_degradation}
+\end{figure}
+
+\section{Conclusions}
+
+In this chapter, a protocol for constructing synthetic data was described.
+%
+This dataset was used to test the performance of a small number of ESI methods.
+
+The results obtained suggest that the shape of the source patch is a factor to consider in ESI.
+%
+A profound exploration of this statement is beyond the scope of this work and thus not explored in further detail;
+it will influence the numerical experiments in Chapter \ref{ch:new_model} by considering source patches with the shapes described.
 
 %\section{Multi-modal asymmetric methods}
 %

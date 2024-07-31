@@ -776,48 +776,121 @@ It is defined as
 
 \subsection{Area Under Receiver-Operator Curve (AUROC)}
 
-H\"{a}m\"{a}l\"{a}inen proposed interpreting the estimation from Electric Source Imaging as a binary classification problem over the dipoles, with active and non-active classes.
+It is possible to interpret the estimation from Electric Source Imaging as a binary classification problem over the dipoles; this is done by considering active/non-active classes.
 %
-This interpretation is consistent with the usability of ESI data to identify brain regions related to specific cognitive or pathological processes.
+This interpretation is consistent with the usability of ESI data to identify brain regions that are `active' during specific cognitive or pathological processes.
 
-Within this interpretation, the active/non-active labels can be created in many ways. 
+%Within this interpretation, the active/non-active labels can be created in many ways. 
 %
-H\"{a}m\"{a}l\"{a}inen proposed using the relative magnitude to 
-\begin{align}
-\mathcal{A}^{\text{ref}}(\beta)
-&=
-\sset{n\in\sset{1, \dots, N} \given  }
-\end{align}
+%H\"{a}m\"{a}l\"{a}inen proposed using the relative magnitude to 
+%\begin{align}
+%\mathcal{A}^{\text{ref}}(\beta)
+%&=
+%\sset{n\in\sset{1, \dots, N} \given  }
+%\end{align}
 
-This metric, very common in Data Science, is used in this context by interpreting the dipoles' magnitude as scores to label them as active or non-active.
+%This metric, very common in Data Science, is used in this context by interpreting the dipoles' magnitude as scores to label them as active or non-active.
 %
-Within this interpretation $\nnorm{\SA}$ is used to create the reference labels, $\mathcal{A}^{\text{ref}}: \R \rightarrow \sset{0,1}^N$, and $\hat{\SA}$ is used to create the estimated labels, $\mathcal{A}^{\text{est}}: \R \rightarrow \sset{0,1}^N$, as follows
+A natural assumption in this context, already discussed in Chapter \ref{ch:forward}, is that dipoles with large magnitude are related to brain regions displaying coherent activity.
+
+We consider the target labels as reference, ${\mathcal{R}: [0,1] \rightarrow \sset{0,1}^N}$ and the inferred labels as estimations, $\mathcal{E}: [0,1] \rightarrow \sset{0,1}^N$.
+%
+The assumption of active dipoles/regions is modeled by constructing the labels as follows,
 \begin{align}
-\mathcal{A}_n^{\text{ref}}(\beta)
+\mathcal{R}_\beta(n)
 &=
 \begin{cases}
 1, &\text{if }
-\nnorm{\SA}_2 \geq \beta \max\sset{\nnorm{\SA}_2}
+\nnorm{\SA(n)}_2 \geq \beta \max_{n'}\sset{\nnorm{\SA(n')}_2}
 \\
 0, &\text{otherwise}
 \end{cases}
 \\
-\mathcal{A}_n^{\text{est}}(\beta)
+\mathcal{E}_\beta(n)
 &=
 \begin{cases}
 1, &\text{if }
-\nnorm{\hat{\SA}}_2 \geq \beta \max\sset{\nnorm{\hat{\SA}}_2}
+\nnorm{\hat{\SA}(n)}_2 \geq \beta \max_{n'}\sset{\nnorm{\hat{\SA}(n')}_2}
 \\
 0, &\text{otherwise}
 \end{cases}
 \end{align}
 
-For ease of notation, labels 0/1 must be read as false/true so that we can use the logical operators and ($\wedge$) and not ($\neg$), but also count the number of \textit{true} elements using the carnality ($\abss{\bullet}$).
+%Formally, there is no reason to use the same $\beta$ to define both labels.
+%
+The classical interpretation of the Receiver-Operator Curve requires that we affix the target labels, $\mathcal{R}_\beta$, which can be achieved in the context of ESI by selecting a particular value $\beta = \beta_0 \in [0,1]$.
+%
+See figure \ref{fig:AUROC}.A for a quick example of the creation of the target labels using $\beta_0=0.5$.
+
+Other authors, like Molins et al. \cite{molins2008quantification}, proposed to define $\mathcal{R}_\beta$ dynamically, changing with $\mathcal{E}_\beta$ as $\beta$ changes.
+%
+This idea is not used in this work because it is unstable for bad estimations, leading to unintuitive results.
+
+%See figure \ref{fig:AUROC}.A for guidance on the creation of these labels:
+%\begin{itemize}
+%    \item Left: Reference sources, $\SA$.
+%    \item Center: Reference labels, $\mathcal{A}^{\text{ref}}_\bullet(0.5)$.
+%    \item Right: Estimated sources, $\hat{\SA}$.
+%\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.85]{./img/AUROC_sketch.pdf}
+%
+\caption{
+A. The true class labels are defined from the true sources, $\SA$, while the estimated labels are constructed from the ESI estimation, $\hat{\SA}$.
+Notice the severe class imbalance between yellow and colorless (gray).
+%
+B. Construction of Receiver Operator Curve (ROC) and Precision-Recall Curve; the area under them is called AUROC and Average Precision, respectively.
+%
+C. To alleviate the class imbalance, only the dipoles within a certain distance of the patch center are considered; such distance is set to 25.7 \si{mm} to consider approximately 50\% of dipoles in each category.
+\\
+%
+Data for these graphs was obtained from a single trial of synthetic data described in Chapter \ref{ch:numeric}. Reference source distribution $\SA$ was constructed with no-noise and the source estimate $\hat{\SA}$ was computed using sLORETA
+}
+\label{fig:AUROC}
+\end{figure}
+
+%For ease of notation, the labels must be 0/1 must be read as false/true so that we can use the logical operators and ($\wedge$) and not ($\neg$), but also count the number of \textit{true} elements using the carnality ($\abss{\bullet}$).
 %
 With this notation, we define True Positives, False Positives, True Negatives, and False Negatives as follows
 \begin{align}
-\text{TP}
+\text{TP}(\beta)
 &=
+\sum_{n=1}^N 
+\spar{\mathcal{E}_\beta\ppar{n}}
+\spar{\mathcal{R}_\beta\ppar{n}}
+\label{eq_auroc:1}
+\\
+\text{FP}(\beta)
+&=
+\sum_{n=1}^N 
+\spar{1-\mathcal{E}_\beta\ppar{n}}
+\spar{\mathcal{R}_\beta\ppar{n}}
+\label{eq_auroc:2}
+\\
+\text{TN}(\beta)
+&=
+\sum_{n=1}^N 
+\spar{1-\mathcal{E}_\beta\ppar{n}}
+\spar{1-\mathcal{R}_\beta\ppar{n}}
+\label{eq_auroc:3}
+\\
+\text{FN}(\beta)
+&=
+\sum_{n=1}^N 
+\spar{1-\mathcal{E}_\beta\ppar{n}}
+\spar{\mathcal{R}_\beta\ppar{n}}
+\label{eq_auroc:4}
+\end{align}
+%Notice that these quantities change as a function of $\beta$.
+\begin{comment}
+\begin{align}
+\text{TP}(\beta)
+&=
+\sum_{n=1}^N 
+\spar{\mathcal{R}_\beta\ppar{n}}
+\spar{\mathcal{E}_\beta\ppar{n}}
 \abss{ 
 \mathcal{A}_n^{\text{ref}}(\beta) \wedge 
 \mathcal{A}_n^{\text{est}}(\beta) }
@@ -840,67 +913,101 @@ With this notation, we define True Positives, False Positives, True Negatives, a
 \mathcal{A}_n^{\text{ref}}(\beta) \wedge 
 \neg \mathcal{A}_n^{\text{est}}(\beta) }
 \end{align}
-Notice that these quantities change as a function of $\beta$.
+\end{comment}
 
-The Receiver-Operator Curve (ROC) is the parametric curve 
-$\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, with the False Positive Rate (FPR) and True Positive Rate (TPR) defined as
+The Receiver-Operator Curve (ROC) itself is the parametric curve defined by
+$\ppar{\text{FPR}\ppar{\beta}, \text{TPR}\ppar{\beta}}$, where the False Positive Rate (FPR) and True Positive Rate (TPR) are defined as
 \begin{align}
-\text{FPR}
+\text{FPR}(\beta)
 &=
 \frac{ \text{FP}\ppar{\beta} }{\text{FP}\ppar{\beta} + \text{TN}\ppar{\beta}}
 \\
-\text{TPR}
+\text{TPR}(\beta)
 &=
 \frac{ \text{TP}\ppar{\beta} }{\text{TP}\ppar{\beta} + \text{FN}\ppar{\beta}}
 \end{align}
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.85]{./img/AUROC_sketch.pdf}
-%
-\caption{
-A. The true class labels are defined from the true sources, $\SA$, while the estimated labels are constructed from the ESI estimation, $\hat{\SA}$.
-Notice the severe class imbalance between yellow and colorless (gray).
-%
-B. Construction of Receiver Operator Curve (ROC) and Precision-Recall Curve; the area under them is called AUROC and Average Precision, respectively.
-%
-C. To alleviate the class imbalance, only the dipoles within a certain distance of the patch center are considered; such distance is set to 25.7 \si{mm} to consider approximately 50\% of dipoles in each category.
-\\
-%
-Data for these graphs was obtained from a single trial of synthetic data described in Chapter \ref{ch:numeric}. Reference source distribution $\SA$ was constructed with no-noise and the source estimate $\hat{\SA}$ was computed using sLORETA
-}
-\end{figure}
-
 The interpretation of the Receiver-Operator Curve is that each selection of $\beta$ balances the ratios of True Positives and False Negatives:
 \begin{itemize}
 \item 
-Using a large $\beta$ will cause the labels to be strict, with very few False Positives but many False Negatives.
+Large $\beta$ $\implies$ labels will be strict, with very few False Positives but many False Negatives.
 \item
-A small $\beta$ will cause the labels to be permissive, with very few False Negatives but many False Positives.
+Small $\beta$ $\implies$ labels will be permissive, with very few False Negatives but many False Positives.
 \end{itemize}
 In general, extreme values of $\beta$ will lead to the endpoints (0,0) and (1,1) of the ROC, and a somewhat smooth trajectory will be observed as $\beta$ increases.
 
-A classifier for which TPR$(\beta)$ and $1-$FPR$(\beta)$ are close to 1 for all $\beta$'s is preferable, and this phenomenon can be observed in the ROC as being `close to the top.'
+A classifier for which TPR$(\beta)\approx 1$ and FPR$(\beta)\approx 0$ for all $\beta$'s is preferable whenever possible.
 %
-This concept is formalized by taking the area under the Area Under ROC curve (AUROC), defined as the area under the ROC curve; AUROC$\approx 1$ is preferable.
+Visually, this condition means that the ROC is `close to the top.'
+
+This concept is formalized by taking the area under the Area Under the ROC (AUROC), defined as the area inside $[0,1]^2\subset \R^2$ and below the ROC curve.
 %
 In practice, the AUROC can be computed numerically using the trapezoid rule as follows
 \begin{equation}
-\text{AUROC}_\text{global} =
+\text{AUROC} =
 \frac{1}{2}
 \sum_{i}
 \ppar{ \text{FPR}\ppar{\beta_i}-\text{FPR}\ppar{\beta_{i-1}} }
 \ppar{ \text{TPR}\ppar{\beta_i}+\text{TPR}\ppar{\beta_{i-1}} }
 \end{equation}
-with $\beta_i$ the finite number of values that $\beta$ can actually take.
+with $\beta_i$ the finite number of values that $\beta$ can take.
 
-The suffix `global' is added since all the dipoles are used to compute AUROC.
+%The condition described previously that the ROC must be `close to the top' can be rewritten as 
+%AUROC$\approx 1$ being preferable.
+
+With this concept at hand, we can rewrite the most desirable scenario as that where AUROC $\approx 1$.
+
+\subsubsection{Local AUROC}
+
+AUROC can be biased on the presence of severe class imbalance when a class has many more elements than the other.
 %
-Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance; we expect the proportion of active dipoles at any moment to be very low.
+This phenomenon is represented in figure \ref{fig:AUROC}: panel A shows how the reference labels created using $\beta_0$ only account for a tiny fraction of dipoles available in the model, while panel B shows that the ROC is unusually flat, regardless of the quality of the ESI estimation.
+
+The class imbalance can't be avoided on the ESI since the source patches are globally sparse and compact --or at least we assume that.
+
+One option to alleviate this issue is to consider only a small selection of dipoles for classification.
 %
-To alleviate that, they propose to use dipoles within a certain distance from the true center.
+In other words, construct local estimated labels as
+\begin{align}
+\mathcal{E}_\beta^{(d)}(n)
+&=
+\begin{cases}
+1, &\text{if }
+\nnorm{\hat{\SA}(n)}_2 \geq \beta \max_{n'}\sset{\nnorm{\hat{\SA}(n')}_2}
+\text{ and }
+\nnorm{\rr_n-\mathbf{m}_p}<d
+\\
+0, &\text{otherwise}
+\end{cases}
+\end{align}
+with $\rr_n$ the location of the $n$-th dipole, $\mathbf{m}_*$ the location of the center of the closest source patch, and $d>0$ a parameter controlling how many dipoles are to be considered.
+
+We can define local target labels analogously.
 %
-We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5 \si{mm}.
+To compute local true/false positives/negatives, we must consider only `local' dipoles.
+%
+For example, 
+%the local True Positive would be defined as
+\begin{align}
+    \text{TP}^{(d)}(\beta)
+&=
+\sum_{\substack{n\in \sset{1, \dots, N} \\ \nnorm{\rr_n-\mathbf{m}_p}<d}}
+\spar{\mathcal{E}^{(d)}_\beta\ppar{n}}
+\spar{\mathcal{R}^{(d)}_\beta\ppar{n}}
+\end{align}
+
+This construction leads to a local AUROC.
+%
+In order to satisfy it's purpose, $d$ must be selected so that
+$\frac{1}{N} \sum_{n=1}^N \mathcal{R}^{(d)}_{\beta_0} (n) \approx 0.5$ for a suitable $\beta_0$.
+
+%The suffix `global' is added since all the dipoles are used to compute AUROC.
+%
+%Some authors proposed that the AUROC value may be imprecise due to the severe class imbalance; we expect the proportion of active dipoles at any moment to be very low.
+%
+%To alleviate that, they propose to use dipoles within a certain distance from the true center.
+%
+%We refer to that metric as $\text{AUROC}_\text{local}$ and use the distance as 5 \si{mm}.
 
 \begin{comment}
 \begin{figure}
@@ -914,29 +1021,40 @@ Data for these graphs was obtained from a single run of the protocol for synthet
 
 \subsection{Average Precision}
 
-A different approach to the class imbalance of the AUROC is to use a robust quantity to this issue instead.
-
+A different approach to the class imbalance is to use a different quantity, one with similar properties to AUROC.
+%
 Average Precision, also known as Area Under Precision-Recall Curve, is based on the parametric curve 
-$\ppar{\text{Rec}\ppar{\beta}, \text{Pre}\ppar{\beta}}$, with the Precision (Pre) and Rec (Rec) defined as
+$\ppar{\text{Rec}\ppar{\beta}, \text{Pre}\ppar{\beta}}$, where the Precision (Pre) and Rec (Rec) defined as
 \begin{align}
-\text{Precision}
+\text{Pre}\ppar{\beta}
 &=
 \frac{ \text{TP}\ppar{\beta} }{\text{TP}\ppar{\beta} + \text{FP}\ppar{\beta}}
 \\
-\text{Rec}
+\text{Rec}\ppar{\beta}
 &=
 \frac{ \text{TP}\ppar{\beta} }{\text{TP}\ppar{\beta} + \text{FP}\ppar{\beta}}
 \end{align}
+where the true/false positive/negatives are defined as in equations 
+\ref{eq_auroc:1},
+\ref{eq_auroc:2},
+\ref{eq_auroc:3}, and
+\ref{eq_auroc:4}.
 
 Similar to AUROC, Average Precision can be computed numerically as follows
 \begin{equation}
-\text{AUROC}_\text{global} =
+\text{Avg. Pre.} =
 \frac{1}{2}
 \sum_{i}
 \ppar{ \text{FPR}\ppar{\beta_i}-\text{FPR}\ppar{\beta_{i-1}} }
 \ppar{ \text{TPR}\ppar{\beta_i}+\text{TPR}\ppar{\beta_{i-1}} }
 \end{equation}
 
-The characteristic shape of the Precision-Recall Curve is quite different. 
+Average Precision ranges from 0 to 1, with 1 being preferable.
+
+Although the definition of Average Precision is largely similar to that of AUROC, it is different in many aspects.
 %
-For instance, see FIGURE.
+The Precision-Recall Curve may not be monotonic and often displays sharp edges. 
+
+Despite being possible to define a local Average Precision,  in figure \ref{fig:AUROC}, we can observe that it may not be very different from the global Average Precision.
+%
+Informally, we may observe that Average Precision is more robust to the class imbalance.
