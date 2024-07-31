@@ -552,26 +552,44 @@ Model misspecification is not explored.
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{img_stats/P_plot_EvalMetrics_Protocol04_30ALL.pdf}
-    \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB}
+    \caption{Performance metrics for some linear estimators, including the proposed one, for the Human synthetic dataset. The dataset contains 30 trials per shape of source patch, and SNR is set to 30 dB}
     \label{fig:results1_P}
 \end{figure}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+      & SD    & AUROC & AP    & Depth  \\
+\midrule
+DLE   & 0.733 & -0.477 & -0.054 & -0.097 \\
+SD    &       & -0.555 & -0.393 & 0.079  \\
+AUROC &       &        & 0.536  & -0.103 \\
+AP    &       &        &        & -0.108 \\
+\bottomrule
+\end{tabular}
+\caption{Pearson correlation between performance metrics for the proposed estimator and the Human dataset.}
+\label{tab:corr_P}
+\end{table}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{img_stats/P_scatter_EvalMetrics_Protocol04_30.pdf}
-    \caption{Data for this graph is the same from figure \ref{fig:results1} for the proposed solver}
+    \caption{Changes in performance metrics for the proposed estimator with the Human dataset when different shapes of source patches are used.}
     \label{fig:deets_P}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{img_stats/P_SNRdegradation_EvalMetrics_Protocol04_30.pdf}
-    \caption{Changes in performance metrics as the SNR decreases}
+    \caption{Changes in performance metrics for the proposed estimator with the Human dataset as the as the SNR decreases}
     \label{fig:noise_degradation_P}
 \end{figure}
 
 The results from these numerical experiments are collected in the
-figures \ref{fig:results1_P}, \ref{fig:deets_P}, and \ref{fig:noise_degradation_P}; these figures are clearly extensions of figures
+figures \ref{fig:results1_P}, \ref{fig:deets_P}, and \ref{fig:noise_degradation_P}, as well as in table \ref{tab:corr_P}.
+%
+These figures are clearly extensions of figures
 \ref{fig:results1}, \ref{fig:deets_SISSY}, and \ref{fig:noise_degradation} with additional data.
 %including data using the proposed solver.
 %
@@ -580,12 +598,14 @@ figures \ref{fig:results1_P}, \ref{fig:deets_P}, and \ref{fig:noise_degradation_
 The findings from these observations may be summarised as follows:
 \begin{itemize}
     \item The proposed solver outperforms the linear methods in Distance Localization Error but is outperformed by them in Spatial Dispersion.
-    \item The proposed method is not very sensible to the shape of the source patch. 
+    \item The proposed method is quite sensible to the shape of the source patch. 
     \item The proposed method seems to outperform all methods, including SISSY, in high-noise conditions, as seen by AUROC and Average Precision.
     \item For the proposed method, degradation of performance due to increasing noise is unremarkable --when compared with other linear estimators.
 \end{itemize}
 
 Source patches that resemble point sources, such as the exponential profile, are more easily recovered by all methods; the proposed method is no exception.
+%
+Average Precision seems to be particularly sensible to the labels created using different shapes of source patches.
 
 The high performance of the proposed method in the classification metrics is easily explained by the presence of P-regions: the location of the source is already given to some extent, independently of noise.
 %
@@ -659,25 +679,57 @@ The leadfield matrix was computed using OpenMEEG \cite{gramfort2010openmeeg} wit
 
 \subsubsection{Results}
 
+As for the previous synthetic dataset, the proposed method is tested.
+%
+A single P-region is constructed per each trial, following the same protocol with $\kappa =$ 8.95 mm.
+%
+This value of $\kappa$ was selected so that the resulting source patches have an approximate volume of 3 $\text{cm}^3$, which is similar to the volume of the region with pathological symptoms observed in the real data.
+
+The battery of visualizations from figures \ref{fig:results1_pig}, \ref{fig:deets_pig}, and \ref{fig:noise_degradation_pig} tell us similar information as with the other synthetic dataset: the performance of the proposed method is within the expected, and the estimation is affected by the shape of the source patches.
+
+As for the other datasets, in table \ref{tab:corr_pig}, we have confirmation that the Distance Localization Error and the Spatial Dispersion are correlated, as well as AUROC and Average Precision.
+%
+None of the variables is significantly correlated with the depth of the source patch.
+
+For this particular dataset, we can observe that the performance degradation due to increased noise is not very aggressive.
+%
+This can be explained by the smaller brain volume, which makes the source patches relatively bigger.
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{img_stats/P_plot_EvalMetrics_Protocol04_30ALL.pdf}
-    \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB}
-    \label{fig:results1_P}
+    \includegraphics[width=0.9\linewidth]{img_stats/pig_plot_EvalMetrics_protocol04_vol5k_pigALL.pdf}
+    \caption{Performance metrics for some linear estimators, including the proposed one, for the Animal Model synthetic dataset. The dataset contains 100 trials per shape of source patch, and the SNR is set to 20 dB}
+    \label{fig:results1_pig}
+\end{figure}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+      & SD    & AUROC & AP    & Depth  \\
+\midrule
+DLE   & 0.870 & 0.138 & 0.105 & -0.192 \\
+SD    &       & 0.028 & 0.008 & -0.144 \\
+AUROC &       &       & 0.957 & -0.035 \\
+AP    &       &       &       & -0.063 \\
+\bottomrule
+\end{tabular}
+\caption{Pearson correlation between performance metrics for the proposed estimator and the Animal Model dataset.}
+\label{tab:corr_pig}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{img_stats/pig_shape_EvalMetrics_protocol04_vol5k_pigALL.pdf}
+    \caption{Changes in performance metrics for the proposed estimator with the Animal Model dataset when different shapes of source patch are used}
+    \label{fig:deets_pig}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{img_stats/P_scatter_EvalMetrics_Protocol04_30.pdf}
-    \caption{Data for this graph is the same from figure \ref{fig:results1} for the proposed solver}
-    \label{fig:deets_P}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\linewidth]{img_stats/P_SNRdegradation_EvalMetrics_Protocol04_30.pdf}
-    \caption{Changes in performance metrics as the SNR decreases}
-    \label{fig:noise_degradation_P}
+    \includegraphics[width=0.9\linewidth]{img_stats/pig_SNRdegradation_EvalMetrics_protocol04_vol5k_pig.pdf}
+    \caption{Changes in performance metrics for the proposed estimator with the Animal Model dataset as the SNR decreases}
+    \label{fig:noise_degradation_pig}
 \end{figure}
 
 \subsection{Real Data}

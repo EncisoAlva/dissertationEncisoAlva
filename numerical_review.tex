@@ -186,13 +186,32 @@ The priority of this work is the ESI method presented in Chapter \ref{ch:new_mod
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{img_stats/plot_EvalMetrics_Protocol04_30ALL.pdf}
-    \caption{A total of 90 trials of synthetic EEG data are accounted for in this picture, constructed using SNR = 30 dB.}
+    \caption{Performance metrics for some linear estimators for the 
+    synthetic data described in the text: the `Human' dataset. The dataset contains 30 trials per shape of source patch, and the SNR is set to 30 dB}
     \label{fig:results1}
 \end{figure}
 
 The solutions produced by these methods, referred to as `solvers' in the figures, are evaluated using the quantities described in Chapter \ref{ch:review}.
 %
 Some of these results are displayed in Figure \ref{fig:results1}.
+
+\subsection{Correlations of metrics}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+      & SD    & AUROC & AP    & Depth  \\
+\midrule
+DLE   & 0.403 & -0.525 & 0.036  & -0.049 \\
+SD    &       & -0.586 & -0.464 & 0.128  \\
+AUROC &       &        & 0.524  & -0.114 \\
+AP    &       &        &        & -0.094 \\
+\bottomrule
+\end{tabular}
+\caption{Pearson correlation between performance metrics for the proposed estimator and the Animal Model dataset.}
+\label{tab:corr_pig}
+\end{table}
 
 \subsection{Effect of Shape of Source Patch}
 
@@ -202,12 +221,12 @@ For instance, figure \ref{fig:deets_SISSY} shows the results for only the SYSSY 
 %
 We can observe that some shapes of source patches are recovered with more accuracy than others; see Figure \ref{fig:exaple_true}.
 %
-Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci, whose geometry is not parallel to the head.
+%Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci, whose geometry is not parallel to the head.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{img_stats/SISSY_scatter_EvalMetrics_Protocol04_30.pdf}
-    \caption{Data for this graph is the same from figure \ref{fig:results1} for the SISSY solver}
+    \caption{Changes in performance metrics for the SISSY estimator with the `Human' dataset when different shapes of source patches are used}
     \label{fig:deets_SISSY}
 \end{figure}
 
@@ -240,7 +259,7 @@ Performing the same observations over different shapes of source patches doesn't
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{img_stats/SNRdegradation_EvalMetrics_Protocol04_30.pdf}
-    \caption{Changes in performance metrics as the SNR decreases}
+    \caption{Changes in performance metrics for some estimators with the `Human' dataset as the SNR decreases}
     \label{fig:noise_degradation}
 \end{figure}
 
