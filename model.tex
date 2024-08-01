@@ -743,6 +743,8 @@ In summary, a stroke is the obstruction of a vein or artery in the brain, which 
 %
 The brain regions affected by hypoxia (lack of oxygen at a cellular level) are called the Ischemic Penumbra.
 
+For ease of notation, this procedure is referred to as the induced lesion.
+
 \subsection{Pathology Data}
 
 Posterior to the experiment, the subject was sacrificed.
@@ -762,9 +764,11 @@ As a result, tissue colored white was affected by necrosis, and tissue colored r
 \includegraphics[width=\linewidth]{./img/Pregions_real.pdf}
 \caption{P-regions are determined based on observed symptoms from a pathology: the TTC stain colors normal tissue as white and hypoxic tissue as red.
 %
-Hypoxia is due to an induced acute ischemic stroke in the Middle Cerebral Artery on an animal model (pig).
+Hypoxia is due to an induced acute ischemic stroke in the Middle Cerebral Artery on an animal model (pig)
 %
-Although the stroke occurred in vivo with ECoG monitoring, the TTC stain is only possible post-mortem}
+%Although the stroke occurred in vivo with ECoG monitoring, the TTC stain is only possible post-mortem
+}
+\label{fig:Preg_real}
 \end{figure}
 
 Within the framework of this work, pictures obtained after TTC staining were registered to the template MRI to identify retroactively the Ischemic Penumbra at the time of the ECoG recordings.
@@ -773,6 +777,67 @@ Within the framework of this work, pictures obtained after TTC staining were reg
 
 With this information, we constructed the P-region $P_1$ as the Ischemic Penumbra and the rest of the brain as the region $P_0$.
 %
+See figure \ref{fig:Preg_real} for a guide to this process.
+%
 %The selection of one single P-region follows the observed data.
 %
-Although the model is capable of considering multiple P-regions, only one region is used for this dataset.
+Although the model is capable of considering multiple P-regions, only one region is used for this dataset based on the observed data.
+
+\subsection{Results}
+
+After using the TCC data to construct the P-regions, the proposed method was used over recordings from the subject after the induced lesion.
+%
+Additionally, other ESI methods (wMNE, MSP, and sLORETA) were used on the same dataset for comparison.
+
+Here, we show an image from the reconstruction at $t=78.507$ s after the lesion was performed.
+%
+As shown in figure \ref{fig:real_ecog}, a small peak can observed at this point in time.
+%
+However, this specific point in time is not of particular interest; it is merely presented as an example to compare the behaviors of different ESI methods.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\linewidth]{./img_dev2/ECOG_All_sub17diss_diss1}
+\caption{Recordings from surface electrodes. Highlighted is the point in time considered for figure \ref{fig:real_comp}.
+Time is measured after the induced lesion}
+\label{fig:real_ecog}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\linewidth]{./img_dev2/real_comparison}
+\caption{Coronal slices of the subject's brain displaying the magnitude of distributed dipoles; maximum magnitude was scaled to 1 for comparison.
+%
+Results were obtained using various ESI methods: wMNE (A), MSP (B), sLORETA (C), and the proposed method (D)}
+\label{fig:real_comp}
+\end{figure}
+
+In figure \ref{fig:real_comp}, we can observe the cortical activations: the estimated magnitudes of the distributed dipoles superimposed with the subject's MRI.
+% 
+A small number of coronal slices were used to illustrate the 3D extent of the estimations.
+
+Notice that wMNE and MSP suffer from depth weighting as their estimations are concentrated near the cortex, more specifically near the sensors.
+%
+These estimations are also quite compact in space, which is a positive quality.
+
+On the other hand, sLORETA is spread throughout the whole volume, making it difficult to judge whether it is sensible to the depth of the sources.
+
+The proposed method behaves much like sLORETA.
+%
+Although the spread is similar, we can observe a slightly better focus in space, with regions far from the source possessing lower magnitudes.
+%
+Notice that the region of high amplitude is diffusively aligned with the P-region shown in figure \ref{fig:Preg_real}.
+
+The numerical experiments show that source localization is not heavily correlated with depth for one simple case: a single source patch of relatively small size.
+%
+We observed that all ESI methods under consideration, including the proposed method, reconstruct better sources whose shape is similar to a point source.
+
+The results from real data suggest that the real source patch may be large in size, and its shape is not similar to a point source.
+
+Based on this data, we can infer that wMNE and MSP enforce the minimal-norm assumption by preferring point-like solutions, while the sLORETA assumption of smoothness in space is more appropriate for large sources but leads to overspreading.
+%
+The proposed method's additional information makes it prefer sources located near or at $P_1$, but it also selects sources that extend on the entirety of $P_1$ and beyond.
+
+For future work, we suggest using this assumption in combination with stronger assumptions of minimal-norm. 
+%
+Maybe the concept of P-regions can be combined with methods based on the $\ell_1$ norm.
