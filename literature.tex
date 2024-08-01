@@ -1,4 +1,4 @@
-\chapter{Review Methods for Electrical Source Reconstruction}
+\chapter{REVIEW OF METHODS FOR ELECTRICAL SOURCE RECONSTRUCTION}
 \label{ch:review}
 % \pagestyle{plain}
 
@@ -138,7 +138,13 @@ The MNE estimator admits a closed-form solution as follows,
 \subsection{Weighted Minimal Norm Estimator}
 \label{sec:wMNE}
 
-H\"{a}m\"{a}l\"{a}inen proposed to consider $\nu$ as follows
+This method incorporates the underlying assumption that the contribution of deep dipoles located far from the scalp is scaled by smaller coefficients in the leadfield matrix.
+%
+These deeper dipoles must have larger magnitudes to contribute similarly to shallow dipoles in the generation of EEG.
+%
+The overall effect is that deep dipoles are misrepresented in the MNE estimator and often deleted.
+%
+This assumption can be encoded by considering the following noise term,
 \begin{align}
 \nu &\sim
 \norm\ppar{
@@ -150,12 +156,6 @@ W &=
 \diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
 \label{det:wMNE}
 \end{align}
-
-The underlying assumption is that the contribution of deep dipoles located far from the scalp is scaled by smaller coefficients in the leadfield matrix.
-%
-These deeper dipoles must have larger magnitudes to contribute similarly to shallow dipoles in the generation of EEG.
-%
-The overall effect is that deep dipoles are misrepresented in the MNE estimator and often deleted.
 
 In order to alleviate the effect mentioned above, the depth-weighting matrix $W$ is introduced.
 %
@@ -310,6 +310,7 @@ leaving the MSP estimator as follows,
 \label{est:MSP}
 \end{align}
 
+\begin{comment}
 \subsection{Minimum Current Estimate (MCE)}
 
 Proposed by Uutel, H\"{a}m\"{a}l\"{a}inen, Somerselo.
@@ -335,10 +336,11 @@ It can be solved efficiently using the Alternating Direction Method of Multiplie
 A thorough description of the ADMM methodology is beyond the scope of this chapter, and the interested reader should refer to the book by Boyd \cite{boyd2011admm}.
 %
 These algorithms are included to compare the results.
+\end{comment}
 
 \subsection{Mixed Norm Estimate (MxNE)}
 
-This algorithm proposed by Gramfort incorporates the assumption that the source patches are sparse in space and smooth in time.
+This algorithm, proposed by Gramfort \cite{gramfort2012mixed}, incorporates the assumption that the source patches are sparse in space and smooth in time.
 %Gramfort, M. Kowalski, and M. Hämäläinen, “Mixed-norm estimates for the M/EEG inverse problem using accelerated gradient methods,” Phys Med Biol., vol. 57, no. 7, pp. 1937–1961, 2012.
 %
 This assumption is enforced by solving the following optimization problem.
@@ -355,7 +357,9 @@ In general, the bi-level $\ell_{p,q}$ norm is defined as
 \ppar{\sum_{m=1}^M \ppar{ \sum_{n=1}^N \abss{A(m,n)}^p }^{q/p}}^{1/q}
 \end{equation}
 
-The MxNE estimator does not admit a closed-form solution but can be computed using ADMM or similar algorithms.
+The MxNE estimator does not admit a closed-form solution but can be computed using the Alternating Direction Method of Multipliers (ADMM) or similar algorithms.
+%
+A thorough description of ADMM is beyond the scope of this chapter, and the interested reader should refer to the book by Boyd \cite{boyd2011admm}.
 
 \begin{comment}
 \subsection{SISSY}

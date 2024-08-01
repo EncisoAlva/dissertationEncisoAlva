@@ -1,7 +1,85 @@
 \chapter{INTRODUCTION}
 \label{ch:intro}
 
+One hundred years after its invention, the Electroencephalogram (EEG) is a popular tool for studying the physiological substrate of behavioral phenomena.
+%
+The study of brain electrophysiology has led to a rather large corpus of electrical signals that are known to be related to normal and pathological states.
+%
+For example, the interested reader may refer to the book from Niedermeyer \cite{niedermeyer2011niedermeyer}.
+
+In light of this legacy, an important task for modern Neuroscience is to determine the location of electrical activity of neural origin inside the brain. 
+%
+For instance, we may take a set of EEG recordings known to be related to a specific cognitive task and then ask which brain region is responsible for creating such electrical activity.
+%
+This task is known as electrical source localization or electrical source reconstruction.
+
+From this vague definition, the task is ill-posed (in the sense of Hadamard) and impossible to achieve without further information/assumptions.
+
+Electrical Source Imaging is a framework for source reconstruction. Its base model reconstructs a group of dipoles whose electric field is equivalent to that of the neurons.
+%
+ESI methods are agnostic to the number or extension of electrical sources and require finding a large number of parameters from a linear system.
+
+ESI methods have been used extensively in the literature to study pathological conditions.
+%
+Asadzadeh et al. report 41 different ESI algorithms described between 1970 and June 2019, most of them used to study a clinical condition.
+
+We explore some of these ESI methods, along with their underlying assumptions and related algorithms.
+%
+Our objective is to incorporate a particular set of assumptions into the ESI model and derive an ESI method optimized for those assumptions.
+
+The main focus of this work is the usability of the ESI methods in clinical settings.
+%
+All the methods described in this work are available for public use in the GitHub repository of the author at 
+%\url{https://github.com/EncisoAlva/Region-Priors}{github.com/EncisoAlva/Region-Priors}.
+https://github.com/EncisoAlva/Region-Priors.
+%
+These methods are implemented in a format compatible with the Brainstorm toolbox \cite{brainstorm}, making it possible for non-technical users to incorporate them into a data analysis pipeline without writing code.
+
 \section{Contents and Organization}
 
-Chapter \ref{ch:forward} shows the derivation for the forward model of Electrical Source Imaging.
+Chapter \ref{ch:forward} is dedicated to deriving the Forward Problem in ESI from physical principles.
 %
+At the end of the chapter, it is established that the following equation governs the ESI,
+\begin{equation*}
+    \Y = \G \SA +\varepsilon
+\end{equation*}
+with $\Y\in \R^{M\times T}$ encoding the measurements from $M$ point electrodes, $\SA \in \R^{N\times T}$ encoding the electrical activity of $N$ dipoles whose electrical field is equivalent to that of the neurons in the brain, $\G \in \R^{M\times N}$ is a mixing operator, and $\varepsilon \in \R^{M\times N}$ encodes some noise.
+%
+In this context, it is expected that $M\ll N$.
+
+The Forward Problem in ESI consists of computing $\G$ from anatomical data; some additional assumptions are necessary.
+%
+%Some commercial software is cited to perform these tasks numerically.
+%
+The derivation presented in chapter \ref{ch:forward} is standard; it can be found in the paper by Hallez et al. \cite{hallez2007review} or the book by Nunez and Srinivasan \cite{nunez2006electric}.
+
+The objective of chapter \ref{ch:forward} is to present the assumptions required for the model to work.
+%
+Understanding the derivation of the realistic 4-sphere model, widely used in the literature, should be sufficient to understand the realistic 2-sphere model used in chapter \ref{ch:new_model}.
+
+%Chapter \ref{ch:forward} shows the derivation for the forward model of Electrical Source Imaging.
+%
+%At some point, cite \cite{grech2008review}.
+
+Chapter \ref{ch:review} presents a basic review of the literature on ESI methods, parameter tuning, and performance evaluation of ESI methods.
+
+%Despite being relatively small, the selection of algorithms is discussed orderly
+
+This chapter presents some assumptions that have been incorporated into the ESI model, leading to algorithms with improved efficiency.
+%
+Some of these ideas will be used to construct a novel method reflecting specific assumptions.
+
+The parameter tuning and performance metrics methods will also be used in chapters \ref{ch:numeric} and \ref{ch:new_model}.
+
+Chapter \ref{ch:numeric} describes a protocol for creating synthetic data and explores some characteristics induced into the resulting dataset.
+
+Chapter \ref{ch:new_model} describes a novel ESI method based on anatomical data provided by observed symptoms.
+
+The model is derived from the assumptions, and we propose a way to implement it efficiently.
+%
+This should prove that the proposed method isn't more computationally expensive than popular fast methods, such as sLORETA.
+
+The proposed method is later used on a real dataset from an induced stroke in an animal model.
+%
+The characteristics of the real data are the motivation of the model assumptions.
+
