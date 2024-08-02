@@ -15,6 +15,34 @@
 
 \usepackage{caption}
 
+% packages
+\usepackage{mdframed}
+
+%for links
+%\usepackage{hyperref}
+
+% for units
+\usepackage{siunitx}
+
+% for the vector on ones
+\usepackage{bbm}
+
+% to get the units correctly for printing
+%\usepackage{layouts}
+
+% for commenting multiple lines efficiently
+\usepackage{comment}
+
+% for fancy tables
+\usepackage{booktabs}
+
+%\usepackage{esint}
+
+%\usepackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \title{New Methods in Electrical Source Imaging Based on EEG and Post-Mortem Pathology Data}
 \date{August 7, 2024}
 \author{Julio Cesar Enciso-Alva}
@@ -22,19 +50,6 @@
 
 \newcommand{\bras}[1]{\left\langle #1 \right\rangle}
 \newcommand{\pars}[1]{\left( #1 \right)}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage{bbm}
-\usepackage{amsmath,amsfonts,amssymb}
-\usepackage{mathtools}
-
-\usepackage{hyperref}
-
-\usepackage{bm}
-
-\usepackage{esint}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,10 +114,6 @@
 \tableofcontents
 \end{frame}
 }
-
-\begin{frame}{A}
-
-\end{frame}
 
 {
 %\metroset{background=dark}
@@ -178,7 +189,7 @@ From equations \eqref{eq:curr_density}, \eqref{eq:elec_field} and \eqref{eq:pot_
 -I \delta\ppar{\rr-\rr_+} + I \delta\ppar{\rr-\rr_-}
 \label{eq:green}
 \end{equation}
-In this work equation \eqref{eq:green} is simplified by assuming 
+In this work, equation \eqref{eq:green} is simplified by assuming 
 all tissues are isotropic, so $\sigma(\rr)\propto \id$.
 
 Equation \eqref{eq:green} is solved 
@@ -191,7 +202,7 @@ From the other side, $\rr_\pm$ must be set for the locations of each dipole on t
 
 \begin{frame}{Electrical Source Imaging Framework}
 Equation \eqref{eq:pot_field} must be solved within the whole head volume, which is partitioned into multiple coupled volumes with simplified conductive properties.
-Furthermore, in this work, the isotropic case is considered, so 
+Furthermore, in this work, the isotropic case is considered so 
 $\sigma(\rr) \propto \id$.
 
 These volumes are typically obtained from an anatomical MRI of the subject or from a template matched to age and gender.
@@ -545,6 +556,10 @@ Some of the parameters extracted include:
 \section{Numerical Experiments}
 }
 
+\begin{frame}{A}
+
+\end{frame}
+
 {
 %\metroset{background=dark}
 \section{Proposed Model}
@@ -571,7 +586,7 @@ to identify tissues damaged by hypoxia. This information is referred to as \aler
 \begin{frame}{Proposed Work}
 The proposed innovation is to use the information from {symptoms} to enhance the results of ESI.
 %
-A posterior analysis of the results of this ESI may be used to aid the identification of the damaged zone as it evolves through time.
+A posterior analysis of the results of this ESI may help identify the damaged zone as it evolves over time.
 
 This new model considers two phases:
 \begin{enumerate}
@@ -600,7 +615,7 @@ where
 \begin{itemize}
 \item $\Y \in \R^{M \times T}$: EEG measurements.
 \item $\J \in \R^{3N \times T}$: Dipole magnitudes, 3 dipoles per grid point.
-\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on  nested media.
+\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on nested media.
 \item $\varepsilon\in \R^{M\times T}$: Additive noise at the sensors.
 \end{itemize}
 \end{frame}
@@ -821,7 +836,7 @@ So that
 &=
     \argmin_{\U, \N }\, F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1}
 \end{align*}
-Notice that the function is convex in both $\U$ and $\N$ and thus it can be minimized iteratively over it's arguments,
+Notice that the function is convex in both $\U$ and $\N$, and thus it can be minimized iteratively over it's arguments,
     \begin{align*}
         \hat{\N}^{(i+1)} &= \argmin_{\N} F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
         \\
@@ -912,7 +927,7 @@ $\frac{\partial}{\partial \lambda} \mathscr{L}_\N = 0$, it arises the conditions
 \N &=
 \G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i)} }
 \end{align*}
-Thus concluding the following
+Thus, concluding the following
 \begin{align*}
 \N^{(i+1)} &=
 \G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i)} }
@@ -941,7 +956,7 @@ For the iterative step, consider the following,
         \\
         \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
     \end{align}
-    These steps have the following closed form
+    These steps have the following closed-form
     \begin{align}
         \hat{\N}^{(i+1)} &=
         \hat{\N}^{(i)}
@@ -958,10 +973,8 @@ For the iterative step, consider the following,
 \begin{frame}{Special cases}
 In the special case with only one region, the proposed model is equivalent to widely known models:
 \begin{itemize}
-\item If the region has no symptoms, 
-then the model reduces to a Tikhonov penalization.
-\item If the region has symptoms,
-then the model reduces to sLORETA.
+\item If the region has no symptoms, the model reduces to a Tikhonov penalization.
+\item If the region has symptoms, the model reduces to sLORETA.
 \end{itemize}
 \end{frame}
 
@@ -972,7 +985,7 @@ then the model reduces to sLORETA.
 }
 
 \begin{frame}{Numerical experiments}
-Synthetic data is simulated with 1 source at a known location at different SNR levels. 
+Synthetic data is simulated with one source at a known location at different SNR levels. 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./img_oldbeamer/protocol1}
@@ -1002,7 +1015,7 @@ Left to right: Classic Tikhonov, sLORETA, proposed method
 \end{frame}
 
 \begin{frame}{Future work}
-The proposed new model is driven by the following equations
+The following equations drive the proposed new model
 \begin{align}
     \Y &= \G \J + \varepsilon \\
     \J_t &=  L_{S_t} \U_t + \N_t
