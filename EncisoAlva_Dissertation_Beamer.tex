@@ -80,6 +80,17 @@
 
 \begin{document}
 
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
 {
 %\metroset{background=dark}
 \maketitle
@@ -88,6 +99,10 @@
 \tableofcontents
 \end{frame}
 }
+
+\begin{frame}{A}
+
+\end{frame}
 
 {
 %\metroset{background=dark}
@@ -328,7 +343,7 @@ This problem is solved numerically either via Boundary Element Method (BEM) with
 
 {
 %\metroset{background=dark}
-\subsection{Literature Review}
+\section{Literature Review}
 }
 
 \begin{frame}{Previous Methods}
@@ -527,7 +542,12 @@ Some of the parameters extracted include:
 
 {
 %\metroset{background=dark}
-\section[Model]{Model description}
+\section{Numerical Experiments}
+}
+
+{
+%\metroset{background=dark}
+\section{Proposed Model}
 }
 
 \begin{frame}{Dataset Framework}
@@ -948,7 +968,7 @@ then the model reduces to sLORETA.
 
 {
 %\metroset{background=dark}
-\section{Numerical Experiments}
+\subsection{Numerical Experiments}
 }
 
 \begin{frame}{Numerical experiments}
@@ -970,7 +990,7 @@ Left to right: Classic Tikhonov, sLORETA, proposed method
 
 {
 %\metroset{background=dark}
-\section{Future Work}
+\subsection{Future Work}
 }
 
 \begin{frame}{Future work}
