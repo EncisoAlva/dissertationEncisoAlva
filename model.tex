@@ -5,7 +5,7 @@
 
 When considering using more than one data modality for analysis, there are many ways to combine them. 
 %
-The asymmetric multi-modal data analysis paradigm consists of selecting a tool designed for one data modality and then incorporating information from all the other data modalities into the analysis.
+The asymmetric multi-modal data analysis paradigm consists of selecting a tool designed for one data modality and incorporating information from all the other data modalities into the analysis.
 %
 This paradigm fits the purpose of performing the Electronic Source Imaging while incorporating information from additional data modalities.
 
@@ -254,7 +254,7 @@ For robustness and to ensure that the resulting matrices are invertible, we prop
     \PA(:,k)\, \PA(:,k)^T
     } \G^T + \rho \id_M }^{-1}
 \end{align}
-where $\rho>0$ is a regularization parameter which must be determined using any of the heuristics defined in Chapter \ref{ch:review}.
+where $\rho>0$ is a regularization parameter that must be determined using any of the heuristics defined in Chapter \ref{ch:review}.
 
 Using $\lambda_\rho$ in equations \eqref{eq:3.13} and \eqref{eq:3.14} lead to the estimators
 \begin{align}
@@ -545,7 +545,7 @@ In order to use the proposed method, one single P-region is constructed for each
     \item Region $P_0$ comprises all dipoles not in $P_1$.
 \end{enumerate}
 
-The use of one single P-region is a natural selection since only one connected source patch is considered.
+The use of one single P-region is a natural selection since only one connected source patch was considered.
 %
 Model misspecification is not explored.
 
@@ -589,7 +589,7 @@ AP    &       &        &        & -0.108 \\
 The results from these numerical experiments are collected in the
 figures \ref{fig:results1_P}, \ref{fig:deets_P}, and \ref{fig:noise_degradation_P}, as well as in table \ref{tab:corr_P}.
 %
-These figures are clearly extensions of figures
+These figures are extensions of figures
 \ref{fig:results1}, \ref{fig:deets_SISSY}, and \ref{fig:noise_degradation} with additional data.
 %including data using the proposed solver.
 %
@@ -600,16 +600,16 @@ The findings from these observations may be summarised as follows:
     \item The proposed solver outperforms the linear methods in Distance Localization Error but is outperformed by them in Spatial Dispersion.
     \item The proposed method is quite sensible to the shape of the source patch. 
     \item The proposed method seems to outperform all methods, including SISSY, in high-noise conditions, as seen by AUROC and Average Precision.
-    \item For the proposed method, degradation of performance due to increasing noise is unremarkable --when compared with other linear estimators.
+    \item For the proposed method, performance degradation due to increasing noise is unremarkable --when compared with other linear estimators.
 \end{itemize}
 
 Source patches that resemble point sources, such as the exponential profile, are more easily recovered by all methods; the proposed method is no exception.
 %
 Average Precision seems to be particularly sensible to the labels created using different shapes of source patches.
 
-The high performance of the proposed method in the classification metrics is easily explained by the presence of P-regions: the location of the source is already given to some extent, independently of noise.
+The presence of P-regions can explain the proposed method's high performance in the classification metrics: the location of the source is already given, to some extent, independently of noise.
 %
-In other words, the additional information gives a heads-up in the creation of estimated labels.
+In other words, the additional information gives a hot start in creating estimated labels.
 
 The proposed method's advantages seem marginal; they stay within the expected values for linear estimators.
 
@@ -623,7 +623,7 @@ The proposed method's advantages seem marginal; they stay within the expected va
 
 \subsubsection{Forward Model}
 
-For this set of synthetic data, we consider a young male from the species \textit{Sus scrofa}: Yucatan minipig.
+We consider a young male from the species \textit{Sus scrofa}: Yucatan minipig for this synthetic dataset.
 %
 This selection follows from the real data used in the next subsection in preparation for it.
 
@@ -633,9 +633,9 @@ The skull-stripped MRI was segmented using
 %the Freesurfer software; the specific methods used can be traced to the paper by Segone et al. \cite{spf2007}.
 the CAT12 software \cite{gaser2022cat}.
 %
-We used the provided skull-tripped MRI to accommodate for the anatomical differences with respect to human subjects.
+We used the provided skull-tripped MRI to accommodate the anatomical differences concerning human subjects.
 %
-Later, the cortex surface was reconstructed, as well as its envelope; both surfaces are displayed in figure \ref{fig:surfaces_pig}.
+Later, the cortex surface and its envelope were reconstructed; both surfaces are displayed in figure \ref{fig:surfaces_pig}.
 
 \begin{figure}
 \centering
@@ -691,7 +691,7 @@ As for the other datasets, in table \ref{tab:corr_pig}, we have confirmation tha
 %
 None of the variables is significantly correlated with the depth of the source patch.
 
-For this particular dataset, we can observe that the performance degradation due to increased noise is not very aggressive.
+For this particular dataset, the performance degradation due to increased noise is not very aggressive.
 %
 This can be explained by the smaller brain volume, which makes the source patches relatively bigger.
 
@@ -743,7 +743,7 @@ In summary, a stroke is the obstruction of a vein or artery in the brain, which 
 %
 The brain regions affected by hypoxia (lack of oxygen at a cellular level) are called the Ischemic Penumbra.
 
-For ease of notation, this procedure is referred to as the induced lesion.
+This procedure is referred to as the induced lesion for ease of notation.
 
 \subsection{Pathology Data}
 
@@ -781,13 +781,13 @@ See figure \ref{fig:Preg_real} for a guide to this process.
 %
 %The selection of one single P-region follows the observed data.
 %
-Although the model is capable of considering multiple P-regions, only one region is used for this dataset based on the observed data.
+Although the model can consider multiple P-regions, based on the observed data, only one region is used for this dataset.
 
 \subsection{Results}
 
 After using the TCC data to construct the P-regions, the proposed method was used over recordings from the subject after the induced lesion.
 %
-Additionally, other ESI methods (wMNE, MSP, and sLORETA) were used on the same dataset for comparison.
+Other ESI methods (wMNE, MSP, and sLORETA) were also tested on the same dataset for comparison.
 
 Here, we show an image from the reconstruction at $t=78.507$ s after the lesion was performed.
 %
@@ -798,7 +798,7 @@ However, this specific point in time is not of particular interest; it is merely
 \begin{figure}
 \centering
 \includegraphics[width=0.9\linewidth]{./img_dev2/ECOG_All_sub17diss_diss1}
-\caption{Recordings from surface electrodes. Highlighted is the point in time considered for figure \ref{fig:real_comp}.
+\caption{Recordings from surface electrodes. The point in time used for figure \ref{fig:real_comp} is highlighted.
 Time is measured after the induced lesion}
 \label{fig:real_ecog}
 \end{figure}
@@ -814,11 +814,11 @@ Results were obtained using various ESI methods: wMNE (A), MSP (B), sLORETA (C),
 
 In figure \ref{fig:real_comp}, we can observe the cortical activations: the estimated magnitudes of the distributed dipoles superimposed with the subject's MRI.
 % 
-A small number of coronal slices were used to illustrate the 3D extent of the estimations.
+A few coronal slices were used to illustrate the 3D extent of the estimations.
 
-Notice that wMNE and MSP suffer from depth weighting as their estimations are concentrated near the cortex, more specifically near the sensors.
+Notice that wMNE and MSP suffer from depth weighting as their estimations are concentrated near the cortex, especially near the sensors.
 %
-These estimations are also quite compact in space, which is a positive quality.
+These estimations are also relatively compact in space, which is a positive quality.
 
 On the other hand, sLORETA is spread throughout the whole volume, making it difficult to judge whether it is sensible to the depth of the sources.
 
@@ -826,7 +826,7 @@ The proposed method behaves much like sLORETA.
 %
 Although the spread is similar, we can observe a slightly better focus in space, with regions far from the source possessing lower magnitudes.
 %
-Notice that the region of high amplitude is diffusively aligned with the P-region shown in figure \ref{fig:Preg_real}.
+Notice that the high amplitude region is diffusively aligned with the P-region shown in figure \ref{fig:Preg_real}.
 
 The numerical experiments show that source localization is not heavily correlated with depth for one simple case: a single source patch of relatively small size.
 %
@@ -834,7 +834,7 @@ We observed that all ESI methods under consideration, including the proposed met
 
 The results from real data suggest that the real source patch may be large in size, and its shape is not similar to a point source.
 
-Based on this data, we can infer that wMNE and MSP enforce the minimal-norm assumption by preferring point-like solutions, while the sLORETA assumption of smoothness in space is more appropriate for large sources but leads to overspreading.
+Based on this data, we can infer that wMNE and MSP enforce the minimal-norm assumption by preferring point-like solutions. In contrast, the sLORETA assumption of smoothness in space is more appropriate for large sources but leads to overspreading.
 %
 The proposed method's additional information makes it prefer sources located near or at $P_1$, but it also selects sources that extend on the entirety of $P_1$ and beyond.
 

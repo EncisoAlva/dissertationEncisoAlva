@@ -115,9 +115,9 @@ For illustrative purposes, four different options for $f$ are considered:
 
 %The selection of these functions follows a survey of the literature.
 %
-Apart from point sources, source patches created using $f_\text{sq}$ are fairly common; their sharp edges facilitate determining the size of the source patch without ambiguity.
+Apart from point sources, source patches created using $f_\text{sq}$ are relatively common; their sharp edges facilitate determining the size of the source patch without ambiguity.
 %
-Some other papers have used $f_\text{Gauss}$ to obtain source patches that are smooth in space. 
+Some other papers have used $f_\text{Gauss}$ to obtain smooth source patches in space. 
 
 Functions $f_\text{exp}$ and $f_\text{pol}$ are introduced here to produce source patches with intermediate properties.
 %
@@ -164,7 +164,7 @@ With a prescribed SNR value, the parameters $\sigma_m$ are selected as follows
 \spar{\G\, \SA}(m)
 \end{equation}
 
-Based on informal observations, we consider that an SNR level of 20 dB is a low-noise condition.
+Based on informal observations, we consider an SNR level of 20 dB a low-noise condition.
 %
 Notice that the condition of lack of noise is attached to $\sigma_m = 0$ and $\text{SNR} = \infty$.
 
@@ -179,7 +179,7 @@ These algorithms were selected due to their presence in the literature and becau
 
 Notice that only one $\ell_1$-norm-based method is accounted for.
 %
-Although it would be optimal to consider many more methods, the large number of trials reduced the number of methods that can be effectively used.
+Although it would be optimal to consider many more methods, the large number of trials reduced the number of methods that can be effectively compared.
 %
 The priority of this work is the ESI method presented in Chapter \ref{ch:new_model}.
 
@@ -193,17 +193,17 @@ The priority of this work is the ESI method presented in Chapter \ref{ch:new_mod
 
 The solutions produced by these methods, referred to as `solvers' in the figures, are evaluated using the quantities described in Chapter \ref{ch:review}.
 %
-Some of these results are displayed in Figure \ref{fig:results1}.
+Figure \ref{fig:results1} displays some of these results.
 
 Before assessing the results, it is worth reviewing the assumption of depth weighting: dipoles closer to the cortex tend to be over-represented on the minimal-norm estimates.
 %
-In previous sections we described some mechanisms to alleviate this effect.
+In previous sections, we described some mechanisms that could alleviate this effect.
 %
 It is natural to verify whether those mechanisms work or, on the contrary, whether an estimate's performance depends on the depth of the original source patch.
 
-In table \ref{tab:corr}, we can see the Pearson correlation of the performance metrics.
+Table \ref{tab:corr} shows the Pearson correlation of the performance metrics.
 %
-We can observe that all the metrics seem to be correlated with each other, but none of them is correlated to the depth of the source patch.
+We can observe that all the metrics seem to be correlated with each other, but none of them correlate with the depth of the source patch.
 
 \begin{table}[]
 \centering
@@ -211,9 +211,9 @@ We can observe that all the metrics seem to be correlated with each other, but n
 \toprule
       & SD    & AUROC & AP    & Depth  \\
 \midrule
-DLE   & 0.403 & -0.525 & 0.036  & -0.049 \\
-SD    &       & -0.586 & -0.464 & 0.128  \\
-AUROC &       &        & 0.524  & -0.114 \\
+DLE   & 0.403 & -0.525 & \phantom{-}0.036  & -0.049 \\
+SD    &       & -0.586 & -0.464 & \phantom{-}0.128  \\
+AUROC &       &        & \phantom{-}0.524  & -0.114 \\
 AP    &       &        &        & -0.094 \\
 \bottomrule
 \end{tabular}
@@ -223,17 +223,17 @@ AP    &       &        &        & -0.094 \\
 
 \subsection{Effect of Shape of Source Patch}
 
-The wide variability observed in the results is affected by a large group of factors.
+A large group of factors affects the wide variability observed in the results.
 %
 For instance, figure \ref{fig:deets_SISSY} shows the results for only the SYSSY solver.
 %
-We can observe that some shapes of source patches are recovered with more accuracy than others.
+We can observe that some source patch shapes are recovered more accurately than others.
 %
 For a reference of the shapes of source patches used, see figure \ref{fig:exaple_true}.
 %
 %Average Precision, which is more robust to class imbalance than the Area Under the Receiver-Operator Curve (AUROC), shows a large variability for sources at a depth of approx 20 mm; this is due to source patches placed at the brain sulci, whose geometry is not parallel to the head.
 
-This effect was to be expected since the assumption of minimal norm tends to favor estimations with few high-norm dipoles and many low-norm dipoles.
+This effect was expected since the assumption of minimal norm tends to favor estimations with few high-norm dipoles and many low-norm dipoles.
 %
 In other words, minimal-norm estimates tend to resemble point sources; if the original source resembled a point source, then the reconstruction was accurate.
 

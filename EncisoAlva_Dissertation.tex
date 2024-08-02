@@ -77,6 +77,9 @@ style=ieee,
 sorting=nyt]{biblatex}
 \addbibresource{refs.bib}
 
+% not sure what this does, but required by biblatex
+\usepackage{csquotes}
+
 % Sample bibliography materials
 % Entries found here: http://ctan.math.utah.edu/ctan/tex-archive/macros/latex/contrib/biblatex/bibtex/bib/biblatex/biblatex-examples.bib
 %\usepackage{biblatex}
@@ -96,10 +99,10 @@ sorting=nyt]{biblatex}
        % Always check valid defense dates
        % See Graduation Deadlines on the site of the UTA Registrar
        % Spring 2020 Deadlines: defense, May 1; dissertation, May 8.
-       \defensedate{August}
+       \defensedate{August 7, 2024}
        \author{Julio Cesar Enciso-Alva}
        % End with "{}{}" if only 4 committee members; end with "{}" if only 5 committee members, i.e., delete text within brackets but keep brackets
-       \committee{Jianzhong Su, PhD}{MemberA}{MemberB}{MemberC}{MemberD}{}
+       \committee{Jianzhong Su, PhD}{Hristo Kojouharov}{Ren-Cang Li}{Li Wang}{}{}
        \title{New Methods in Electrical Source Imaging Based on EEG and Post-Mortem Pathology Data}
 
 
@@ -116,10 +119,28 @@ sorting=nyt]{biblatex}
 
          \copyrightpage
 
+% If submitting electronically, the signature page should not be included.
+% You should then comment out the line that produces the signature page and
+% move the title page up here so that it appears first.
+% added by Darin Brezeale, Fri Jan 11 10:29:12 CST 2008
+%       \signaturepageMs
+        \signaturepagePhD
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%  Dedication page  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
 
+	\vspace*{1.0in}
+	\begin{center}
+To my brother E. Ricardo, my mother Mar\'ia Guadalupe, and my late father Nicol\'as.
+
+Despite the harsh times, we stay afloat and continue.
+%
+This is the way.
+	\end{center}
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%  acknowledgements  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

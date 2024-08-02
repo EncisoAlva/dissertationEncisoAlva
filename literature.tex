@@ -21,7 +21,7 @@ In chapter \ref{ch:forward}, it was discussed that if the orientation is known, 
 %
 Since the cases of known and unknown dipole orientations don't significantly change the model formulation, they will be treated as a single model whenever possible.
 
-Within the context of Electrical Source Reconstruction, the computation of the leadfield matrix is referred to as the forward problem.
+Within the context of Electrical Source Reconstruction, the computation of the leadfield matrix is referred to as the Forward Problem.
 %
 This computation implies a large number of steps: identification of tissues from anatomical MRI or similar, construction of triangulated surfaces representing anatomical regions of interest (which may be simplified), setup of several PDEs within the anatomical regions as geometric domain, and the numerical solution of said equations by either BEM or FEM (or a different method).
 
@@ -49,7 +49,7 @@ with $\nnorm{A}_F$ the Frobenius norm of $A\in \R^{M\times N}$, defined as
 \end{equation}
 
 The expression in \eqref{est:naive} represents
-an ill-posed problem due to not having a unique solution and changing significantly with small changes of the parameters.
+an ill-posed problem due to (1) not having a unique solution and (2) changing significantly with small changes in the parameters.
 %
 The first statement is straightforward since we assumed $M\ll N$.
 %
@@ -124,7 +124,7 @@ Since the MAP estimator is obtained by minimizing the norm of $\SA$ (in particul
 %
 This designation is ambiguous since many other estimators depend on minimizing some norm of the sources; thus, `minimal-norm estimator' refers to a family of estimators. 
 %
-This particular estimator will be referred to simply as MNE in this work to avoid confusion.
+To avoid confusion, this particular estimator will be referred to simply as MNE in this work.
 
 The MNE estimator admits a closed-form solution as follows,
 \begin{equation}
@@ -138,7 +138,7 @@ The MNE estimator admits a closed-form solution as follows,
 \subsection{Weighted Minimal Norm Estimator}
 \label{sec:wMNE}
 
-This method incorporates the underlying assumption that the contribution of deep dipoles located far from the scalp is scaled by smaller coefficients in the leadfield matrix.
+This method incorporates the assumption that smaller coefficients in the leadfield matrix scale the contribution of deep dipoles located far from the scalp.
 %
 These deeper dipoles must have larger magnitudes to contribute similarly to shallow dipoles in the generation of EEG.
 %
@@ -341,7 +341,7 @@ These algorithms are included to compare the results.
 \subsection{Mixed Norm Estimate (MxNE)}
 
 This algorithm, proposed by Gramfort \cite{gramfort2012mixed}, incorporates the assumption that the source patches are sparse in space and smooth in time.
-%Gramfort, M. Kowalski, and M. Hämäläinen, “Mixed-norm estimates for the M/EEG inverse problem using accelerated gradient methods,” Phys Med Biol., vol. 57, no. 7, pp. 1937–1961, 2012.
+%Gramfort, M. Kowalski, and M. Hämäläinen, "Mixed-norm estimates for the M/EEG inverse problem using accelerated gradient methods," Phys Med Biol., vol. 57, no. 7, pp. 1937–1961, 2012.
 %
 This assumption is enforced by solving the following optimization problem.
 \begin{align}
@@ -421,7 +421,7 @@ To do that, define the quantities
 
 The L-curve denominations come from the graph of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which resembles the letter `L' in some cases.
 %
-This graph is typically displayed in log-log scale, i.e. the parametric curve $\ppar{\log\ppar{\rho(\lambda)}, \log\ppar{\eta(\lambda)} }$.
+This graph is typically displayed in log-log scale, i.e., the parametric curve $\ppar{\log\ppar{\rho(\lambda)}, \log\ppar{\eta(\lambda)} }$.
 %
 %stand from a log-log plot of the parametric curve $\ppar{\rho(\lambda), \eta(\lambda) }$, which has a characteristic appearance.
 
@@ -431,9 +431,9 @@ Look at the figure \ref{fig:tuning} for visual reference.
 
 It is important to mention that the selection of parameters using the L-curve criterion depends on visual perception, and it may be affected by the precision with which the curve is constructed.
 %
-Without prior knowledge, $\eta$ and $\rho$ shall be computed for a number of potential values of $\lambda$.
+Without prior knowledge, $\eta$ and $\rho$ shall be computed for several potential values of $\lambda$.
 %
-Exploring the obtained parametric curve visually allows us to better identify the range where the optimal values may be found.
+Exploring the obtained parametric curve visually allows us to identify better the range where the optimal values may be found.
 
 %The heuristic from this method is to select the value of $\lambda$ that leads to the closest point to the curving point in the plotted curve.
 
@@ -588,11 +588,11 @@ Point sources are easy to evaluate in the forward model: we only need to select 
 
 The location of a point source indexed by $n^*$ is $\rr_{n^*}$, a very straightforward definition.
 %
-On the other side, there is not a single unified definition for more complicated source distributions, including multiple source patches.
+On the other hand, there is no single unified definition for more complicated source distributions, including multiple source patches.
 
 %There is no single definition for the location of the source in the case of multiple extended sources.
 %
-%In the case of synthetic data with protocols similar to that of the next section, we use the `seed' node as the center of each source patch.
+%In synthetic data with protocols similar to those of the next section, we use the `seed' node as the center of each source patch.
 %
 %It is also possible to use the dipoles with a maximal magnitude or the centers of mass with respect to the dipole magnitude.
 %
@@ -633,7 +633,7 @@ On the other side, there is not a single unified definition for more complicated
 %In this work, for the sake of comparability,
 %
 %%For evaluation purposes, 
-%we employ the definition proposed by H\"{a}m\"{a}l\"{a}inen []; this definition considers one single measurement in time and multiple disconnected source patches, each one created from a `seed dipole'. 
+%we employ the definition proposed by H\ "{a}m\" {a}l\" {a}inen []; this definition considers one single measurement in time and multiple disconnected source patches, each one created from a `seed dipole'. 
 %
 %Informally, a seed dipole is a dipole around which the source patch is constructed.
 
@@ -659,7 +659,7 @@ In the case of estimated sources, the role of seed dipoles can be fulfilled by l
 
 Let be $k_1^*, k_2^*, \dots, k_{P} \in \sset{1, 2, \dots, N}$ the indexes of the seed dipoles.
 %
-Formally, the $p$-th source patch, $\mathcal{I}_p$, is defined as the set of dipoles that have significant activity and are closer to the $p$-th seed dipole, $k_p^*$, than to the other seed dipoles.
+Formally, the $p$-th source patch, $\mathcal{I}_p$, is defined as the set of dipoles that have significant activity and are closer to the $p$-th seed dipole, $k_p^*$ than to the other seed dipoles.
 %
 %In other words,
 \begin{equation}
@@ -677,7 +677,7 @@ where $\alpha\in [0,1]$ filters sources whose magnitude is very small;
 %
 for instance, we may set $\alpha = 10\%$ as a cutoff for significance.
 
-In the case of estimated dipoles, the number of source patches can be adjusted algorithmically by either joining or breaking other source patches.
+In the case of estimated dipoles, the number of source patches can be adjusted algorithmically by joining or breaking other source patches.
 
 The location of the $p$-th source patch, $\mm_p$, is defined as the center of mass of the dipoles in the source patch with respect to their magnitude,
 \begin{equation}
@@ -693,7 +693,7 @@ On the other side, the definition is trivially extended to the location of an es
 \frac{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2 \rr_n }{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2}
 \end{equation}
 
-This definition is deficient for the case when an ESI method does not recover all source patches, in which the performance is overestimated.
+This definition is deficient when an ESI method does not recover all source patches, in which case the performance is overestimated.
 
 \subsubsection{Other Definitions}
 
@@ -824,7 +824,7 @@ The assumption of active dipoles/regions is modeled by constructing the labels a
 %
 The classical interpretation of the Receiver-Operator Curve requires that we affix the target labels, $\mathcal{R}_\beta$, which can be achieved in the context of ESI by selecting a particular value $\beta = \beta_0 \in [0,1]$.
 %
-See figure \ref{fig:AUROC}.A for a quick example of the creation of the target labels using $\beta_0=0.5$.
+See figure \ref{fig:AUROC}.A for a quick example of creating the target labels using $\beta_0=0.5$.
 
 Other authors, like Molins et al. \cite{molins2008quantification}, proposed to define $\mathcal{R}_\beta$ dynamically, changing with $\mathcal{E}_\beta$ as $\beta$ changes.
 %
@@ -940,11 +940,11 @@ Small $\beta$ $\implies$ labels will be permissive, with very few False Negative
 \end{itemize}
 In general, extreme values of $\beta$ will lead to the endpoints (0,0) and (1,1) of the ROC, and a somewhat smooth trajectory will be observed as $\beta$ increases.
 
-A classifier for which TPR$(\beta)\approx 1$ and FPR$(\beta)\approx 0$ for all $\beta$'s is preferable whenever possible.
+A classifier for which TPR$(\beta)\approx 1$ and FPR$(\beta)\approx 0$ for all $\ beta$'s is preferable whenever possible.
 %
 Visually, this condition means that the ROC is `close to the top.'
 
-This concept is formalized by taking the area under the Area Under the ROC (AUROC), defined as the area inside $[0,1]^2\subset \R^2$ and below the ROC curve.
+This concept is formalized by taking the area under the ROC (AUROC): the area inside $[0,1]^2\subset \R^2$ below the ROC curve.
 %
 In practice, the AUROC can be computed numerically using the trapezoid rule as follows
 \begin{equation}
@@ -959,7 +959,7 @@ with $\beta_i$ the finite number of values that $\beta$ can take.
 %The condition described previously that the ROC must be `close to the top' can be rewritten as 
 %AUROC$\approx 1$ being preferable.
 
-With this concept at hand, we can rewrite the most desirable scenario as that where AUROC $\approx 1$.
+With this definition at hand, we can rewrite the most desirable scenario where AUROC $\approx 1$.
 
 \subsubsection{Local AUROC}
 
@@ -1017,7 +1017,7 @@ $\frac{1}{N} \sum_{n=1}^N \mathcal{R}^{(d)}_{\beta_0} (n) \approx 0.5$ for a sui
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./img_dev/nsCurves4}
-\caption{Effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. To attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.
+\caption{effect of neighborhood radius over the Receiver-Operator Curve and the Precision-Recall Curve. To attenuate the effects of class imbalance on the active/non-active dipoles, a small neighborhood around the source patch center is considered for the construction of the Receiver-Operator Curve and the Precision-Recall Curve, and in turn to compute the AUROC and Average Precision.
 %
 Data for these graphs was obtained from a single run of the protocol for synthetic data described in Chapter \ref{ch:numeric}, while the estimates $\SA_\lambda$ were computed using sLORETA}
 \end{figure}
@@ -1025,10 +1025,10 @@ Data for these graphs was obtained from a single run of the protocol for synthet
 
 \subsection{Average Precision}
 
-A different approach to the class imbalance is to use a different quantity, one with similar properties to AUROC.
+A different approach to class imbalance is using a different quantity with properties similar to AUROC.
 %
 Average Precision, also known as Area Under Precision-Recall Curve, is based on the parametric curve 
-$\ppar{\text{Rec}\ppar{\beta}, \text{Pre}\ppar{\beta}}$, where the Precision (Pre) and Rec (Rec) defined as
+$\ppar{\text{Rec}\ppar{\beta}, \text{Pre}\ppar{\beta}}$, where the Precision (Pre) and Rec (Rec) are defined as
 \begin{align}
 \text{Pre}\ppar{\beta}
 &=
@@ -1055,10 +1055,14 @@ Similar to AUROC, Average Precision can be computed numerically as follows
 
 Average Precision ranges from 0 to 1, with 1 being preferable.
 
-Although the definition of Average Precision is largely similar to that of AUROC, it is different in many aspects.
+Although the definition of Average Precision is very similar to that of AUROC, it is different in many aspects.
 %
-The Precision-Recall Curve may not be monotonic and often displays sharp edges. 
+For example, the Precision-Recall Curve is somewhat decreasing but displays some sharp zigzags. 
+%
+When the recall is approximately 1, the precision is roughly equal to the ratio of elements between classes.
 
-Despite being possible to define a local Average Precision,  in figure \ref{fig:AUROC}, we can observe that it may not be very different from the global Average Precision.
+Similar to AUROC, defining a `local' Average Precision is possible.
+%
+In figure \ref{fig:AUROC}, we can observe that the Precision-Recall Curve is quite similar to its global counterpart, or at least when compared against the local and global ROC.
 %
 Informally, we may observe that Average Precision is more robust to the class imbalance.

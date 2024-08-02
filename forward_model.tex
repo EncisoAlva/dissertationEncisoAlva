@@ -26,7 +26,7 @@ It is important to acknowledge that the EEG may also register events whose origi
 %
 This work does not discuss any methods for dealing with artifacts; the interested reader must refer to specialized manuals, for example, that from Fish and Spehlmann \cite{fisch1999fisch}.
 
-In the absence of artifacts, either biological or instrumental, the EEG measurements are produced exclusively by brain activity.
+In the absence of biological or instrumental artifacts, the EEG measurements are produced exclusively by brain activity.
 %
 The electric potential fields at the EEG scale, often called macro-scale fields, correspond to large groups of neurons that fire simultaneously and have a common physical orientation.
 %
@@ -44,7 +44,7 @@ In this work, we perform ESI under the distributed dipole paradigm: the current 
 
 This paradigm can be justified formally as a discretized multi-pole expansion of order 2 (using dipoles) of the current density field; this approximation is sufficient to explain measurements obtained 1 mm or farther from the electrical sources \cite{nunez2019multi}.
 
-ESI with distributed dipoles aims to produce a representative set of dipoles that will produce an equivalent current density of the real neurons at the EEG scale.
+Within the paradigm of distributed dipoles, ESI's task is to construct a representative set of dipoles that will produce a current density equivalent to that of the real neurons in the brain; the resulting model should operate at the EEG scale.
 %
 This paradigm is considered to be non-parametric in the sense that it is agnostic to the number and extent of the electric sources. 
 %
@@ -52,7 +52,7 @@ Since an area with no discernible activity will produce a group of dipoles with 
 
 When interpreting the results obtained from ESI, one should be aware of the limitations inherited from EEG.
 %
-For example, the lack of synchronization of time and direction of some active neuron patches may prevent them from producing an electric potential that can be measured by the EEG.
+For example, the lack of synchronization of time and direction of some active neuron patches may prevent them from producing an electric potential that the EEG can measure.
 %
 This silent activity can't be measured by ESI methods based on EEG data.
 
@@ -128,7 +128,7 @@ For ease of notation, we select $\dd^-$ and $\dd^+$ so that the dipole position,
 %
 Refer to figure \ref{fig:diagrams1} for a graphical summary of this construction.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 %\includegraphics[width=0.4\linewidth]{./img_dev/nsNeuronDipole}
 \includegraphics{./img/CurrDensField.pdf}
@@ -203,7 +203,7 @@ At the interfaces between media, the boundary conditions are to have continuous 
 
 The continuity of $\sigma(\rr) V(\rr)$ is particularly important on the interfaces between media because the conductivity, $\sigma$, is expected to be homogeneous within each media but to change drastically between different media. 
 
-To make sense of the magnitudes of the discontinuities of the conductivity, $\sigma$, among different media, in table \ref{tab:conductivity} are displayed typical values for the four media described before; data is from Ramon et al \cite{ramon2006influence}. See figure \ref{fig:diagrams2} for a visual reference of these tissues.
+To make sense of the magnitudes of the discontinuities of the conductivity, $\sigma$, among different media, in table \ref{tab:conductivity} are displayed typical values for the four media described before; data is from Ramon et al. \cite{ramon2006influence}. See figure \ref{fig:diagrams2} for a visual reference of these tissues.
 
 \begin{table}[]
 \centering
@@ -218,7 +218,7 @@ Skull Tissue        & 625.00       \\
 Scalp               & 1.74        \\
 \bottomrule
 \end{tabular}
-\caption{Conductivity for different head tissues considered in the Four-sphere model, measured in microsiemens per centimeter. Data from \cite{ramon2006influence}}
+\caption{conductivity for different head tissues considered in the Four-sphere model, measured in microsiemens per centimeter. Data from \cite{ramon2006influence}}
 \label{tab:conductivity}
 \end{table}
 
@@ -339,7 +339,7 @@ which can be written as a matrix equation such as \eqref{eq:model4}.
 The overall effect of assuming unknown orientations are (1) the increase of the number of dipole magnitudes to be determined by a factor of 3, as well as the size of the leadfield matrix, and (2)
 we need to compute the magnitude of these dipoles in order to recover the original interpretation.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 %\includegraphics[width=0.4\linewidth]{./img_dev/OrthDecompOld}
 \includegraphics[scale=1.2]{./img/OrthDecomp}
@@ -409,9 +409,9 @@ subject to the boundary conditions in \eqref{eq:boundary1}.
 
 These equations can be solved numerically using Boundary Element Methods (BEM) or Finite Element Methods.
 %
-A full review of these methods --even in the particular case of ESI-- is beyond the scope of this work, and the interested reader may refer to the review by Hallez \cite{hallez2007review} or that by Vorwerk et al \cite{vorwerk2012comparison}.
+A full review of these methods --even in the particular case of ESI-- is beyond the scope of this work, and the interested reader may refer to the review by Hallez \cite{hallez2007review} or that by Vorwerk et al. \cite{vorwerk2012comparison}.
 
-Needless to say, these methods are implemented in commercially available software such as OpenMEEG \cite{gramfort2010openmeeg}, DUNEuro \cite{schrader2021duneuro}, and MNE Python \cite{GramfortEtAl2013a}.
+These methods are implemented in commercially available software such as OpenMEEG \cite{gramfort2010openmeeg}, DUNEuro \cite{schrader2021duneuro}, and MNE Python \cite{GramfortEtAl2013a}.
 
 In this section, the goal is to describe the identification of the tissue media from an operative standpoint.
 %
@@ -419,13 +419,13 @@ Tissues are often defined from the subject's anatomical data or an appropriately
 
 The anatomical data often originates as the result of T1 or T2 magnetic resonance imaging (MRI) from the subject. 
 %
-Later, the MRI images are segmented: relevant tissues are identified, and triangulated 3D surfaces are constructed from them. 
+Later, the MRI images are segmented: relevant tissues are identified, and triangulated 3D surfaces are constructed. 
 %
-Relevant algorithms for these tasks are available on commercial software such as CAT12 \cite{gaser2022cat} and Fieldtrip \cite{oostenveld2011fieldtrip}.
+Relevant algorithms for these tasks are available on commercial software such as CAT12 \cite{gaser2022cat}, and Fieldtrip \cite{oostenveld2011fieldtrip}.
 
 It is relevant to mention that the Fours Sphere model is not the only option for constructing the leadfield matrix. 
 %
-For instance, the model can be trivially extended to include five media by separating the brain into gray matter and white matter.
+For instance, the model can be trivially extended to include five media by separating the brain into gray and white matter.
 %
 Such division requires a robust algorithm to distinguish between those tissues; since the interface is known to be non-smooth, robustness is a strong requirement.
 
@@ -433,9 +433,9 @@ Such division requires a robust algorithm to distinguish between those tissues; 
 
 Over the previous sections, the locations of the distributed dipoles, $\mathbf{d}_n$, were assumed to be known.
 %
-Two cases were considered: if their orientation, $\mathbf{m}_n$, was assumed to be known or not.
+Two cases were considered: if their orientation, $\mathbf{m}_n$, was either assumed to be known or not.
 
-Formally, the goal of ESI is to gain knowledge from the neural sources of electrical activity, including their location. 
+The goal of ESI is to gain knowledge from the neural sources of electrical activity, including their location. 
 %
 Thus, we shouldn't make assumptions about their location.
 
@@ -447,23 +447,23 @@ In figure \ref{fig:dipoles}, two of these arrangements are displayed: a cubic gr
 %
 The adaptive grid, as implemented on the Brainstorm software \cite{brainstorm}, is constructed following these steps:
 \begin{enumerate}
-    \item Use cortex as initial layer.
-    \item Downsample to locate dipoles with prescribed distance between them.
-    \item Shrink to obtain next layer.
-    \item Repeat until no more layer can be constructed.
+    \item Use cortex as the initial layer.
+    \item Downsample to locate dipoles with a prescribed distance between them.
+    \item Shrink to obtain the next layer.
+    \item Repeat until no more layers can be constructed.
 \end{enumerate}
 %first building multiple surfaces are constructed by shrinking the outer surface (cortex) and setting the dipoles over the obtained surfaced.
 
 Adaptive grids offer some advantages since they are conceptually consistent with depth weighting (see section \ref{sec:wMNE}), and they can be constructed so that the outer layer falls within a certain distance from the cortex.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \includegraphics{./img/Pregions_pic_radial_v2.pdf}
 \caption{Some configurations for distributed dipoles. Constrained dipoles have a known orientation (orthogonal to the cortex surface), while unconstrained dipoles have an unknown orientation.}
 \label{fig:dipoles}
 \end{figure}
 
-In certain scenarios, the assumption of a total lack of information may be replaced by the assumption that the dipoles are located in the cortex and are oriented orthogonally to it.
+In some scenarios, the assumption of a total lack of information may be replaced by the assumption that the dipoles are located in the cortex and are oriented orthogonally to it.
 %
 This is justified by the peculiar geometry of the outer layers of the gray matter, which consist of neuron dendrites orthogonal to the cortex surface.
 %
@@ -475,7 +475,7 @@ Many `higher' cognitive processes are known to occur in the cerebral cortex: spe
 %
 Conversely, we may ignore some deeper brain regions if their associated neural functions are not part of the phenomenon under study.
 
-Many software dedicated to ESI refers to the case when dipoles are orthogonal to the cortex surface as `constrained,' while the other case is `unconstrained.' 
+Many software dedicated to ESI refers to the case when dipoles are orthogonal to the cortex surface as `constrained', while the other case is `unconstrained'. 
 %
 Other setups are possible, yet their discussion is outside the scope of this work.
 
