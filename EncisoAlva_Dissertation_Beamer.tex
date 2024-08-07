@@ -82,14 +82,29 @@
 \maketitle
 
 \begin{frame}%{Overview}
-\tableofcontents[pausesections]
+\tableofcontents[pausesections,hideothersubsections]
 \end{frame}
 }
 
-\addcontentsline{toc}{section}{Foreword}
+%\addcontentsline{toc}{section}{Foreword}
 
-\begin{frame}{Family}
-Picture of the family and Pachuca.
+\begin{frame}{Biographic Statement}
+\begin{itemize}
+\item I was born and raised on Pachuca, a small city on central Mexico.
+\item Studied Applied Math at UAEH (Hidalgo State University).
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./img_dev3/caballeros}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Biographic Statement}
+Hi to my family.
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{./img_dev3/family}
+\end{figure}
 \end{frame}
 
 
@@ -98,64 +113,25 @@ Picture of the family and Pachuca.
 \section{Introduction}
 }
 
-\begin{frame}{Why Electrical Source Imaging}
+\begin{frame}{Introduction}
 \begin{itemize}
 \item Multiple EEG patterns have been found to be related to normal and pathological states \footfullcite{niedermeyer2011niedermeyer}. 
 \item Electrical Source Imaging (ESI) is a framework to locate the neural sources of electric/magnetic activity.
 \item EEG has high resolution in time, low resolution in space. 
 \item ESI is ill-posed, in the sense of Hadamard.
 \end{itemize}
-\begin{figure}
-\centering
-\includegraphics[width=0.6\linewidth]{./img_oldbeamer/sketch03}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.6\linewidth]{./img_oldbeamer/sketch03}
+%\end{figure}
 \end{frame}
 
 
 
-\begin{frame}{What is Electrical Source Imaging}
-%Post-synaptic potentials from neurons produces a small current density field that can be approximated by a dipole.
-
-
-EEG recordings can be modeled by a system in the form 
-\begin{equation}
-\mathbf{Y} = \mathbf{G} \mathbf{S} + \varepsilon
-\end{equation}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.75\linewidth]{./img_oldbeamer/sketch04}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Electrical Source Imaging Framework}
-    The modeling of the dipoles starts with the \alert{current density field}, $K: \R^3 \rightarrow \R^3$, whose divergence is defined as
-    \begin{equation}
-        \nabla \cdot K = \lim_{G \rightarrow 0} \frac{1}{\text{vol}\ppar{G}}
-        \oint_{\partial G} K\, dS
-    \end{equation}
-    In the presence of a single dipole with magnitude $I$, whose source is located at $\rr_{+}$ and whose sink is located at $\rr_{-}$, the divergence of th current density field reduces to
-    \begin{equation}
-        \nabla \cdot K(\rr) = I \delta\ppar{\rr-\rr_+} - I \delta\ppar{\rr-\rr_-}
-        \label{eq:curr_density}
-    \end{equation}
-\end{frame}
 
 \begin{frame}{Previous Results}
 Electrical Source Imaging was used; for example, 
-in
-\cite{dr_pascal}.
-
-\begin{itemize}
-\item Glucose transporter type I deficiency (G1D) causes nutrient-responsive epilepsy
-\item EEG was recorded for 23 hours following the monitoring
-of 6 G1D subjects (ages 2-19)
-\item 81 seizures (2-15 minutes) were analyzed
-\item ESI was performed using sLORETA
-\item ESI results were downsampled in space to the LPA40 anatomical atlas and in time to 20\% segments
-\item From 20\% to 40\% of duration, significant changes of relative power (with respect to baseline) were observed to be significant on
-the sensorimotor cortex and the thalamus.
-\end{itemize}
+to study epilepsy caused by Glucose transporter type I deficiency (G1D) \footfullcite{dr_pascal}.
 \end{frame}
 
 {
@@ -323,7 +299,7 @@ Steps to solve the Forward Problem:
 
 \end{frame}
 
-\begin{frame}{Typical pipelin}
+\begin{frame}{Typical Pipeline for ESI}
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{./img_dev/pipeline}
@@ -333,91 +309,44 @@ Steps to solve the Forward Problem:
 
 {
 %\metroset{background=dark}
-\section{Literature Review}
+\section{Inverse Problem}
 }
 
-\begin{frame}{Previous Methods}
-%EEG source localization is old in the literature. 
-This comparison is focused only on methods based on distributed dipoles. These methods, in general, can be written as
+\begin{frame}{Literature Review}
+Electrical Source Imaging (ESI) consist in estimating $\SA$ from the equation
 \begin{equation}
-    \mathbf{M}^\delta = \mathbf{G} \mathbf{S} + \varepsilon
-    \label{eq:general}
+\Y = \G\, \SA + \varepsilon
 \end{equation}
-%with 
-\begin{itemize}
-    \item[$\mathbf{M}$] Matrix of measurements, with noise
-    \item[$\mathbf{S}$] Matrix of dipole magnitudes
-    \item[$\mathbf{G}$] Leadfield matrix
-    \item[$\varepsilon$] Matrix of additive noise at sensors
-\end{itemize}
+with $\Y\in \R^{M\times T}$ is given, $\G\in \R^{kN\times T}$ is given with $k\in \sset{1,3}$, and $\varepsilon$ is a noise term.\\
 
-Equation \eqref{eq:general} has been used with %$\mathbf{M}$ 
-data from EEG and MEG, and with 
-dipoles on either known or unknown orientations
-\cite{grech2008review}.
-
-\end{frame}
-
-\begin{frame}{Previous Methods}
-Equation \eqref{eq:general} is under-determined and thus doesn't have a unique solution. One common structure is to prioritize the solutions which minimize certain penalty function
-\begin{equation}
-    \hat{\mathbf{S}} = \argmin_{\mathbf{S}}\, \nnorm{\G \mathbf{S}-\mathbf{M}^\delta} + \lambda\, f\ppar{\mathbf{S}}
-    \label{eq:general_min}
-\end{equation}
-where $f$ is the penalty function, and $\lambda$ is a parameter.
-
-\end{frame}
-
-\begin{frame}{Previous Methods}
-    For example, basic Tikhonov regularization considers $f\ppar{\mathbf{S}} = \nnorm{\mathbf{S}}_2^2$.
-\begin{equation}
-    \hat{\mathbf{S}}_{\text{basic}}
-    =
-    \G^T \ppar{\G \G^T + \lambda\, \id}^{-1} \mathbf{M}^\delta
-\end{equation}
-
-A more general Weighted Minimal Norm Estimator (WMNE) is obtained by considering
-$f\ppar{\mathbf{S}} = \nnorm{W\, \mathbf{S}}_2^2$, with $W$ a positive-definite matrix. Then
-\begin{equation}
-    \hat{\mathbf{S}}_{\text{WMNE}}
-    =
-    \G^T \ppar{\G \G^T + \lambda\, W^T W}^{\dagger} \mathbf{M}^\delta
-\end{equation}
-\end{frame}
-
-\begin{frame}{Previous Methods}
-LORETA\cite{loreta}  considers 
-$f\ppar{\mathbf{S}} = \nnorm{Q\,\overline{\G}\, \mathbf{S}}_2^2$, with $Q$ 
-a Laplacian operator and $\overline{\G}$ 
-a diagonal matrix
-defined as
-\begin{align*}
-    \overline{\G}_{i,i} &= \nnorm{\G_{\bullet,i}}_2 \\
-    Q_{i,j} &=
-    \begin{cases}
-        1 &\text{if } i=j \\
-        -\frac{1}{n} &\text{if } i\in N(i) \\
-        0 &\text{otherwise}
-    \end{cases}
-\end{align*}
-with $N(i)$ a neighborhood of $i$ with $n$ grid-points.
+Many methods have been described to accomplish this task.
 %
-\begin{equation}
-    \hat{\mathbf{S}}_{\text{LORETA}}
-    =
-    \ppar{\overline{\G}\, Q^T\, Q\,  \overline{\G}}^{-1} \G^T
-    \spar{\G \ppar{\overline{\G}\, Q^T\, Q\,  \overline{\G}}^{-1} \G^T}^{\dagger} 
-    \mathbf{M}^\delta
-\end{equation}
+Asadzadeh et al. reported 41 different ESI algorithms between 1970 and June 2019, most of which were used to study clinical conditions.
 \end{frame}
 
-\begin{frame}{Previous Methods}
-sLORETA\cite{sloreta}  considers a small variant of the minimization function
+\begin{frame}{Weighted Minimal Norm Estimator (wMNE)}
+Dipoles near the sensors are often over-represented in the inverse solution. The weight $W$ is used to alleviate that.
+\begin{align}
+\hat{\SA}_\text{wMNE} 
+&=
+\G\trans
+\ppar{\G \ppar{W\trans W}\iinv \G\trans + \lambda\, \id_M}\pinv \Y
+\\
+W &=
+\diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
+\end{align}
+\end{frame}
+
+
+\begin{frame}{sLORETA\footfullcite{sloreta}}
+%sLORETA  considers a small variant of the minimization function
 \begin{equation}
-    \hat{\mathbf{S}} = \argmin_{\mathbf{S}}\, \nnorm{\G \mathbf{S}-\mathbf{M}^\delta-c \mathbb{1}} + \lambda\, f\ppar{\mathbf{S}}
+    \hat{\mathbf{S}} = \argmin_{\mathbf{S}}\, \nnorm{\G \mathbf{S}-\mathbf{M}^\delta-c \mathbb{1}} + \lambda\, \nnorm{\mathbf{S}}_2^2
 \end{equation}
-with $f\ppar{\mathbf{S}} = \nnorm{\mathbf{S}}_2^2$ and 
-$\mathbb{1}=\{1\}^{M\times 1}$.
+with $\mathbb{1}=\{1\}^{M\times 1}$.
+If $\Y$ is re-referenced to average, then $c=0$.
+
+
 The solution is given by
 \begin{equation}
     \hat{\mathbf{S}}_{\text{sLORETA}}
@@ -432,476 +361,544 @@ with $H$ an averaging operator constructed as
 
 \end{frame}
 
-\begin{frame}{Previous Methods}
-All the mentioned methods, as well as similar others such as LAURA\cite{LAURA},  FOCUSS\cite{focuss}, among others,
-can be interpreted as WMNEs 
-specific
-weight matrices.
+\begin{frame}{Multivariate Source Prelocalisation (MSP)\footfullcite{mattout2005multivariate}}
+Dipoles near the sensors are often over-represented in the inverse solution. The weight $W$ is used to alleviate that.
+\begin{align}
+\hat{\SA}_\text{MSP} 
+&=
+\G\trans
+\ppar{\G \ppar{W\trans W}\iinv \G\trans + \lambda\, \id_M}\pinv \Y
+\end{align}
 
-In general, for autonomous\footnote{Penalization is independent of time.} WMNEs, the source estimations can be written as a filter of the observations,
+The weight $W$ is obtained by (1) projecting $\G$ into a small number of singular values, obtaining $\bar{\G}$, and then (2) obtaining the correlations of $\bar{\G} \Y$.
+\end{frame}
+
+
+\subsection{Performance Metrics}
+
+\begin{frame}{Performance Metrics: Localization Error}
+The location of an estimated source patch is defined using the center of mass,
 \begin{equation}
-    \hat{\mathbf{S}}
-    =
-    \mathbf{K}\,
-    \mathbf{M}^\delta
+    \hat{\mm}_p = 
+\frac{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2 \rr_n }{\displaystyle \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2}
 \end{equation}
-with $\mathbf{K}$ known as a \alert{Wiener kernel}.
+
+Distance Localisation Error (DLE) is defined as
+\begin{equation}
+\text{DLE} = 
+\frac{1}{P} \sum_{p=1}^P \nnorm{ \mm_p - \hat{\mm}_p }_2
+\label{def:DLE}
+\end{equation}
 \end{frame}
 
-\begin{frame}{Previous Methods}
-Some selections of the penalty function lead to solutions with desirable properties but not closed-form solutions.
+\begin{frame}{Performance Metrics: Spatial Dispersion}
+Proposed by Molins et al \footfullcite{molins2008quantification}, 
+\begin{equation}
+\text{SD}
+=
+\ppar{
+\frac{ \displaystyle
+\sum_{p=1}^P \sum_{n\in \mathcal{I}_p} \nnorm{\hat{\SA}(n)}_2^2\, \nnorm{\rr_n-\mm_p} }{\sum_{n=1}^N \nnorm{\hat{\SA}(n))}_2^2}
+}^{1/2}
+\end{equation}
 
-For example, $f(\mathbf{S}) = \nnorm{\mathbf{S}}_1$ can be solved efficiently \cite{review_sparse}, but the solution can't be written as a Wiener Kernel.
-
-The existence of a Wiener Kernel is desirable when the number of dipoles and time points is particularly large. This is the case for long-term monitoring of spontaneous activity.
+In some sense, Spatial Dispersion (SD) behaves a variance in space.
 \end{frame}
 
+\begin{frame}{Performance Metrics: AUROC and Avg. Precision}
+Area Under Receiver-Operator Curve (AUROC) measures how good is a classifier.
 
+In the context of ESI, the estimated labels are defined as
+\begin{align}
+\mathcal{E}_\beta(n)
+&=
+\begin{cases}
+1, &\text{if }
+\nnorm{\hat{\SA}(n)}_2 \geq \beta \max_{n'}\sset{\nnorm{\hat{\SA}(n')}_2}
+\\
+0, &\text{otherwise}
+\end{cases}
+\end{align}
 
-
-
-{
-%\metroset{background=dark}
-\section{Numerical Experiments}
-}
-
-\begin{frame}{A}
-
-\end{frame}
-
-{
-%\metroset{background=dark}
-\section{Proposed Model}
-}
-
-\begin{frame}{Previous Methods for Multimodal Data}
-One big conceptual challenge for multimodal data integration is to model the interaction of the underlying physical phenomena. 
-%
-Focusing only on unilateral interactions results in asymmetric data integration.
-
-\alert{Asymmetric data fusion} is the extraction of some parameters from one modality, which then are used to further the analysis of the other modality.
-
-Some of the parameters extracted include:
 \begin{itemize}
-    \item Correlation networks
-    \item Statistical Parametric Maps (SPM)
-    \item Hidden activation variables \cite{fire}
+\item AUROC is defined using the parametric curve True-Positive-Rate vs False-Positive Rate.
+\item Average Precision is defined using the parametric curve Recall vs Precision
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Dataset Framework}
-The goal is to study the effects of
-ischemic stroke of the Middle Cerebral Artery in an animal
-model. 
-Said lesion is induced.
-
-Electro Corticogram (ECoG) is placed. Recordings start before the lesion and stop 2 hours after it.
-
-In the post-mortem, the brain is stained with
-triphenyl-tetrazolium (TTC)
-to identify tissues damaged by hypoxia. This information is referred to as \alert{symptoms}.
-
+\begin{frame}{Performance Metrics: AUROC}
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_oldbeamer/sketch01_v2}
+\includegraphics[width=0.8\linewidth]{./img_dev3/auroc1}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Proposed Work}
-The proposed innovation is to use the information from {symptoms} to enhance the results of ESI.
-%
-A posterior analysis of the results of this ESI may help identify the damaged zone as it evolves over time.
+\begin{frame}{Performance Metrics: AUROC}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{./img_dev3/auroc2}
+\end{figure}
+\end{frame}
 
-This new model considers two phases:
+{
+%\metroset{background=dark}
+\section{Proposed Method}
+}
+
+\begin{frame}{Assymetric Multi-modal Data Analysis}
+When dealing with multiple `modalities' of data, A and B, the information from B is incorporated during the analysis of A.
+
+We consider the case where a region, identified using an histochemical test, is known to produce a higher background activity.
+%
+We refer this region to as the P-region.
+
+Now the goal is to incorporate the P-region into the ESI model with the aim of improving the results. 
+\end{frame}
+
+\begin{frame}{Model Assumptions}
+\begin{itemize}
+\item The model equation, $\Y = \G \ppar{\SA + \varepsilon}$, is unchanged. 
+\item We use $\SA \in \R^{N\times 1}$ or $\SA \in \R^{3N\times 1}$ as needed. 
+\item Only one time-point is considered.
+\item P-regions are encoded into the following matrix
+\begin{equation}
+\PA(n,k) = \begin{cases}
+1, &\text{if } n\in P_k \\
+0, &\text{otherwise}.
+\end{cases}
+\end{equation}
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.65\linewidth]{./img/Pregions_pic}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Model Assumptions}
+Sources are independent, but synchronized within each P-region
+\begin{equation}
+\text{Cov}\ppar{\SA\ppar{n_1}, \SA\ppar{n_2}}
+=
+\begin{cases}
+\ppar{\theta_0+\theta_k}, &\text{if } n_1, n_2 \in P_k, k\neq 0 \\
+\theta_0, &\text{if } n_1, n_2 \in P_0 \\
+0, &\text{otherwise}.
+\end{cases}
+\end{equation}
+
+Sources are thus separated into regionally synchronized activity, $\mathbf{R}$, and background activity, $\BA$,
+\begin{equation}
+    {\SA} + \varepsilon = {\BA} + \PA {\RA}
+    = {\BA} + \sum_{k=1}^K \PA(:,k) {\RA}(k)
+\end{equation}
+\end{frame}
+
+\begin{frame}{Model Assumptions}
+Recall, the sources (to be estimated) are decomposed as
+\begin{equation}
+    {\SA} + \varepsilon = {\BA} + \PA {\RA}
+    = {\BA} + \sum_{k=1}^K \PA(:,k) {\RA}(k)
+\end{equation}
+
+In the assumption of Gaussian noise, we have then
+\begin{align}
+    \BA &\sim \norm\ppar{0, \theta \id_N } 
+     \\
+    \RA &\sim \norm\ppar{0, 
+    \spar{\text{diag}\ppar{\theta_1, \theta_2, \dots, \theta_K}} }
+\end{align}
+with $\theta_k \gg \theta_0$ for all $k$.
+\end{frame}
+
+\begin{frame}{Derivation of Estimator}
+We use a Maximum A Posteriori Estimator,
+\begin{align}
+    \hat{\SA} &= 
+    \argmax_{\SA }\, 
+    \phantom{.}
+    \log \ppar{
+    \text{Prob}\ppar{ \Y \given \SA }\,  \text{Prob}\ppar{ \SA } }.
+\end{align}
+
+This lead to the following optimization problem,
+\begin{align}
+    \sset{ \hat{\BA}, \hat{\RA} } 
+    =
+    \argmax_{\BA, \RA }\, 
+    &\phantom{.}
+    \frac{\sigma}{2 \theta_0} \nnorm{\BA}^2
+    +
+    \sum_{k=1}^K \frac{1}{2\theta_k } \nnorm{\PA(:,k)\, \RA(k)}^2
+    \nonumber \\
+    \text{s.t.}
+    \quad
+    &\phantom{.}
+    {\G \ppar{\BA + \PA \RA} } - \Y = 0
+    \label{eq:3.7}
+\end{align}
+which is smooth.
+\end{frame}
+
+\begin{frame}{Derivation of Estimator}
+The optimization problem \ref{eq:3.7} has the following Lagrangian function
+\begin{align}
+    \mathcal{L}\ppar{\BA, \RA, \lambda} &=
+    \frac{1}{2 \theta_0} \nnorm{\BA}^2
+    +
+    \sum_{k=1}^K \frac{1}{2 \theta_k} \nnorm{\PA(:,k)\, \RA(k)}^2
+    \nonumber \\
+    &\phantom{=} \quad
+    +
+    \lambda^T \ppar{{\G \ppar{\BA + \PA \RA} } - \Y}
+\end{align}
+
+By solving the normal equations, $\ppar{\frac{\partial}{\partial \bullet}} \mathcal{L} = 0$, we obtain
+\begin{align*}
+    \hat{\SA}
+    &=
+    \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T W_\rho \Y
+    %\label{eq:3.24}
+    \\
+    W_\rho &=
+    \spar{\G \ppar{ \theta_0 \id_N + \sum_{k=1}^K \theta_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T }^\dagger
+    %\label{eq:3.25}
+\end{align*}
+\end{frame}
+
+\begin{frame}{Derivation of Estimator}
+For ease of notation, the parameter $\theta_0$ will be replaced by rewriting
+\begin{align}
+    \hat{\SA}
+    &=
+    \ppar{ \id_N + \sum_{k=1}^K \tau_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T W_\lambda \Y
+    \label{eq:3.24}
+    \\
+    W_\lambda &=
+    \spar{\G \ppar{ \id_N + \sum_{k=1}^K \tau_k \abss{P_k}^{-1} 
+    \PA(:,k)\, \PA(:,k)^T
+    } \G^T + \lambda \id_M }^{-1}
+    \label{eq:3.25}
+\end{align}
+with $\tau_k = \theta_k/\theta_0$.
+%
+The regularization parameter $\lambda>0$ is introduced for stability of the inverse.
+\end{frame}
+
+\section{Results}
+
+\begin{frame}{Protocol for Synthetic Data}
 \begin{enumerate}
-    \item Static symptoms (finished, reporting now).
-    \item Time-changing symptoms.
+    \item Construct the leadfield matrix $\G$.
+    \item Select a `seed' dipole, $n^*$.
+    \item Construct source distribution, $\SA$, as
+    \begin{equation}
+\SA(n) = f\ppar{ \nnorm{\rr_n-\rr_{n^*}} / \kappa }.
+\end{equation}
+    \item Construct noiseless EEG measurements, $\Y_0 = \G \SA$.
+    \item Construct some additive noise, $\varepsilon$, in order to achieve a prescribed Signal-to-Noise Ratio $\ppar{\text{SNR}_\text{dB}}$.
+    \item Construct the EEG measurements, $\Y = \Y_0 + \varepsilon$.
 \end{enumerate}
 \end{frame}
 
-
-
-
-
-\begin{frame}{Observed symptoms}
-The post-mortem observations, referred to as \alert{symptoms}, are registered against a template brain. 
-
-This information is used to label the dipoles in the grid using
-${S\in \sset{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{./img_oldbeamer/sketch02_v2}
-\end{figure}
-
-\end{frame}
-
-
-
-\begin{frame}{Effect of Observed Symptoms}
-The relation between symptoms and current density ($\J$) is modeled by adjusting the expected value of the latter based on the symptoms label ($S$).
-\begin{equation}
-    E\spar{\J_{t,n}} = 
+\begin{frame}{Shape of Source Patch}
+This factor was surprisingly important.
+\begin{align}
+\text{Square} &&
+    f_\text{sq}(x) 
+    &= 
     \begin{cases}
-        \U_{t,k} & \text{if } S_n=1 \text{ and } n\in R_k \\
-        0 & \text{if } S_n=0
-    \end{cases}
-\end{equation}
-
-This formulation is equivalent to stating that
-\begin{equation}
-    \J = \text{diag}\ppar{S} L \U + \N
-\end{equation}
-where $\mathbf{U}\in \R^{K\times T}$ and $\mathbf{N}\in \R^{N\times T}$ are independent and satisfy
-\begin{equation}
-    \text{Var}\ppar{\N_{t,n}} \ll \text{Var}\ppar{\U_{t,k}}.
-\end{equation}
-\end{frame}
-
-\begin{frame}{Distributions from the model}
-The proposed model is driven by the following equations
-\begin{align}
-    \Y &= \G \J + \varepsilon \\
-    \J &=  L_S \U + \N
-\end{align}
-where $\Y, \G$ and $L_S = \text{diag}\ppar{S} L$ are given, and
-\begin{align}
-    \varepsilon_t &\sim  \norm\ppar{0, \sigma^2 \id } \\
-    \N_t &\sim  
-    \norm\ppar{0, \gamma_0^2 \id } \\
-    \U_t &\sim  
-    \norm\ppar{0, \gamma_1^2 \id } 
-\end{align}
-with $\gamma_0^2 \ll \gamma_1^2$.
-\end{frame}
-
-
-
-\begin{frame}{Maximum A Posteriori (MAP) estimator}
-The estimator is derived from maximizing the a posteriori probability,
-\begin{align}
-    \ppar{ \hat{\U}, \hat{\N} } &=
-    \argmax_{\U, \N }\,
-    \log P\ppar{\ppar{ {\U}, {\N} } \Big| {\Y; \gamma_0, \gamma_2} }
-\end{align}
-which derives into the following error function
-\begin{align}
-    F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1} &=
-    \frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U + \G \N - \Y}_F^2
-    \nonumber \\
-    &\phantom{=}
-    +
-    \frac{1}{2\gamma_0^2} \nnorm{\N}_F^2
-    +
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U}_F^2
+1, &\text{if } x\leq 1 \\
+0, &\text{otherwise}.
+\end{cases}
+    \\
+\text{Gaussian} &&
+    f_\text{Gauss}(x) 
+    &= 
+    e^{-x^2/\kappa}
+    \\
+\text{Exponential} &&
+    f_\text{exp}(x) 
+    &= 
+    e^{-x/\kappa}
+    \\
+\text{Polynomial} &&
+    f_\text{pol}(x) 
+    &= 
+    \sqrt{ \max \sset{1-{x}^2, 0 }}
 \end{align}
 \end{frame}
 
-\begin{frame}{Maximum A Posteriori (MAP) estimator}
-    The iterative minimization of the error function can be interpreted as a multi-scale iterative correction
-    \begin{align}
-        \hat{\N}^{(i+1)} &= \argmin_{\N} F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
-        \\
-        \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
-    \end{align}
-    These steps have the following closed-form
-    \begin{align}
-        \hat{\N}^{(i+1)} &=
-        \hat{\N}^{(i)}
-        -
-        \G^T \spar{\G \G^T + \frac{\gamma_0^2}{\sigma^2} \id}^{-1} L_S \ppar{\hat{\U}^{(i)}-\hat{\U}^{(i-1)} }
-        \\
-        \hat{\U}^{(i+1)} &=
-        \hat{\U}^{(i)}
-        -
-        L_S^T \G^T \spar{\G L_S L_S^T \G^T + \frac{\gamma_1^2}{\sigma^2} \id}^{-1} \ppar{\hat{\N}^{(i)}-\hat{\N}^{(i-1)} }
-    \end{align}
-\end{frame}
-
-{
-%\metroset{background=dark}
-\subsection{Derivation of the Estimator}
-}
-
-\begin{frame}
-\begin{align*}
-    \ppar{ \hat{\U}, \hat{\N} } &=
-    \argmax_{\U, \N }\,
-    \log P\ppar{\ppar{ {\U}, {\N} } \Big| {\Y; \gamma_0, \gamma_2} }
-    \\
-    &=
-    \argmax_{\U, \N }\, \sum_{t=1}^T 
-    \log P\ppar{\ppar{ {\U_t}, {\N_t} } \Big| {\Y_t; \gamma_0, \gamma_2} }
-    \\
-    &=
-    \argmax_{\U, \N }\, \sum_{t=1}^T  \left[
-    \log P\ppar{{ \Y_t } \Big| { \ppar{\U_t, \N_t}  ; \gamma_0, \gamma_2} }
-    \right.
-    \\
-    &\phantom{=}
-    \left.
-    +
-    P\ppar{{ {\U_t}  ; \gamma_0, \gamma_2} }
-    +
-    P\ppar{{ {\N_t}  ; \gamma_0, \gamma_2} }
-    \right]
-    \\
-    &=
-    \argmax_{\U, \N }\, \sum_{t=1}^T  \left[
-    -\frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U_t + \G \N_t - \Y_t}_2^2
-    \right.
-    \\
-    &\phantom{=}
-    \left.
-    -
-    \frac{1}{2\gamma_0^2} \nnorm{\N_t}_2^2
-    -
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U_t}_2^2
-    \right]
-\end{align*}
-\end{frame}
-
-\begin{frame}
-\begin{align*}
-\ppar{ \hat{\U}, \hat{\N} } 
-&=
-    \argmax_{\U, \N }\, \sum_{t=1}^T  \left[
-    -\frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U_t + \G \N_t - \Y_t}_2^2
-    \right.
-    \\
-    &\phantom{=}
-    \left.
-    -
-    \frac{1}{2\gamma_0^2} \nnorm{\N_t}_2^2
-    -
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U_t}_2^2
-    \right]
-    \\
-    &=
-    \argmax_{\U, \N }\, \left[
-    -\frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U + \G \N - \Y}_F^2
-    \right.
-    \\
-    &\phantom{=}
-    \left.
-    -
-    \frac{1}{2\gamma_0^2} \nnorm{\N}_F^2
-    -
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U}_F^2
-    \right]
-\end{align*}
-\end{frame}
-
-\begin{frame}
-This derives into the following error function
-\begin{align*}
-    F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1} &=
-    \frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U + \G \N - \Y}_F^2
-    \nonumber \\
-    &\phantom{=}
-    +
-    \frac{1}{2\gamma_0^2} \nnorm{\N}_F^2
-    +
-    \frac{1}{2\gamma_1^2} \nnorm{L_S \U}_F^2
-\end{align*}
-So that
-\begin{align*}
-\ppar{ \hat{\U}, \hat{\N} } 
-&=
-    \argmin_{\U, \N }\, F\ppar{ {\U}, {\N};  \gamma_0, \gamma_1}
-\end{align*}
-Notice that the function is convex in both $\U$ and $\N$, and thus it can be minimized iteratively over it's arguments,
-    \begin{align*}
-        \hat{\N}^{(i+1)} &= \argmin_{\N} F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
-        \\
-        \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
-    \end{align*}
-\end{frame}
-
-\begin{frame}
-Minimization is carried away via Lagrange multipliers with the constraint $\G L_S \U + \G \N - \Y=0$.
-\begin{align*}
-    \hat{\N}^{(i+1)} &= \argmin_{\N}  F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
-    \\
-    &\phantom{=}
-    \quad \quad
-    \text{st} \quad \quad
-    \G L_S \U^{(i)} + \G \N - \Y=0
-\end{align*}
-This leads to the Lagrangian function
-\begin{align*}
-    \mathscr{L}_\N \ppar{\N, \lambda; \U^{(i)}, \gamma_0}
-    &=
-    \frac{1}{2\sigma^2}
-    \nnorm{\G L_S \U^{(i)} + \G \N - \Y}_F^2
-    +
-    \frac{1}{2\gamma_0^2} \nnorm{\N}_F^2
-    \\
-    &\phantom{=}
-    +\lambda^T\ppar{\G L_S \U^{(i)} + \G \N - \Y}
-\end{align*}
-\end{frame}
-
-\begin{frame}
-\begin{align*}
-\frac{\partial}{\partial \N}
-\mathscr{L}_\N \ppar{\N, \lambda; \U^{(i)}, \gamma_0}
-    &=
-    \frac{1}{\sigma^2}
-    \G^T
-    \ppar{\G L_S \U^{(i)} + \G \N - \Y}
-    \\
-    &\phantom{=}
-    +
-    \frac{1}{\gamma_0^2} {\N}
-    +
-    \G^T \lambda
-    \\
-    \frac{\partial}{\partial \lambda} 
-    \mathscr{L}_\N \ppar{\N, \lambda; \U^{(i)}, \gamma_1}
-    &=
-    \G L_S \U^{(i)} + \G \N - \Y
-\end{align*}
-By setting $\frac{\partial}{\partial \N} \mathscr{L}_\N = 0$ and 
-$\frac{\partial}{\partial \lambda} \mathscr{L}_\N = 0$, it arises the conditions
-\begin{align*}
-    {\frac{1}{\gamma_0^2} { \N}
-    +
-    \G^T \lambda} &= 0
-    \\
-    \G \N 
-    &= \Y - \G L_S \U^{(i)} 
-\end{align*}
-\end{frame}
-
-\begin{frame}
-\begin{align*}
-&&
-{\frac{1}{\gamma_0^2} { \N}
-    +
-    \G^T \lambda} &= 0
-\\
-\Rightarrow
-&&
-\N &= -\gamma_0^2 \G^T \lambda
-\\
-\Rightarrow
-&&
--\gamma_0^2 \G \G^T \lambda
-&=
-\Y - \G L_S \U^{(i)} 
-\\
-\Rightarrow
-&&
-\lambda &=
--\frac{1}{\gamma_0^2} \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}}^{-1} \ppar{\Y - \G L_S \U^{(i)} }
-\\
-\Rightarrow
-&&
-\N &=
-\G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i)} }
-\end{align*}
-Thus, concluding the following
-\begin{align*}
-\N^{(i+1)} &=
-\G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i)} }
-\end{align*}
-\end{frame}
-
-\begin{frame}{Maximum A Posteriori (MAP) estimator}
-For the iterative step, consider the following,
-\begin{align*}
-\N^{(i+1)} &=
-\G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i)} }
-\\
-\N^{(i)} &=
-\G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \ppar{\Y - \G L_S \U^{(i-1)} }
-\\
-\Rightarrow
-\N^{(i+1)}-\N^{(i)} &=
-\G^T \spar{\G \G^T+ \frac{\gamma_0^2}{\sigma^2}^{-1}} \G L_S \ppar{ \U^{(i)}-\U^{(i-1)} }
-\end{align*}
-\end{frame}
-
-\begin{frame}{Maximum A Posteriori (MAP) estimator [repeated slide]}
-    The iterative minimization of the error function can be interpreted as a multi-scale iterative correction
-    \begin{align}
-        \hat{\N}^{(i+1)} &= \argmin_{\N} F\ppar{\U^{(i)},\N; \gamma_0, \gamma_1}
-        \\
-        \hat{\U}^{(i+1)} &= \argmin_{\U} F\ppar{\U,\N^{(i)}; \gamma_0, \gamma_1}
-    \end{align}
-    These steps have the following closed-form
-    \begin{align}
-        \hat{\N}^{(i+1)} &=
-        \hat{\N}^{(i)}
-        -
-        \G^T \spar{\G \G^T + \frac{\gamma_0^2}{\sigma^2} \id}^{-1} L_S \ppar{\hat{\U}^{(i)}-\hat{\U}^{(i-1)} }
-        \\
-        \hat{\U}^{(i+1)} &=
-        \hat{\U}^{(i)}
-        -
-        L_S^T \G^T \spar{\G L_S L_S^T \G^T + \frac{\gamma_1^2}{\sigma^2} \id}^{-1} \ppar{\hat{\N}^{(i)}-\hat{\N}^{(i-1)} }
-    \end{align}
-\end{frame}
-
-
-
-{
-%\metroset{background=dark}
-\subsection{Numerical Experiments}
-}
-
-\begin{frame}{Numerical experiments}
-Synthetic data is simulated with one source at a known location at different SNR levels. 
+\begin{frame}{Shape of Source Patch}
+This factor was surprisingly important.
 \begin{figure}
 \centering
-\includegraphics[width=0.8\linewidth]{./img_oldbeamer/protocol1}
+\includegraphics[width=0.8\linewidth]{./img/profiles.pdf}
 \end{figure}
 \end{frame}
 
-\begin{frame}{SNR = 10}
-Left to right: Classic Tikhonov, sLORETA, proposed method
-\begin{figure}
-\centering
-\includegraphics[width=1\linewidth]{./img_oldbeamer/comparison1}
-\end{figure}
-\end{frame}
-
-
 {
 %\metroset{background=dark}
-\subsection{Future Work}
+\subsection{Synthetic Data (Human)}
 }
 
-\begin{frame}{Future work}
+\begin{frame}{Synthetic Data: Human Model}
 \begin{itemize}
-    \item The implemented method expands over previous methods for ESI by incorporating information from binary symptoms observed in the brain.
-    \item As a first phase, these binary symptoms are assumed to be static over time. However, there is enough physiological information to claim that the damaged area grows over time.
-    \item This time-changing damaged area can be incorporated into the model by including a time-changing vector of symptoms, ${S\in \sset{0,1}^{N\times T}}$.
+\item Subject: ICBM152 human MRI template. This is the `average' of 152 subjects \cite{icbm152_2011}.
+\item $M=90$ EEG electrodes according to the 10-10 International System.
+\item $N=15,002$ constrained equivalent dipoles on the brain cortex.
+\item 4-sphere model with (1) brain, (2) CSF, (3) skull, and (4) head. 
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Future work}
-The following equations drive the proposed new model
-\begin{align}
-    \Y &= \G \J + \varepsilon \\
-    \J_t &=  L_{S_t} \U_t + \N_t
-\end{align}
-where $\Y, \G$ and $L_{S_t} = \text{diag}\ppar{S_t} L$ are given, and
-\begin{align}
-    \varepsilon_t &\sim  \norm\ppar{0, \sigma^2 \id } \\
-    \N_t &\sim  
-    \norm\ppar{0, \gamma_0^2 \id } \\
-    \U_t &\sim  
-    \norm\ppar{0, \gamma_1^2 \id } 
-\end{align}
-with $\gamma_0^2 \ll \gamma_1^2$.
+\begin{frame}{Synthetic Data: Human Model}
+\begin{figure}
+\centering
+\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_top - Copy2}
+\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_front}
+\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_left}
+\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_left_inner}
+\includegraphics[width=0.18\linewidth]{./img_dev/3D_Subject_ICBM152_2019b_bottom}
+%
+\includegraphics[width=0.18\linewidth]{./img_dev/combined - Copy}
+\includegraphics[width=0.18\linewidth]{./img_dev/combined_scalp}
+\includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_outer}
+\includegraphics[width=0.18\linewidth]{./img_dev/combined_skull_inner}
+\includegraphics[width=0.18\linewidth]{./img_dev/combined_cortex}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data: Human Model}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{./img/EEG_10-10.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Human)}
+In order to use the proposed method, one single P-region is constructed for each trial following these steps:
+\begin{enumerate}
+    \item Recall the position of the seed dipole, $\rr_{n^*}$. The source patch has an approximate radius of $\kappa = 12.6$ mm.
+    \item Select a point at the cortex, $\mathbf{c}$, so that $\nnorm{\rr_{n^*}-\mathbf{c}}< \kappa$.
+    \item Region $P_1$ consist on a ball with center at $\mathbf{c}$ an radius $2\kappa$.
+    \item Region $P_0$ comprises all dipoles not in $P_1$.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Human)}
+General performance
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/P_plot_EvalMetrics_Protocol04_30ALL.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Human)}
+Pearson correlation of variables
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+      & SD    & AUROC & AP    & Depth  \\
+\midrule
+DLE   & 0.733 & -0.477 & -0.054 & -0.097 \\
+SD    &       & -0.555 & -0.393 & 0.079  \\
+AUROC &       &        & 0.536  & -0.103 \\
+AP    &       &        &        & -0.108 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Human)}
+General performance, accounting for shape of source patch
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/P_shape_EvalMetrics_Protocol04_30ALL.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Human)}
+General performance degradation due to noise
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/P_SNRdegradation_EvalMetrics_Protocol04_30.pdf}
+\end{figure}
+\end{frame}
+
+
+{
+%\metroset{background=dark}
+\subsection{Synthetic Data (Animal)}
+}
+
+
+\begin{frame}{Synthetic Data: Animal Model}
+\begin{itemize}
+\item Subject: young male Yucatan minipig (\textit{Sus scrofa}).
+\item Age-matched publicly available MRI template by Joanne et al. \cite{pig_template}.
+\item $M=8$ surface electrodes at cortex surface.
+\item $N=4,940$ unconstrained equivalent dipoles on an adaptive grid over the brain volume.
+\item 2-sphere model with (1) brain and (2) cortex envelope. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Synthetic Data: Animal Model}
+\begin{figure}
+\centering
+\includegraphics[width=0.18\linewidth]{./img_dev2/3D_subject17_top}
+\includegraphics[width=0.18\linewidth]{./img_dev2/3D_subject17_front}
+\includegraphics[width=0.18\linewidth]{./img_dev2/3D_subject17_left}
+\includegraphics[width=0.18\linewidth]{./img_dev2/3D_subject17_left_in}
+\includegraphics[width=0.18\linewidth]{./img_dev2/3D_subject17_bottom}
+%
+\includegraphics[width=0.23\linewidth]{./img_dev2/3D_subject17_compositeA}
+\includegraphics[width=0.23\linewidth]{./img_dev2/3D_subject17_compositeB}
+\includegraphics[width=0.23\linewidth]{./img_dev2/3D_subject17_compositeC}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data: Animal Model}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{./img/electrodes_pig.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Animal)}
+A single P-region is constructed per each trial, following the same protocol with $\kappa =$ 8.95 mm.\\
+
+This value of $\kappa$ was selected so that the resulting source patches have an approximate volume of 3 $\text{cm}^3$, which is similar to the volume of the region with pathological symptoms observed in the real data.
+\end{frame}
+
+\begin{frame}{Synthetic Data (Animal)}
+General performance
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/pig_plot_EvalMetrics_protocol04_vol5k_pigALL.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Animal)}
+Pearson correlation of variables
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+      & SD    & AUROC & AP    & Depth  \\
+\midrule
+DLE   & 0.870 & 0.138 & 0.105 & -0.192 \\
+SD    &       & 0.028 & 0.008 & -0.144 \\
+AUROC &       &       & 0.957 & -0.035 \\
+AP    &       &       &       & -0.063 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Animal)}
+General performance, accounting for shape of source patch
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/pig_shape_EvalMetrics_Protocol04_vol5k_pigALL.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Synthetic Data (Animal)}
+General performance degradation due to noise
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{img_stats/pig_SNRdegradation_EvalMetrics_protocol04_vol5k_pig.pdf}
+\end{figure}
+\end{frame}
+
+{
+%\metroset{background=dark}
+\subsection{Real Data}
+}
+
+\begin{frame}{Real Data}
+The proposed ESI method is used on a real dataset from an experiment by Pascual et al. \cite{pig_lesion1, PMID_36109613} at UT Southwestern.\\
+
+Acute Ischemic Stroke was induced in the subject by obstruction of the Middle
+Cerebral Artery. Stroke is the obstruction of a vein or artery in the
+brain, which stops the supply of oxygenated blood.\\
+
+ The brain regions affected by
+hypoxia (lack of oxygen at a cellular level) are called the Ischemic Penumbra.
+\end{frame}
+
+\begin{frame}{Pathology Data}
+During a post-mortem analysis, the subject's brain was extracted and sliced in order to be stained with 
+triphenyltetrazolium (TTC).\\
+
+TTC staining is used to identify the Ischemic Penumbra, which is used to define the P-region $P_1$.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{./img/Pregions_real}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Results (Real Data)}
+Time series with ECoG recordings; induced lesion happened at $t=0$ s.
+\begin{figure}
+\centering
+\includegraphics[width=0.9\linewidth]{./img_dev2/ECOG_All_sub17diss_diss1}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Results (Real Data)}
+Normalized source activations, $\nnorm{\hat{S}(n)}_2/\max\sset{\nnorm{\hat{S}(n)}_2}$, superimposed with MRI.
+\begin{figure}
+\centering
+\includegraphics[width=0.99\linewidth]{./img_dev3/proposed_A}
+\end{figure}
+\textbf{wMNE}
+\end{frame}
+
+\begin{frame}{Results (Real Data)}
+Normalized source activations, $\nnorm{\hat{S}(n)}_2/\max\sset{\nnorm{\hat{S}(n)}_2}$, superimposed with MRI.
+\begin{figure}
+\centering
+\includegraphics[width=0.99\linewidth]{./img_dev3/proposed_B}
+\end{figure}
+\textbf{MSP}
+\end{frame}
+
+\begin{frame}{Results (Real Data)}
+Normalized source activations, $\nnorm{\hat{S}(n)}_2/\max\sset{\nnorm{\hat{S}(n)}_2}$, superimposed with MRI.
+\begin{figure}
+\centering
+\includegraphics[width=0.99\linewidth]{./img_dev3/proposed_C}
+\end{figure}
+\textbf{sLORETA}
+\end{frame}
+
+\begin{frame}{Results (Real Data)}
+Normalized source activations, $\nnorm{\hat{S}(n)}_2/\max\sset{\nnorm{\hat{S}(n)}_2}$, superimposed with MRI.
+\begin{figure}
+\centering
+\includegraphics[width=0.99\linewidth]{./img_dev3/proposed_D}
+\end{figure}
+\textbf{Proposed method}
+\end{frame}
+
+\begin{frame}{Acknowledgements}
+\begin{itemize}
+\item To Dr. Jianzhong Su for his encouragement and support.
+\item To the members of my dissertation committee: Dr. Hristo V. Kojouharov, Dr. Ren-Cang Li, and Dr. Li Wang.
+\item To Imelda Trejo-Lorenzo for her encouragement, help, and guidance.
+\item To the colleagues I met at UTA, and the friends from home who are family in my heart.
+\item To my family: my brother E. Ricardo, my mother Mar\'ia Guadalupe, and my late father Nicol\'as.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Thanks for your attention}
