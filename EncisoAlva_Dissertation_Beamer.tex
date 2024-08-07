@@ -11,7 +11,7 @@
 
 \usepackage{ bbold }
 
-\usepackage{cite}
+%\usepackage{cite}
 
 \usepackage{caption}
 
@@ -40,6 +40,12 @@
 
 %\usepackage{mathtools}
 
+% for bibliography
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{refs.bib}
+
+\usepackage{csquotes}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -48,47 +54,10 @@
 \author{Julio Cesar Enciso-Alva}
 \institute{University   of Texas at Arlington}
 
-\newcommand{\bras}[1]{\left\langle #1 \right\rangle}
-\newcommand{\pars}[1]{\left( #1 \right)}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\newcommand{\R}{\mathbb{R}}
-\newcommand{\ones}[1]{ \mathbbm{1}_{N_{#1}} \mathbbm{1}_{N_{#1}}^\intercal }
-\newcommand{\trans}{^\intercal}
-
-\newcommand{\set}[1]{ \left\{ #1 \right\} }
-\newcommand{\ppar}[1]{ \left( #1 \right) }
-\newcommand{\spar}[1]{ \left[ #1 \right] }
-
-%\newcommand{\ccon}[2]{\left\phantom{(} #1 \mathrel{}\middle|\mathrel{} #2 \right\phantom{)}}
-
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
-
-\newcommand{\nnorm}[1]{\lVert #1 \rVert}
-
-\newcommand{\J}{\mathbf{J}}
-\newcommand{\Y}{\mathbf{Y}}
-\newcommand{\G}{\mathbf{G}}
-\newcommand{\U}{\mathbf{U}}
-\newcommand{\N}{\mathbf{N}}
-
-\newcommand{\GAM}{\mathbf{\Gamma}}
-\newcommand{\SIG}{\mathbf{\Sigma}}
-\newcommand{\ga}{\pmb{\gamma}}
-
-\newcommand{\jt}{\mathbf{j}}
-
-\newcommand{\W}{\mathbf{W}}
-
-\newcommand{\id}{\mathbf{I}}
-\newcommand{\norm}{\mathcal{N}}
-
-\newcommand{\R}{\mathbb{R}}
-
-\newcommand{\rr}{\mathbf{r}}
+\input{macros_disstemplate2.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,43 +75,52 @@
   \end{frame}
 }
 
+
+
 {
 %\metroset{background=dark}
 \maketitle
 
 \begin{frame}%{Overview}
-\tableofcontents
+\tableofcontents[pausesections]
 \end{frame}
 }
+
+\addcontentsline{toc}{section}{Foreword}
+
+\begin{frame}{Family}
+Picture of the family and Pachuca.
+\end{frame}
+
 
 {
 %\metroset{background=dark}
 \section{Introduction}
 }
 
-\begin{frame}{Electrical Source Imaging Framework}
-    The synchronous post-synaptic potentials of multiple neurons generate electrical activity measured by EEG.
-    %
-    EEG source localization aims to identify the brain regions where these neurons are located.
-    
-    Electrical Source Imaging assumes that 
-    these electrical potential fields
-    can be 
-    approximated via a finite collection 
-    of equivalent dipoles
-    with known positions on a grid over the brain.
-
+\begin{frame}{Why Electrical Source Imaging}
+\begin{itemize}
+\item Multiple EEG patterns have been found to be related to normal and pathological states \footfullcite{niedermeyer2011niedermeyer}. 
+\item Electrical Source Imaging (ESI) is a framework to locate the neural sources of electric/magnetic activity.
+\item EEG has high resolution in time, low resolution in space. 
+\item ESI is ill-posed, in the sense of Hadamard.
+\end{itemize}
 \begin{figure}
 \centering
 \includegraphics[width=0.6\linewidth]{./img_oldbeamer/sketch03}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-Derivation of ESI methods from physics principles requires relating the \alert{dipoles' magnitude} (from inside the brain) with the \alert{electrical potential field} (at the scalp).
-The following derivation is based on 
-that of Hallez et al.
-\cite{hallez2007review}.
+
+
+\begin{frame}{What is Electrical Source Imaging}
+%Post-synaptic potentials from neurons produces a small current density field that can be approximated by a dipole.
+
+
+EEG recordings can be modeled by a system in the form 
+\begin{equation}
+\mathbf{Y} = \mathbf{G} \mathbf{S} + \varepsilon
+\end{equation}
 
 \begin{figure}
 \centering
@@ -163,194 +141,195 @@ that of Hallez et al.
     \end{equation}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-From Ohm Law, the \alert{electric field}, $E: \R^3\rightarrow \R^3$, can be obtained as
-\begin{equation}
-    K = \sigma E
-    \label{eq:elec_field}
-\end{equation}
-with $\sigma: \R^3 \rightarrow \R$ the position-dependent conductivity tensor.
-\begin{itemize}
-    \item Skull and white matter are known to be anisotropic.
-    \item Grey matter, scalp, and cerebrospinal fluid (CSF) are considered isotropic.
-\end{itemize}
+\begin{frame}{Previous Results}
+Electrical Source Imaging was used; for example, 
+in
+\cite{dr_pascal}.
 
-From quasi-static Maxwell equation $\ppar{\nabla\times E=0}$, the \alert{scalar potential field}, $V: \R^3\rightarrow \R$, can be obtained as
-\begin{equation}
-    E = - \nabla V
-    \label{eq:pot_field}
-\end{equation}
+\begin{itemize}
+\item Glucose transporter type I deficiency (G1D) causes nutrient-responsive epilepsy
+\item EEG was recorded for 23 hours following the monitoring
+of 6 G1D subjects (ages 2-19)
+\item 81 seizures (2-15 minutes) were analyzed
+\item ESI was performed using sLORETA
+\item ESI results were downsampled in space to the LPA40 anatomical atlas and in time to 20\% segments
+\item From 20\% to 40\% of duration, significant changes of relative power (with respect to baseline) were observed to be significant on
+the sensorimotor cortex and the thalamus.
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-From equations \eqref{eq:curr_density}, \eqref{eq:elec_field} and \eqref{eq:pot_field}, the potential field is related to the dipoles according to the following equation
+{
+%\metroset{background=dark}
+\section{Forward Problem}
+}
+
+\begin{frame}{Neuron Dipoles}
+\begin{itemize}
+\item A single post-synaptic potential 
+acts like an electric dipole and
+produces an electric scalar field, $V$. 
+%This can be modeled as a single dipole.
+\item Each single neuron is too small to produce a significant change. The combined action of all neurons produces a large current density field.
+\item EEG electrodes are located finite set at $\sa_1, \sa_2, \dots, \sa_M$.
+\item EEG measures a difference in scalar electric field, $V$,
+\begin{equation}
+\Y(m) = V\ppar{\sa_m} - V\ppar{\sa_\text{ref}}
+\end{equation}
+with $\sa_\text{ref}$ an `electrical neutral' point.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equivalent Dipoles}
+\begin{itemize}
+\item \alert{Key assumption:} Consider a finite set of \textbf{distributed dipoles}, which produce the same electric field observe by the EEG.
+\item Location of these dipoles is known: $\dd_1, \dots, \dd_N$.
+%\item `Silent activity' occurs when singular neuron dipoles don't fire coherently. It can't be observed using EEG.
+\item Consider the $n$-th dipole as $\rho_n \ee_n$ with $\nnorm{\ee_n}_2=1$.
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[width=0.45\linewidth]{./img/CurrDensField}
+\includegraphics[width=0.45\linewidth]{./img/Pregions_pic_radial_v2}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Green Equation for 1 dipole + 1 sensor}
+\begin{itemize}
+\item Consider the $m$-th EEG sensor and the $n$-th equivalent dipole.
+\item The electrical potential field, $V$, follows
 \begin{equation}
 \nabla \cdot\ppar{\sigma(\rr)\, \nabla V(\rr) } = 
--I \delta\ppar{\rr-\rr_+} + I \delta\ppar{\rr-\rr_-}
-\label{eq:green}
+\rho\spar{ \delta\ppar{\rr-\ee_n^+} + \delta\ppar{\rr-\ee_n^-} }
+\label{eq:01}
 \end{equation}
-In this work, equation \eqref{eq:green} is simplified by assuming 
-all tissues are isotropic, so $\sigma(\rr)\propto \id$.
-
-Equation \eqref{eq:green} is solved 
-only for a finite number of points, 
-\begin{equation*}
-    \rr = \text{position of EEG sensors at scalp}
-\end{equation*}
-From the other side, $\rr_\pm$ must be set for the locations of each dipole on the grid.
+with $\sigma\ppar{\rr}$ the conductivity.
+\item For the isotropic case, $\sigma\ppar{\rr}= \kappa \id$, equation \ref{eq:01} reduces to 
+\begin{equation}
+\kappa\, \Delta { V(\rr) } = 
+\rho\spar{ \delta\ppar{\rr-\ee_n^+} + \delta\ppar{\rr-\ee_n^-} }
+\label{eq:02}
+\end{equation}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-Equation \eqref{eq:pot_field} must be solved within the whole head volume, which is partitioned into multiple coupled volumes with simplified conductive properties.
-Furthermore, in this work, the isotropic case is considered so 
-$\sigma(\rr) \propto \id$.
-
-These volumes are typically obtained from an anatomical MRI of the subject or from a template matched to age and gender.
-
+\begin{frame}{Green Equation: Domain}
+\begin{itemize}
+\item We use the 4-sphere model: the domain is 4 media (brain, CSF, skull, head) with regional-constant conductivity.
+\item Solutions must be regular:
+%\begin{equation}
+$\sigma(\bullet)\, V(\bullet) \in C^1 \ppar{\mathcal{M}_1 \cup \dots, \cup \mathcal{M}_4}$.
+%\end{equation}
+\item Air is non-conductive, so we use reflective boundary conditions
+\begin{equation}
+\kappa\, \nabla V(\rr) \cdot \mathbf{n} = 0, \text{ for } \rr\in \mathcal{M}_1.
+\end{equation}
 \begin{figure}
 \centering
-\includegraphics[width=0.4\linewidth]{./img_oldbeamer/sketch06}
+\includegraphics[width=0.8\linewidth]{./img/HeadSurfacesVolumes}
 \end{figure}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-Interface conditions are Neumann, as well as continuity:
+\begin{frame}{Green Equation for $M$ sensors + $N$ dipole}
+\begin{itemize}
+\item Consider $\tilde{V}_n$ the solution to 
 \begin{equation}
-\left\{
-\begin{array}{rl}
-    V_1(\rr) \cdot \mathbf{n} &= V_2(\rr) \cdot \mathbf{n} \\
-    \ppar{\sigma_1(\rr)\, \nabla V_1(\rr)}\cdot \mathbf{n} &= 
-    \ppar{\sigma_2(\rr)\, \nabla V_2(\rr)}\cdot \mathbf{n} \\
-    V_1(\rr) &= V_2(\rr)
-\end{array}
-\right.
+\kappa\, \Delta { \tilde{V}_n(\rr) } = 
+{ \delta\ppar{\rr-\ee_n^+} + \delta\ppar{\rr-\ee_n^-} },
 \end{equation}
-with $\mathbf{n}$ a vector normal to the interface.
-For the interface with air, the boundary conditions are different
+\item The electrical scalar field from all the equivalent dipoles, at the $m$-th sensor, is given by
 \begin{equation}
-\left\{
-\begin{array}{rl}
-    V(\rr) \cdot \mathbf{n} &= 0 \\
-    \ppar{\sigma(\rr)\, \nabla V(\rr)}\cdot \mathbf{n} &= 0
-\end{array}
-\right.
-\end{equation}    
-\end{frame}
-
-\begin{frame}{Electrical Source Imaging Framework}
-The location and momentum of each dipole are changed to a more convenient notation.
-\begin{align}
-\mathbf{d} &= \ppar{I\, p} \mathbf{e}_d \\
-\rr_{dip} &= \frac{1}{2}\ppar{\rr_++\rr_-}
-\end{align}
-where 
-$p\, \mathbf{e}_d = \ppar{\rr_+-\rr_-}$, with
-with $\mathbf{e}_d$ unitary.
-\begin{figure}
-\centering
-\includegraphics[width=0.4\linewidth]{./img_oldbeamer/sketch05}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Electrical Source Imaging Framework}
-%
-Since \eqref{eq:green} is linear, if a dipole $\mathbf{d}$ is decomposed as 
-\begin{equation}
-\mathbf{d} = d_x \mathbf{e}_x + d_y \mathbf{e}_y + d_z \mathbf{e}_z    
-\end{equation}
-with $d_x \mathbf{e}_i$ unitary orthogonal vectors, then
-\begin{align}
-V\ppar{\rr} &=
-V\ppar{\rr; \rr_{dip}, \mathbf{d}} 
-\nonumber \\
-&=
-d_x V\ppar{\rr; \rr_{dip}, \mathbf{e}_x} +
-d_y V\ppar{\rr; \rr_{dip}, \mathbf{e}_y} +
-d_z V\ppar{\rr; \rr_{dip}, \mathbf{e}_z}
-\end{align}
-For ease of notation, the function $g: \R^{3+3+3}\rightarrow \R$ is defined as
-\begin{equation}
-    g\ppar{\rr, \rr_{dip}, \mathbf{d}} = V\ppar{\rr; \rr_{dip}, \mathbf{d}}
-\end{equation}
-\end{frame}
-
-\begin{frame}{Electrical Source Imaging Framework}
-Since \eqref{eq:green} is linear, 
-by considering $N$ dipoles we can write
-\begin{align}
-V\ppar{\rr} &=
-\sum_{i=1}^N g\ppar{\rr, \rr_{dip_i}, \mathbf{d}_i}
+V(\sa_m) = \sum_{n=1}^N \rho_n \tilde{V}_n \ppar{\sa_m}
 =
-\sum_{i=1}^{3N} d_i\, g\ppar{\rr, \rr_{dip_i}, \mathbf{e}_i}
-\end{align}
-Considering measurements at $M$ locations, this last equation can be arranged as
-\begin{equation}
-    \begin{bmatrix}
-        V\ppar{\rr_1} \\
-        \vdots \\
-        V\ppar{\rr_M}
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        g\ppar{\rr_1, \rr_{dip_1}, \mathbf{e}_1}
-        &
-        \hdots 
-        &
-        g\ppar{\rr_1, \rr_{dip_{3N}}, \mathbf{e}_{3N}}
-        \\
-        \vdots & \ddots & \vdots 
-        \\
-        g\ppar{\rr_M, \rr_{dip_1}, \mathbf{e}_1}
-        &
-        \hdots 
-        &
-        g\ppar{\rr_M, \rr_{dip_{3N}}, \mathbf{e}_{3N}}
-    \end{bmatrix}
-    \begin{bmatrix}
-        d_1 \\ \vdots \\ d_{3N}
-    \end{bmatrix}
-    \label{eq:almost}
+\begin{bmatrix}
+\tilde{V}_1 \ppar{\sa_m} &
+\cdots &
+\tilde{V}_N \ppar{\sa_m}
+\end{bmatrix}
+\begin{bmatrix}
+\rho_1 \\ \vdots \\ \rho_N
+\end{bmatrix}
+\label{eq:stack}
 \end{equation}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-Furthermore, equation \eqref{eq:almost} can be extended trivially to
-consider measurements at $M$ locations and $T$ times (indexed from 1 to $T$). The resulting equation can be arranged as
+\begin{frame}{Resulting Model}
+\begin{itemize}
+\item Observation from $M$ sensors can be stacked as
 \begin{equation}
-    \mathbf{V} = \mathbf{G} \mathbf{D}
-    \label{eq:primitive}
+\begin{bmatrix}
+V\ppar{\sa_1}
+\\
+V\ppar{\sa_2}
+\\
+\vdots \\
+V\ppar{\sa_M}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\tilde{V}_1 \ppar{\sa_1} &
+\tilde{V}_2 \ppar{\sa_1} &
+\cdots &
+\tilde{V}_N \ppar{\sa_1} \\
+\tilde{V}_1 \ppar{\sa_2} &
+\tilde{V}_2 \ppar{\sa_2} &
+&
+\tilde{V}_N \ppar{\sa_M} \\
+\vdots &  & \ddots & \vdots \\
+\tilde{V}_1 \ppar{\sa_M} &
+\tilde{V}_2 \ppar{\sa_M} &
+\cdots &
+\tilde{V}_N \ppar{\sa_M}
+\end{bmatrix}
+\begin{bmatrix}
+\rho_1 \\ \rho_2 \\ \vdots \\ \rho_N
+\end{bmatrix}
 \end{equation}
-with $\mathbf{V}\in\R^{M\times T}$, $\mathbf{G}\in \R^{M\times 3N}$, $\mathbf{V}\in \R^{3N\times T}$ given by
-\begin{align*}
-    \mathbf{V}_{m,t} &= V\ppar{\rr_m, t}
-    \\
-    \mathbf{G}_{n,m} &=
-    g\ppar{\rr_m, \rr_{dip_{n}}, \mathbf{e}_{n}}
-    \\
-    \mathbf{D}_{n,t}
-    &=
-    d_n(t)
-\end{align*}
+\item Such equation can be summarized as
+\begin{equation}
+\Y = \G \SA
+\end{equation}
+with $\G$ referred to as the \alert{leadfield matrix}.
+\item $\Y$ depends entirely on EEG data, $\G$ can be computed from anatomical data, and $\SA$ is to be found.
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Electrical Source Imaging Framework}
-Notice on equation \eqref{eq:primitive} the matrix $\G$, which is often referred as the \alert{leadfield matrix}, is defined as
-\begin{equation*}
-    \mathbf{G}_{n,m} =
-    g\ppar{\rr_m, \rr_{dip_{n}}, \mathbf{e}_{n}} =
-    V\ppar{\rr_m; \rr_{dip_{n}}, \mathbf{e}_{n}}
-\end{equation*}
-where $V$ is the solution to 
+\begin{frame}{Case of Unknown Orientation}
+\begin{itemize}
+%\item We may assume that dipoles at the cortex surface are orthogonal to it. This assumption is motivated by physiological observations. 
+\item If the dipoles' orientation is unknown, each dipole can be projected into canonical coordinates, so
 \begin{equation}
-\sigma\,
-\Delta V(\rr)
-= 
--\delta\ppar{\rr-\rr_{dip}-\kappa} + \delta\ppar{\rr-\rr_{dip}+\kappa}
+\rho_n\, \ee_n =
+\rho_n^x\, \ee_n^x + \rho_n^y\, \ee_n^y + \rho_n^z\, \ee_n^z.
 \end{equation}
-with the conditions described previously.
-
-This problem is solved numerically either via Boundary Element Method (BEM) with boundaries at the interfaces or via Finite Element Method (FEM).
+\item To recover the original interpretation, find $\abss{\rho_n}$.
+\begin{figure}
+\centering
+\includegraphics[width=0.4\linewidth]{./img/OrthDecomp}
+\end{figure}
+\end{itemize}
 \end{frame}
+
+\begin{frame}{Practical considerations}
+Steps to solve the Forward Problem:
+\begin{enumerate}
+\item Start with anatomic MRI from subject (or template) and locations of EEG electrodes.
+\item Segmentation: Identify relevant volumes.
+\item Reconstruction triangulated surfaces.
+\item Generate locations of distributed dipoles.
+\item Solve equation \ref{eq:02} to compute $\G$.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Typical pipelin}
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./img_dev/pipeline}
+\end{figure}
+\end{frame}
+
 
 {
 %\metroset{background=dark}
@@ -477,63 +456,23 @@ For example, $f(\mathbf{S}) = \nnorm{\mathbf{S}}_1$ can be solved efficiently \c
 The existence of a Wiener Kernel is desirable when the number of dipoles and time points is particularly large. This is the case for long-term monitoring of spontaneous activity.
 \end{frame}
 
-\begin{frame}{Previous Results}
-Electrical Source Imaging was used; for example, 
-in
-\cite{dr_pascal}.
 
-\begin{itemize}
-\item Glucose transporter type I deficiency (G1D) causes nutrient-responsive epilepsy
-\item EEG was recorded for 23 hours following the monitoring
-of 6 G1D subjects (ages 2-19)
-\item 81 seizures (2-15 minutes) were analyzed
-\item ESI was performed using sLORETA
-\item ESI results were downsampled in space to the LPA40 anatomical atlas and in time to 20\% segments
-\item From 20\% to 40\% of duration, significant changes of relative power (with respect to baseline) were observed to be significant on
-the sensorimotor cortex and the thalamus.
-\end{itemize}
+
+
+
+{
+%\metroset{background=dark}
+\section{Numerical Experiments}
+}
+
+\begin{frame}{A}
+
 \end{frame}
 
-\begin{frame}{Previous Results}
-\textbf{Note:} ESI methods give the amplitude of electrical activity at any time and space (up to a certain resolution). 
-For a 
-further clinical analysis,
-this data may need to be either downsampled to interpretable units or co-registered between subjects.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\linewidth]{./img_oldbeamer/MriViewer_Subject02_protocol1_LPBA40_v2}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Previous Results}
-In a separate work\footnote{In preparation}, the quality of ESI estimates is assessed on the presence of 
-simultaneous surface- and depth-electrode recordings.
-\begin{itemize}
-\item In this setup, the recordings of depth electrodes can be interpreted as a
-`realistic ground truth'.
-\end{itemize}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.35\linewidth]{./img_oldbeamer/positions02_v2}
-\includegraphics[width=0.35\linewidth]{./img_oldbeamer/positions01_v2}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Previous Methods for Multimodal Data}
-A common framework
-to enhance ESI is to incorporate 
-`information' from the additional \alert{modalities} of data:
-MEG, MRI/fMRI\cite{he2008multimodal, huster2012methods}, PET, fNIRS\cite{fnirs}, etc.
-(Figure based on \cite{he2008multimodal}).
-
-\begin{figure}
-\centering
-\includegraphics[width=0.65\linewidth]{./img_oldbeamer/sketch07}
-\caption{PET=Positron Emission Tomography, NIRS=Near Infrared Spectroscopy, SPECT=Single-Photon Emission Computed Tomography}
-\end{figure}
-\end{frame}
+{
+%\metroset{background=dark}
+\section{Proposed Model}
+}
 
 \begin{frame}{Previous Methods for Multimodal Data}
 One big conceptual challenge for multimodal data integration is to model the interaction of the underlying physical phenomena. 
@@ -550,20 +489,6 @@ Some of the parameters extracted include:
 \end{itemize}
 
 \end{frame}
-
-{
-%\metroset{background=dark}
-\section{Numerical Experiments}
-}
-
-\begin{frame}{A}
-
-\end{frame}
-
-{
-%\metroset{background=dark}
-\section{Proposed Model}
-}
 
 \begin{frame}{Dataset Framework}
 The goal is to study the effects of
@@ -597,34 +522,13 @@ This new model considers two phases:
 
 
 
-\begin{frame}{Electrical Source Imaging Formulation}
-\begin{itemize}
-    \item $N$ dipoles with fixed locations on a grid over the brain volume ($<5$ mm between points).
-    \item Each dipole is written as the sum of 3 dipoles with canonical orientations and magnitude to be determined.
-    \item $M$ EEG sensors at fixed locations over the head surface.
-    \item $T$ time-points, labeled from 1 to $T$.
-\end{itemize}
-\end{frame}
 
-\begin{frame}{Electrical Source Imaging Formulation}
-\textbf{Forward problem}, $N$ unconstrained dipoles with fixed locations
-\begin{equation}
-\Y = \G \J + \varepsilon.
-\end{equation}
-where
-\begin{itemize}
-\item $\Y \in \R^{M \times T}$: EEG measurements.
-\item $\J \in \R^{3N \times T}$: Dipole magnitudes, 3 dipoles per grid point.
-\item $\G \in \R^{3N\times M}$: `Leadfield matrix', originated from the numerical solution of a Poisson PDE on nested media.
-\item $\varepsilon\in \R^{M\times T}$: Additive noise at the sensors.
-\end{itemize}
-\end{frame}
 
 \begin{frame}{Observed symptoms}
 The post-mortem observations, referred to as \alert{symptoms}, are registered against a template brain. 
 
 This information is used to label the dipoles in the grid using
-${S\in \set{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
+${S\in \sset{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is located on a region where symptoms were observed.
 
 \begin{figure}
 \centering
@@ -633,24 +537,7 @@ ${S\in \set{0,1}^{N\times 1}}$, so that $S_n = 1$ if the $n$-th dipole is locate
 
 \end{frame}
 
-\begin{frame}{Regional Parcellation}
-The brain is divided into $K$ arbitrary regions. The Desikan-Killian anatomical atlas is used for this work.
 
-Let $R_k$ be all the dipoles in the $k$-th region. Define the matrix $L\in \set{0,1}^{N\times K}$ as
-\begin{equation}
-    L_{n,k} = \begin{cases}
-        1, &\text{if } n\in R_k \\
-        0, &\text{otherwise.}
-    \end{cases}
-\end{equation}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.3\linewidth]{./img_oldbeamer/desikan}
-
-\end{figure}
-
-\end{frame}
 
 \begin{frame}{Effect of Observed Symptoms}
 The relation between symptoms and current density ($\J$) is modeled by adjusting the expected value of the latter based on the symptoms label ($S$).
@@ -689,14 +576,7 @@ where $\Y, \G$ and $L_S = \text{diag}\ppar{S} L$ are given, and
 with $\gamma_0^2 \ll \gamma_1^2$.
 \end{frame}
 
-\begin{frame}{Additional assumption}
-For simplicity, assume that
-the measurements are generated independently over time, so
-\begin{equation}
-    P\ppar{ \U } = \prod_{t=1}^T P\ppar{ \U_t }
-\end{equation}
-The analogous holds for $\varepsilon$ and $\N$.
-\end{frame}
+
 
 \begin{frame}{Maximum A Posteriori (MAP) estimator}
 The estimator is derived from maximizing the a posteriori probability,
@@ -970,13 +850,6 @@ For the iterative step, consider the following,
     \end{align}
 \end{frame}
 
-\begin{frame}{Special cases}
-In the special case with only one region, the proposed model is equivalent to widely known models:
-\begin{itemize}
-\item If the region has no symptoms, the model reduces to a Tikhonov penalization.
-\item If the region has symptoms, the model reduces to sLORETA.
-\end{itemize}
-\end{frame}
 
 
 {
@@ -1010,7 +883,7 @@ Left to right: Classic Tikhonov, sLORETA, proposed method
 \begin{itemize}
     \item The implemented method expands over previous methods for ESI by incorporating information from binary symptoms observed in the brain.
     \item As a first phase, these binary symptoms are assumed to be static over time. However, there is enough physiological information to claim that the damaged area grows over time.
-    \item This time-changing damaged area can be incorporated into the model by including a time-changing vector of symptoms, ${S\in \set{0,1}^{N\times T}}$.
+    \item This time-changing damaged area can be incorporated into the model by including a time-changing vector of symptoms, ${S\in \sset{0,1}^{N\times T}}$.
 \end{itemize}
 \end{frame}
 
@@ -1035,15 +908,21 @@ with $\gamma_0^2 \ll \gamma_1^2$.
 
 \end{frame}
 
-{
-%\metroset{background=dark}
-\section{Bibliography}
-}
+%{
+%%\metroset{background=dark}
+%\section{Bibliography}
+%}
+
+%\begin{frame}[allowframebreaks]
+%        \frametitle{References}
+%\bibliographystyle{abbrv} % We choose the "plain" reference style
+%%\bibliography{./refs_old} % Entries are in the refs.bib file
+%\bibliography{./refs} % Entries are in the refs.bib file
+%\end{frame}
 
 \begin{frame}[allowframebreaks]
-        \frametitle{References}
-\bibliographystyle{abbrv} % We choose the "plain" reference style
-\bibliography{./refs_old} % Entries are in the refs.bib file
+  \frametitle{References}
+  \printbibliography
 \end{frame}
 
 \end{document}
