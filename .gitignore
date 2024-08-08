@@ -5,6 +5,9 @@
 *.bbl
 *.blg
 *.bcf
+*.nav
+*.out
+*.snm
 *.run.xml
 EncisoAlva_Dissertation.pdf
 EncisoAlva_Dissertation_Beamer.pdf
