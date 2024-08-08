@@ -270,7 +270,9 @@ The leadfield matrix is column-normalized as in \ref{det:wMNE}, and the SVD deco
 \begin{align}
 \Gbar &=  \G\, W_G\iinv = \U \mathbf{\Lambda} \V\trans
 \\
-W_G &= \diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
+W_G &= 
+\text{diag}
+\ppar{ \nnorm{\G(:,1)}_2, \nnorm{\G(:,2)}_2, \dots, \nnorm{\G(:,N)}_2 }
 \end{align}
 with $\U\in \R^{M\times M},\V\in \R^{N\times N}$ such that $\U\trans \U = \id_M, \V\trans\V = \id_N$, and $\mathbf{\Lambda} \in \R^{M\times N}$ a matrix with the singular values of $\Gbar$ in descending order on its diagonal.
 
@@ -287,7 +289,7 @@ $\Y$ is normalized on a similar way as $\Gbar$, and then it is projected into $\
 &=
 \U_s \U_s^T \Ybar = \U_s \U_s^T W_Y \Y
 \\
-W_Y &= \diag{ Y(:,1), Y(:,2), \dots, Y(:,T) }
+W_Y &= \diag{ \nnorm{Y(:,1)}_2, \nnorm{Y(:,2)}_2, \dots, \nnorm{Y(:,T)}_2 }
 \\
 \mathbf{A}_s &= \ppar{\Gbar\trans \Ybar_s}\, \ppar{\Gbar\trans \Ybar_s}\trans
 \end{align}
@@ -347,7 +349,7 @@ This algorithm, proposed by Gramfort \cite{gramfort2012mixed}, incorporates the 
 This assumption is enforced by solving the following optimization problem.
 \begin{align}
 \hat{\SA}_\text{MxNE} &=
-\argmin_{\SA}\, \nnorm{\G\, \SA - \Y }_2^2 + \lambda\, \nnorm{\SA}_{2,1}
+\argmin_{\SA}\, \nnorm{\G\, \SA - \Y }_F^2 + \lambda\, \nnorm{\SA}_{2,1}
 \label{est:MxNE}
 \end{align}
 with $\nnorm{\SA}_{2,1}$ the $\ell_{2,1}$ norm of $\SA$.
