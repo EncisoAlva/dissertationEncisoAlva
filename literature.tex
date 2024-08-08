@@ -153,7 +153,8 @@ W\iinv \otimes \id_T
 }
 \\
 W &=
-\diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
+\text{diag}
+\ppar{ \nnorm{\G(:,1)}_2, \nnorm{\G(:,2)}_2, \dots, \nnorm{\G(:,N)}_2 }
 \label{det:wMNE}
 \end{align}
 
@@ -183,7 +184,7 @@ The LORETA estimator can be expressed as an optimization problem
 \hat{\SA}_\text{sLORETA} 
 &=
 \argmin_\SA \,
-\nnorm{ B\, W\, \SA } _2^2 
+\nnorm{ B\, W\, \SA } _F^2 
 \nonumber \\
 &\text{s.t. }
 \G\, \SA = \Y
@@ -220,7 +221,7 @@ The sLORETA estimator considers the following minimization problem
 \begin{equation}
 \hat{\SA}_\text{sLORETA} 
 = 
-\argmin_{\SA}\, \nnorm{\G\, \SA - \Y - c \ones }_2^2 + \lambda\, \nnorm{\SA}_F^2
+\argmin_{\SA}\, \nnorm{\G\, \SA - \Y - c \ones }_F^2 + \lambda\, \nnorm{\SA}_F^2
 \end{equation}
 with $\ones=\{1\}^{M\times 1}$ a column vector of ones.
 

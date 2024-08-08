@@ -330,10 +330,10 @@ Dipoles near the sensors are often over-represented in the inverse solution. The
 \hat{\SA}_\text{wMNE} 
 &=
 \G\trans
-\ppar{\G \ppar{W\trans W}\iinv \G\trans + \lambda\, \id_M}\pinv \Y
+\ppar{\G \ppar{W\trans W}\iinv \G\trans + \lambda\, \id_M}\iinv \Y
 \\
 W &=
-\diag{ \G(:,1), \G(:,2), \dots, \G(:,N) }
+\diag{ \nnorm{\G(:,1)}_2, \nnorm{\G(:,2)}_2, \dots, \nnorm{\G(:,N)}_2 }
 \end{align}
 \end{frame}
 
@@ -341,7 +341,7 @@ W &=
 \begin{frame}{sLORETA\footfullcite{sloreta}}
 %sLORETA  considers a small variant of the minimization function
 \begin{equation}
-    \hat{\mathbf{S}} = \argmin_{\mathbf{S}}\, \nnorm{\G \mathbf{S}-\mathbf{M}^\delta-c \mathbb{1}} + \lambda\, \nnorm{\mathbf{S}}_2^2
+    \hat{\mathbf{S}} = \argmin_{\mathbf{S}}\, \nnorm{\G \mathbf{S}-\Y-c \mathbb{1}}_2^2 + \lambda\, \nnorm{\mathbf{S}}_2^2
 \end{equation}
 with $\mathbb{1}=\{1\}^{M\times 1}$.
 If $\Y$ is re-referenced to average, then $c=0$.
@@ -825,7 +825,7 @@ General performance degradation due to noise
 }
 
 \begin{frame}{Real Data}
-The proposed ESI method is used on a real dataset from an experiment by Pascual et al. \cite{pig_lesion1, PMID_36109613} at UT Southwestern.\\
+The proposed ESI method is used on a real dataset from an experiment by Pascual et al. \footfullcite{pig_lesion1, PMID_36109613} at UT Southwestern.\\
 
 Acute Ischemic Stroke was induced in the subject by obstruction of the Middle
 Cerebral Artery. Stroke is the obstruction of a vein or artery in the
